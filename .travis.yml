@@ -1,0 +1,5 @@
+language: cpp
+os: linux
+script: qmake BankServer.pro && make
+compiler: g++
+dist: trusty

@@ -2,6 +2,8 @@ QT += core
 QT -= gui
 
 CONFIG += c++11
+#to support c++11 in travis ci
+QMAKE_CXXFLAGS += -std=c++11
 
 TARGET = BankServer
 CONFIG += console
@@ -30,4 +32,5 @@ HEADERS += \
     Protocol/PacketsList.h
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    .travis.yml
