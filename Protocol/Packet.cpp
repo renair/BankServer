@@ -28,3 +28,25 @@ Packet* Packet::getPacket(char id)
     }
     return NULL;
 }
+
+bool Packet::isPacket(const QByteArray& byteArray)
+{
+    if(byteArray.length() < 3)
+    {
+        return false;
+    }
+    else
+    {
+        return getPacketSize(byteArray) == (byteArray.length()-sizeof(char)-sizeof(short));
+    }
+}
+
+char Packet::getPacketId(const QByteArray& byteArray)
+{
+    return *byteArray.data();
+}
+
+unsigned short Packet::getPacketSize(const QByteArray& byteArray)
+{
+    return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1));
+}

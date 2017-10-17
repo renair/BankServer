@@ -10,7 +10,7 @@ class Server : QObject
     Q_OBJECT
 private:
     QTcpServer _tcpServer;
-    std::vector<QTcpSocket*> _connections;
+    QMap<qintptr, QByteArray*> _connectionsMap;
     //deleted methods
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;

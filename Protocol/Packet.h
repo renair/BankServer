@@ -14,6 +14,9 @@ namespace Protocol
         static void init();
     public:
         static Packet* getPacket(char id);
+        static bool isPacket(const QByteArray&);
+        static char getPacketId(const QByteArray&);
+        static unsigned short getPacketSize(const QByteArray&);
         //interface methods
         virtual char getID() const = 0;
         virtual Packet* clone() const = 0;

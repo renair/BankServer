@@ -51,13 +51,15 @@ Packet* UserAuthPacket::clone() const
 
 QByteArray UserAuthPacket::dump() const
 {
-    QByteArray arr;
-    QBuffer buff(&arr);
-    buff.open(QBuffer::WriteOnly);
-    buff.write(&_ID, sizeof(_ID));
-    buff.write((char*)&_cardnum, sizeof(_cardnum));
-    buff.write((char*)&_password, sizeof(_password));
-    return arr;
+    QByteArray data;
+    data.append((char*)&_cardnum, sizeof(_cardnum));
+    data.append((char*)&_password, sizeof(_password));
+    QByteArray result;
+    result.append(getID());
+    unsigned short size = data.length();
+    result.append((char*)&size, sizeof(short));
+    result.append(data);
+    return result;
 }
 
 void UserAuthPacket::load(QByteArray& bytes)
@@ -70,6 +72,7 @@ void UserAuthPacket::load(QByteArray& bytes)
     {
         //throw some error
     }
+    buff.seek(buff.pos()+sizeof(short)); //skip size field
     buff.read((char*)&_cardnum, sizeof(_cardnum));
     buff.read((char*)&_password, sizeof(_password));
 }
