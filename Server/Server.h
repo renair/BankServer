@@ -3,22 +3,27 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <vector>
 
 class Server : QObject
 {
     Q_OBJECT
 private:
     QTcpServer _tcpServer;
-    QMap<int, QTcpSocket*> _connectionMap;
-public:
-    Server(int port = 45654);
-    ~Server();
-    void start() const;
+    std::vector<QTcpSocket*> _connections;
     //deleted methods
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
+public:
+    Server();
+    ~Server();
+    void start(unsigned short port = 45654);
 private slots:
-    void newConnection();
+    //slot for server
+    void clientConnected();
+    //slots for clients
+    void dataReady();
+    void clientDisconnected();
 };
 
 #endif // SERVER_H

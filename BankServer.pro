@@ -14,7 +14,9 @@ TEMPLATE = app
 SOURCES += main.cpp \
     Protocol/Packet.cpp \
     Protocol/Client/UserAuthPacket.cpp \
-    BankSystem/PaymentManager.cpp
+    BankSystem/PaymentManager.cpp \
+    Server/Server.cpp \
+    BankSystem/PaymentService.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
