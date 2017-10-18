@@ -12,6 +12,13 @@ namespace Protocol
         static const char _ID;
         long long _cardnum;
         short _password;
+
+        //interface methods
+        char specificGetID() const;
+        Packet* specificClone() const;
+        QByteArray specificDump() const;
+        void specificLoad(QBuffer&);
+        void specificHandle() const;
     public:
         UserAuthPacket();
         UserAuthPacket(long long card, short pass);
@@ -22,12 +29,6 @@ namespace Protocol
         //selectors
         long long card() const;
         short password() const;
-        //interface methods
-        char getID() const;
-        Packet* clone() const;
-        QByteArray dump() const;
-        void load(QByteArray&);
-        void handle() const;
     };
 }
 

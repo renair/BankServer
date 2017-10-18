@@ -39,45 +39,31 @@ short UserAuthPacket::password() const
     return _password;
 }
 
-char UserAuthPacket::getID() const
+char UserAuthPacket::specificGetID() const
 {
     return _ID;
 }
 
-Packet* UserAuthPacket::clone() const
+Packet* UserAuthPacket::specificClone() const
 {
     return new UserAuthPacket(*this);
 }
 
-QByteArray UserAuthPacket::dump() const
+QByteArray UserAuthPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_cardnum, sizeof(_cardnum));
     data.append((char*)&_password, sizeof(_password));
-    QByteArray result;
-    result.append(getID());
-    unsigned short size = data.length();
-    result.append((char*)&size, sizeof(short));
-    result.append(data);
-    return result;
+    return data;
 }
 
-void UserAuthPacket::load(QByteArray& bytes)
+void UserAuthPacket::specificLoad(QBuffer& buff)
 {
-    QBuffer buff(&bytes);
-    buff.open(QBuffer::ReadOnly);
-    char i = 0;
-    buff.read(&i, sizeof(i));
-    if(i != getID())
-    {
-        //throw some error
-    }
-    buff.seek(buff.pos()+sizeof(short)); //skip size field
     buff.read((char*)&_cardnum, sizeof(_cardnum));
     buff.read((char*)&_password, sizeof(_password));
 }
 
-void UserAuthPacket::handle() const
+void UserAuthPacket::specificHandle() const
 {
     //do some stuff here
 }

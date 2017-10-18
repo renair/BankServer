@@ -1,8 +1,8 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include<QBuffer>
 #include<unordered_map>
-#include<QByteArray>
 
 namespace Protocol
 {
@@ -12,17 +12,35 @@ namespace Protocol
         static std::unordered_map<char, Packet*> _packetsMap;
         static bool _isInited;
         static void init();
+        // specific methods for each packets
+        virtual char specificGetID() const = 0;
+        virtual Packet* specificClone() const = 0;
+        virtual QByteArray specificDump() const = 0;
+        virtual void specificLoad(QBuffer&) = 0;
+        virtual void specificHandle() const = 0;
     public:
         static Packet* getPacket(char id);
         static bool isPacket(const QByteArray&);
         static char getPacketId(const QByteArray&);
         static unsigned short getPacketSize(const QByteArray&);
-        //interface methods
-        virtual char getID() const = 0;
-        virtual Packet* clone() const = 0;
-        virtual QByteArray dump() const = 0;
-        virtual void load(QByteArray&) = 0;
-        virtual void handle() const = 0;
+        // NVI (NonVirtualInterface)
+        QByteArray dump() const;
+        void load(QByteArray& arr);
+
+        inline char getID() const
+        {
+            return specificGetID();
+        }
+
+        inline Packet* clone() const
+        {
+            return specificClone();
+        }
+
+        inline void handle() const
+        {
+            return specificHandle();
+        }
     };
 }
 

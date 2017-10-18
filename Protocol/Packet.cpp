@@ -50,3 +50,30 @@ unsigned short Packet::getPacketSize(const QByteArray& byteArray)
 {
     return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1));
 }
+
+// Methods from NVI
+
+QByteArray Packet::dump() const
+{
+    QByteArray data = specificDump(); //using pure virtual method
+    QByteArray result;
+    result.append(getID());
+    unsigned short size = data.length();
+    result.append((char*)&size, sizeof(short));
+    result.append(data);
+    return result;
+}
+
+void Packet::load(QByteArray& byteArray)
+{
+    QBuffer buff(&byteArray);
+    buff.open(QBuffer::ReadOnly);
+    char i = 0;
+    buff.read(&i, sizeof(i));
+    if(i != getID())
+    {
+        //throw some error
+    }
+    buff.seek(buff.pos()+sizeof(short)); //skip size field
+    specificLoad(buff);
+}
