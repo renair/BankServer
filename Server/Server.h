@@ -1,6 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <QtGlobal> //to include qintptr
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <vector>
