@@ -19,6 +19,7 @@ namespace Protocol
         virtual void specificLoad(QBuffer&) = 0;
         virtual void specificHandle() const = 0;
     public:
+        virtual ~Packet(){}
         static Packet* getPacket(char id);
         static bool isPacket(const QByteArray&);
         static char getPacketId(const QByteArray&);
