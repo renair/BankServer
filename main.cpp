@@ -3,6 +3,7 @@
 #include "Protocol/Packet.h"
 #include "Protocol/Client/UserAuthPacket.h"
 #include "Server/Server.h"
+#include "DBWork/testingdb.h"
 
 using namespace std;
 
@@ -19,5 +20,11 @@ int main(int argc, char** argv)
 
 //    Server server;
 //    server.start(2000);
-    return a.exec();
+//    return a.exec();
+    {
+        TestingDB* test = new TestingDB();
+        test->run();
+        delete test;
+    }
+    return 0;
 }

@@ -1,4 +1,4 @@
-QT += core network
+QT += core network sql
 QT -= gui
 
 CONFIG += c++11
@@ -14,9 +14,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     Protocol/Packet.cpp \
     Protocol/Client/UserAuthPacket.cpp \
-    BankSystem/PaymentManager.cpp \
     Server/Server.cpp \
-    BankSystem/PaymentService.cpp
+    BankSystem/PaymentManager.cpp \
+    BankSystem/PaymentService.cpp \
+    DBWork/testingdb.cpp \
+    DBWork/connection.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -31,11 +33,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     Protocol/Packet.h \
-    Protocol/Client/UserAuthPacket.h \
     Protocol/PacketsList.h \
+    Protocol/Client/UserAuthPacket.h \
     Server/Server.h \
     BankSystem/PaymentManager.h \
-    BankSystem/PaymentService.h
+    BankSystem/PaymentService.h \
+    DBWork/connection.h \
+    DBWork/testingdb.h
 
 DISTFILES += \
     .gitignore \
