@@ -19,7 +19,6 @@ SOURCES += main.cpp \
     BankSystem/PaymentService.cpp \
     DBWork/testingdb.cpp \
     DBWork/connection.cpp \
-    BankSystem/PaymentService.cpp \
     DataBase/Objects/Payment.cpp \
     DataBase/Objects/PaymentStub.cpp
 
