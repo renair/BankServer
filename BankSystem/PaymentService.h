@@ -2,26 +2,27 @@
 #define PAYMENTSERVICE_H
 
 #include <queue>
+#include <QObject>
 #include <QMutex>
-#include <QThread>
+#include "../DataBase/Objects/Payment.h"
 
-class Payment;
-
-class PaymentService : public QThread
+class PaymentService : public QObject
 {
     Q_OBJECT
 private:
     std::priority_queue<Payment*> _paymentQueue;
     QMutex _mutex;
     //some DB connectors?
-    void performPayment();
-protected:
-    void run();
+private slots:
+    void savePendingPayments();
+    void loadPendingPayments();
 public:
     PaymentService();
     ~PaymentService();
-    void addPayment();
-    unsigned int payment_amount() const;
+    void addPayment(Payment*);
+    unsigned int paymentsAmount() const;
+public slots:
+    void startService();
 };
 
 #endif // PAYMENTSERVICE_H

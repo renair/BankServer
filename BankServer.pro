@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     BankSystem/PaymentManager.cpp \
     BankSystem/PaymentService.cpp \
     DBWork/testingdb.cpp \
-    DBWork/connection.cpp
+    DBWork/connection.cpp \
+    BankSystem/PaymentService.cpp \
+    DataBase/Objects/Payment.cpp \
+    DataBase/Objects/PaymentStub.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -39,7 +42,9 @@ HEADERS += \
     BankSystem/PaymentManager.h \
     BankSystem/PaymentService.h \
     DBWork/connection.h \
-    DBWork/testingdb.h
+    DBWork/testingdb.h \
+    DataBase/Objects/Payment.h \
+    DataBase/Objects/PaymentStub.h
 
 DISTFILES += \
     .gitignore \
