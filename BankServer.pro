@@ -17,10 +17,11 @@ SOURCES += main.cpp \
     Server/Server.cpp \
     BankSystem/PaymentManager.cpp \
     BankSystem/PaymentService.cpp \
-    DBWork/testingdb.cpp \
-    DBWork/connection.cpp \
-    DataBase/Objects/Payment.cpp \
-    DataBase/Objects/PaymentStub.cpp
+    DataBase/testingdb.cpp \
+    DataBase/connection.cpp \
+    DataBase/Objects/withdraw.cpp \
+    DataBase/Objects/transfer.cpp \
+    DataBase/Access/transfer_table.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -40,10 +41,12 @@ HEADERS += \
     Server/Server.h \
     BankSystem/PaymentManager.h \
     BankSystem/PaymentService.h \
-    DBWork/connection.h \
-    DBWork/testingdb.h \
-    DataBase/Objects/Payment.h \
-    DataBase/Objects/PaymentStub.h
+    DataBase/connection.h \
+    DataBase/testingdb.h \
+    DataBase/Objects/withdraw.h \
+    DataBase/Objects/transfer.h \
+    DataBase/Objects/payment.h \
+    DataBase/Access/transfer_table.h
 
 DISTFILES += \
     .gitignore \

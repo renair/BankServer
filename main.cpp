@@ -4,15 +4,15 @@
 #include "Protocol/Client/UserAuthPacket.h"
 #include "Server/Server.h"
 #include "BankSystem/PaymentManager.h"
-#include "DataBase/Objects/PaymentStub.h"
-#include "DBWork/testingdb.h"
+#include "DataBase/Objects/transfer.h"
+#include "DataBase/testingdb.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    Payment* p1 = new PaymentStub(100);
+    /*Payment* p1 = new PaymentStub(100);
     Payment* p2 = new PaymentStub(200);
     Payment* p3 = new PaymentStub(300);
     Payment* p4 = new PaymentStub(400);
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     delete p2;
     delete p3;
     delete p4;
-    delete p5;
+    delete p5;*/
 //    Protocol::UserAuthPacket p;
 //    p.card() = 12432423425;
 //    p.password() = 6294;

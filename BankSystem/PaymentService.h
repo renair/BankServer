@@ -4,7 +4,7 @@
 #include <queue>
 #include <QObject>
 #include <QMutex>
-#include "../DataBase/Objects/Payment.h"
+#include "../DataBase/Objects/transfer.h"
 
 class PaymentService : public QObject
 {
