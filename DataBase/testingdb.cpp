@@ -5,7 +5,7 @@ using namespace std;
 
 #include "DataBase/testingdb.h"
 #include "DataBase/connection.h"
-#include "DataBase/Objects/Transfer.h"
+#include "DataBase/Objects/transfer.h"
 #include "DataBase/Access/transfer_table.h"
 
 TestingDB::TestingDB()
