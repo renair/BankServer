@@ -10,40 +10,46 @@ using namespace std;
 class Transfer : public Payment
 {
 public:
-    explicit Transfer(int id,
-                      int payer_id,
-                      int receiver_id,
-                      QString tech_comment,
-                      QString comment="",
-                      int period=0);
-    Transfer(int payer_id=-1,
-             int receiver_id=-1,
-             QString tech_comment="",
-             QString comment="",
-             int period=0);
+    explicit Transfer(const int id,
+                      const int payer_id,
+                      const int receiver_id,
+                      const long time,
+                      const QString& tech_comment,
+                      const QString& comment="",
+                      const int period=0);
+    Transfer(const int payer_id=-1,
+             const int receiver_id=-1,
+             const long time=0,
+             const QString& tech_comment="transfer",
+             const QString& comment="",
+             const int period=0);
     ~Transfer(){}
-    Transfer(Transfer&);
+    Transfer(const Transfer&);
     //Selectors
-    id() const;
-    payer_id() const;
-    receiver_id() const;
-    period() const;
-    const QString tech_comment() const;
-    const QString comment() const;
-    //Modifiers
-    void payer_id(int);
-    void receiver_id(int);
-    void period(int);
-    void tech_comment(const QString&);
-    void comment(const QString&);
+    const int& id() const;
+    const int& payer_id() const;
+    const int& receiver_id() const;
+    const int& period() const;
+    const long& time() const;
+    const QString& tech_comment() const;
+    const QString& comment() const;
+    //Selector-modifiers
+    int& payer_id();
+    int& receiver_id();
+    int& period();
+    long& time();
+    QString& tech_comment();
+    QString& comment();
 private:
-    int id(int);
+    int& id();
     //Identifier, not initialized(NI): -1
     int _id;
     //The account from which transfer will be made, NI: -1
     int _account_payer_id;
     //The account is where the transfer will be made, NI: -1
     int _account_receiver_id;
+    //Number of seconds after start of Unix age
+    long _time;
     /*The comment need for specific transfers,
         as the transfer to the account of the mobile operator
         indicating the phone number*/

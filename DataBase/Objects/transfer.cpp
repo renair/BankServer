@@ -1,14 +1,17 @@
 #include "transfer.h"
+#include <QDateTime>
 
-Transfer::Transfer(int id,
-                   int payer_id,
-                   int receiver_id,
-                   QString tech_comment,
-                   QString comment,
-                   int period):
+Transfer::Transfer(const int id,
+                   const int payer_id,
+                   const int receiver_id,
+                   const long time,
+                   const QString& tech_comment,
+                   const QString& comment,
+                   const int period):
   _id(id),
   _account_payer_id(payer_id),
   _account_receiver_id(receiver_id),
+  _time(time),
   _technical_comment(tech_comment),
   _comment(comment),
   _periodicity(period)
@@ -16,18 +19,20 @@ Transfer::Transfer(int id,
     qDebug("New money widthraw");
 }
 
-Transfer::Transfer(int payer_id,
-                   int receiver_id,
-                   QString tech_comment,
-                   QString comment,
-                   int period):
-    Transfer(-1,payer_id,receiver_id,tech_comment,comment,period)
+Transfer::Transfer(const int payer_id,
+                   const int receiver_id,
+                   const long time,
+                   const QString& tech_comment,
+                   const QString& comment,
+                   const int period):
+    Transfer(-1,payer_id,receiver_id,time,tech_comment,comment,period)
 {}
 
-Transfer::Transfer(Transfer& src):
+Transfer::Transfer(const Transfer& src):
     _id(src.id()),
     _account_payer_id(src.payer_id()),
     _account_receiver_id(src.receiver_id()),
+    _time(src.time()),
     _technical_comment(src.tech_comment()),
     _comment(src.comment()),
     _periodicity(src.period())
@@ -40,58 +45,71 @@ bool Transfer::specificPerform()
 }
 
 //Selectors
-Transfer::id() const
+const int& Transfer::id() const
 {
     return _id;
 }
-Transfer::payer_id() const
+const int& Transfer::payer_id() const
 {
     return _account_payer_id;
 }
-Transfer::receiver_id() const
+const int& Transfer::receiver_id() const
 {
     return _account_receiver_id;
 }
-Transfer::period() const
+const int& Transfer::period() const
 {
     return _periodicity;
 }
-const QString Transfer::tech_comment() const
+const long& Transfer::time() const
+{
+    return _time;
+}
+const QString& Transfer::tech_comment() const
 {
     return _technical_comment;
 }
-const QString Transfer::comment() const
+const QString& Transfer::comment() const
 {
     return _comment;
 }
 
-//Modifiers
-void Transfer::payer_id(int i)
+//Selector-modifiers
+int& Transfer::payer_id()
 {
-    _account_payer_id=i;
+    _account_payer_id;
 }
-void Transfer::receiver_id(int i)
+int& Transfer::receiver_id()
 {
-    _account_receiver_id=i;
+    _account_receiver_id;
 }
-void Transfer::period(int i)
+int& Transfer::period()
 {
-    _periodicity=i;
+    _periodicity;
 }
-void Transfer::tech_comment(const QString& s)
+long& Transfer::time()
 {
-    _technical_comment=s;
+    return _time;
 }
-void Transfer::comment(const QString& s)
+QString& Transfer::tech_comment()
 {
-    _comment=s;
+    _technical_comment;
+}
+QString& Transfer::comment()
+{
+    _comment;
 }
 
 ostream& operator<<(ostream& os, const Transfer& t)
 {
+    QDateTime time;
+    time.setTime_t(t.time());
+    //SetConsoleOutputCP(1251);
+    //setlocale(LC_ALL, "rus");
     return os<< "Transfer ID: " << t.id() <<endl
              << "Payer ID: " << t.payer_id() <<endl
              << "Receiver ID: " << t.receiver_id() <<endl
+             << "Time: " << time.toString().toStdString() <<endl
              << "Period: " << t.period() << "seconds" <<endl
              << "Technical comment: \"" << t.tech_comment().toUtf8().constData() << "\"" <<endl
              << "Comment: \"" << t.comment().toUtf8().constData() << "\"" <<endl;

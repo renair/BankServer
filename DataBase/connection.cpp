@@ -26,7 +26,8 @@ bool Connection::open()
 QSqlQuery Connection::execute(const QString& sql)
 {
     /* TODO when open()==false */
-    open();
+    if(!open())
+        throw QString("Cannot connect to data base");
     QSqlQuery q;
     q.exec(sql);
     return q;

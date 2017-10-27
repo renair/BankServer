@@ -1,3 +1,5 @@
+#include <QDebug>
+#include <fstream>
 #include <iostream>
 using namespace std;
 
@@ -19,18 +21,19 @@ TestingDB::~TestingDB()
 void TestingDB::run()
 {
     cout<< "Test db connection" <<endl;
-    /*Transfer* t = new Transfer();
-    cout<< *t <<endl;
-    cout<< t->id() <<endl;
-    t->id()=5;
-    cout<< t->id() <<endl;
-    delete t;*/
     Connection* connection = new Connection();
     TransferTable transfers(*connection);
-    cout<< transfers.get_by_id(1) <<endl;
+    ofstream out;
+    out.open("res.txt");
+    cout<< "File opened" <<endl;
+    try{
+        //out<< transfers.get_by_id(1) <<endl;
+        out<< transfers.get_by_id(1) <<endl;
+    }catch(const QString& error){
+        out<< "Error: " + error.toStdString();
+    }
+    out.close();
+    cout<< "Completed!" <<endl;
     delete connection;
-    //Transfer t(1,1,"Some comments");
-    //cout<<t<<endl;
-    //Transfer t();
     return;
 }
