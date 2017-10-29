@@ -34,7 +34,7 @@ void Server::clientConnected()
     {
         QTcpSocket* client = _tcpServer.nextPendingConnection();
         connect(client, SIGNAL(readyRead()), this , SLOT(dataReady()));
-        connect(client, SIGNAL(disconnected()), this, SLOT(clientConnected()));
+        connect(client, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
         _connectionsMap.insert(client->socketDescriptor(), new QByteArray());
     }
 }
@@ -47,12 +47,10 @@ void Server::dataReady()
     if(Packet::isPacket(*callerData))
     {
         //do some stuff
+        Packet* p = Packet::getPacket(1);
+        p->load(callerData);
+        //callerData->re
     }
-    //test stub!
-//    QTcpSocket* caller = static_cast<QTcpSocket*>(sender());
-//    char data[1024];
-//    int length = caller->read(data, 1024);
-//    caller->write(data, length);
 }
 
 void Server::clientDisconnected()

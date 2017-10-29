@@ -15,13 +15,13 @@ SOURCES += main.cpp \
     Protocol/Packet.cpp \
     Protocol/Client/UserAuthPacket.cpp \
     Server/Server.cpp \
-    BankSystem/PaymentManager.cpp \
     BankSystem/PaymentService.cpp \
     DataBase/testingdb.cpp \
     DataBase/connection.cpp \
     DataBase/Objects/withdraw.cpp \
     DataBase/Objects/transfer.cpp \
-    DataBase/Access/transfer_table.cpp
+    DataBase/Access/transfer_table.cpp \
+    BankSystem/BankManager.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -39,14 +39,15 @@ HEADERS += \
     Protocol/PacketsList.h \
     Protocol/Client/UserAuthPacket.h \
     Server/Server.h \
-    BankSystem/PaymentManager.h \
     BankSystem/PaymentService.h \
     DataBase/connection.h \
     DataBase/testingdb.h \
     DataBase/Objects/withdraw.h \
     DataBase/Objects/transfer.h \
     DataBase/Objects/payment.h \
-    DataBase/Access/transfer_table.h
+    DataBase/Access/transfer_table.h \
+    BankSystem/BankManager.h \
+    BankSystem/UserService.h
 
 DISTFILES += \
     .gitignore \

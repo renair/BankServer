@@ -41,7 +41,6 @@ public:
     QString& tech_comment();
     QString& comment();
 private:
-    int& id();
     //Identifier, not initialized(NI): -1
     int _id;
     //The account from which transfer will be made, NI: -1
@@ -58,8 +57,10 @@ private:
     QString _comment;
     //The frequency with which the transfer will be made (in seconds), NI: 0
     int _periodicity;
-
+    //interface methods
     bool specificPerform();
+    bool specificIsPeriodic();
+    Payment* specificNextPayment();
 };
 
 ostream& operator<<(ostream&, const Transfer&);

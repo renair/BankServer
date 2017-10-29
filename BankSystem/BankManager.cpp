@@ -1,7 +1,7 @@
-#include "PaymentManager.h"
+#include "BankManager.h"
 #include <QObject>
 
-PaymentManager::PaymentManager()
+BankManager::BankManager()
 {
     _paymentService.moveToThread(&_paymentThread);
     QObject::connect(&_paymentThread, SIGNAL(started()), &_paymentService, SLOT(loadPendingPayments()));
@@ -9,19 +9,19 @@ PaymentManager::PaymentManager()
     _paymentThread.start(QThread::HighestPriority);
 }
 
-PaymentManager::~PaymentManager()
+BankManager::~BankManager()
 {
     _paymentThread.quit();
     _paymentThread.wait();
 }
 
-void PaymentManager::addPayment(Payment* newOperation)
+void BankManager::addPayment(Payment* newOperation)
 {
     qDebug("Payment manager add Payment");
     _paymentService.addPayment(newOperation);
 }
 
-unsigned int PaymentManager::paymentAmount() const
+unsigned int BankManager::paymentAmount() const
 {
     return _paymentService.paymentsAmount();
 }

@@ -3,7 +3,7 @@
 #include "Protocol/Packet.h"
 #include "Protocol/Client/UserAuthPacket.h"
 #include "Server/Server.h"
-#include "BankSystem/PaymentManager.h"
+#include "BankSystem/BankManager.h"
 #include "DataBase/Objects/transfer.h"
 #include "DataBase/testingdb.h"
 

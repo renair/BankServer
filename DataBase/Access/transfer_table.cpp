@@ -23,9 +23,9 @@ Transfer TransferTable::get_by_id(int id)
 {
     try{
     QSqlQuery q = _connection.execute(
-                QString("SELECT ID,payer,destination,time,technical_comment,comment,periodicity")+
-                        " FROM payment"+
-                        " WHERE id='"+QString::number(id)+"' AND is_withdraw='0'");
+                QString("SELECT ID,payer,destination,time,technical_comment,comment,periodicity \
+                         FROM payment \
+                         WHERE id='%1' AND is_withdraw='0'").arg(QString::number(id)));
     q.next();
     Transfer t(q.value(0).toInt(),
                q.value(1).toInt(),

@@ -44,6 +44,19 @@ bool Transfer::specificPerform()
     return true;
 }
 
+bool Transfer::specificIsPeriodic()
+{
+    //TODO check periodicity of the payment
+    return false;
+}
+
+Payment* Transfer::specificNextPayment()
+{
+    //TODO return copy with new date and id
+    return NULL;
+}
+
+
 //Selectors
 const int& Transfer::id() const
 {
@@ -77,15 +90,15 @@ const QString& Transfer::comment() const
 //Selector-modifiers
 int& Transfer::payer_id()
 {
-    _account_payer_id;
+    return _account_payer_id;
 }
 int& Transfer::receiver_id()
 {
-    _account_receiver_id;
+    return _account_receiver_id;
 }
 int& Transfer::period()
 {
-    _periodicity;
+    return _periodicity;
 }
 long& Transfer::time()
 {
@@ -93,11 +106,11 @@ long& Transfer::time()
 }
 QString& Transfer::tech_comment()
 {
-    _technical_comment;
+    return _technical_comment;
 }
 QString& Transfer::comment()
 {
-    _comment;
+    return _comment;
 }
 
 ostream& operator<<(ostream& os, const Transfer& t)
