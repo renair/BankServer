@@ -1,6 +1,6 @@
 #ifndef PACKETSLIST_H
 #define PACKETSLIST_H
 
-#include "Client/UserAuthPacket.h"
+#include "Packets/UserAuthPacket.h"
 
 #endif // PACKETSLIST_H

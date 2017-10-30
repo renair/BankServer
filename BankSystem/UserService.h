@@ -15,7 +15,7 @@ private:
     QMutex _mutex;
 public:
     UserService();
-    ~UserService();
+    ~UserService(){}
     void registerNewUser(const User*);
     bool isUserConnected(long);
 signals:

@@ -1,7 +1,5 @@
 #include "UserAuthPacket.h"
 
-using namespace Protocol;
-
 const char UserAuthPacket::_ID = 1;
 
 UserAuthPacket::UserAuthPacket():

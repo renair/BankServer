@@ -2,7 +2,6 @@
 #include "../Protocol/Packet.h"
 
 using namespace std;
-using namespace Protocol;
 
 Server::Server()
 {
@@ -48,7 +47,7 @@ void Server::dataReady()
     {
         //do some stuff
         Packet* p = Packet::getPacket(1);
-        p->load(callerData);
+        p->load(*callerData);
         //callerData->re
     }
 }

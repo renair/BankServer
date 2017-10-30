@@ -13,7 +13,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Protocol/Packet.cpp \
-    Protocol/Client/UserAuthPacket.cpp \
     Server/Server.cpp \
     BankSystem/PaymentService.cpp \
     DataBase/testingdb.cpp \
@@ -21,7 +20,8 @@ SOURCES += main.cpp \
     DataBase/Objects/withdraw.cpp \
     DataBase/Objects/transfer.cpp \
     DataBase/Access/transfer_table.cpp \
-    BankSystem/BankManager.cpp
+    BankSystem/BankManager.cpp \
+    Protocol/Packets/UserAuthPacket.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -37,7 +37,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     Protocol/Packet.h \
     Protocol/PacketsList.h \
-    Protocol/Client/UserAuthPacket.h \
     Server/Server.h \
     BankSystem/PaymentService.h \
     DataBase/connection.h \
@@ -47,7 +46,9 @@ HEADERS += \
     DataBase/Objects/payment.h \
     DataBase/Access/transfer_table.h \
     BankSystem/BankManager.h \
-    BankSystem/UserService.h
+    BankSystem/UserService.h \
+    Protocol/Packets/UserAuthPacket.h \
+    Server/PacketStorage.h
 
 DISTFILES += \
     .gitignore \

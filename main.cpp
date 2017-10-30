@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "Protocol/Packet.h"
-#include "Protocol/Client/UserAuthPacket.h"
+#include "Protocol/Packets/UserAuthPacket.h"
 #include "Server/Server.h"
 #include "BankSystem/BankManager.h"
 #include "DataBase/Objects/transfer.h"
@@ -40,11 +40,10 @@ int main(int argc, char** argv)
 
 //    Server server;
 //    server.start(2000);
-//    return a.exec();
     {
         TestingDB* test = new TestingDB();
         test->run();
         delete test;
     }
-    return 0;
+    return a.exec();
 }

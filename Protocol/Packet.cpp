@@ -1,8 +1,6 @@
 #include "Packet.h"
 #include "PacketsList.h"
 
-using namespace Protocol;
-
 bool Packet::_isInited = false;
 std::unordered_map<char, Packet*> Packet::_packetsMap;
 
@@ -16,6 +14,7 @@ Packet* Packet::getPacket(char id)
     if(!_isInited)
     {
         init();
+        _isInited = true;
     }
     for(std::unordered_map<char, Packet*>::iterator iterator = _packetsMap.begin();
         iterator != _packetsMap.end();
@@ -37,7 +36,7 @@ bool Packet::isPacket(const QByteArray& byteArray)
     }
     else
     {
-        return getPacketSize(byteArray) == (byteArray.length()-sizeof(char)-sizeof(short));
+        return getPacketSize(byteArray) <= (byteArray.length()-sizeof(char)-sizeof(short));
     }
 }
 
@@ -49,6 +48,13 @@ char Packet::getPacketId(const QByteArray& byteArray)
 unsigned short Packet::getPacketSize(const QByteArray& byteArray)
 {
     return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1));
+}
+
+//virtual method
+
+void Packet::specificHandle() const
+{
+    return;
 }
 
 // Methods from NVI
