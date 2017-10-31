@@ -28,6 +28,15 @@ Packet* Packet::getPacket(char id)
     return NULL;
 }
 
+void Packet::removeFirstPacket(QByteArray& data)
+{
+    if(isPacket(data))
+    {
+        unsigned int size = getPacketSize(data);
+        data.remove(0,size+sizeof(char)+sizeof(short));
+    }
+}
+
 bool Packet::isPacket(const QByteArray& byteArray)
 {
     if(byteArray.length() < 3)
@@ -47,7 +56,7 @@ char Packet::getPacketId(const QByteArray& byteArray)
 
 unsigned short Packet::getPacketSize(const QByteArray& byteArray)
 {
-    return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1));
+    return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1)); // + sizeof(char) + sizeof(short)
 }
 
 //virtual method

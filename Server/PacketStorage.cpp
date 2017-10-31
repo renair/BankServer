@@ -1,6 +1,9 @@
 #include "PacketStorage.h"
 #include "../Protocol/Packet.h"
 
+#include <iostream>
+using namespace std;
+
 #include "QFile"
 
 PacketStorage::PacketStorage():
@@ -62,19 +65,22 @@ void PacketStorage::loadFromFile()
     loadFromFile(_saveFileName);
 }
 
+//TODO improve loading algorithm!!!
 void PacketStorage::loadFromFile(const QString& filename)
 {
     QFile file(filename);
-    file.open(QFile::ReadOnly);
-    QByteArray data = file.readAll();
     if(file.exists())
     {
+        file.open(QFile::ReadOnly);
+        QByteArray data = file.readAll();
         _mutex.lock();
         while(Packet::isPacket(data))
         {
             Packet* packet = Packet::getPacket(Packet::getPacketId(data));
             packet->load(data);
             _packetsQueue.enqueue(packet);
+            cout << _packetsQueue.length() << endl;
+            Packet::removeFirstPacket(data);
         }
         _mutex.unlock();
     }

@@ -19,6 +19,7 @@ private:
 public:
     virtual ~Packet(){}
     static Packet* getPacket(char id);
+    static void removeFirstPacket(QByteArray&);
     static bool isPacket(const QByteArray&);
     static char getPacketId(const QByteArray&);
     static unsigned short getPacketSize(const QByteArray&);

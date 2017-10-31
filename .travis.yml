@@ -13,5 +13,5 @@ install:
 
 script:
   - source /opt/qt55/bin/qt55-env.sh
-  - /opt/qt55/bin/qmake qmake BankServer.pro
+  - /opt/qt55/bin/qmake BankServer.pro
   - make

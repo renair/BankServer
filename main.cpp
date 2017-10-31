@@ -15,13 +15,14 @@ int main(int argc, char** argv)
     QCoreApplication a(argc, argv);
 
     PacketStorage* storage = new PacketStorage("testfile.bin");
-//    for(int i = 5000000;i > 0; --i)
+//    append packets to the file! loading become slower!!!
+//    for(int i = 500;i > 0; --i)
 //    {
 //        storage->addPacket(new UserAuthPacket());
 //    }
     cout << "readed " << storage->amount() << " packets" << endl;
     cout << "saving to file" << endl;
-    //storage->saveToFile();
+    storage->saveToFile();
     cout << "saved!" << endl;
     QThread::sleep(15);
     delete storage;
