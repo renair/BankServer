@@ -60,8 +60,3 @@ void UserAuthPacket::specificLoad(QBuffer& buff)
     buff.read((char*)&_cardnum, sizeof(_cardnum));
     buff.read((char*)&_password, sizeof(_password));
 }
-
-void UserAuthPacket::specificHandle() const
-{
-    //do some stuff here
-}

@@ -9,9 +9,9 @@ class Packet;
 class PacketStorage
 {
 private:
-    QQueue<Packet*> _paketsQueue;
     QString _saveFileName;
-    QMutex _mutex;
+    mutable QQueue<Packet*> _packetsQueue;
+    mutable QMutex _mutex;
     PacketStorage(const PacketStorage&) = delete;
     PacketStorage& operator=(const PacketStorage&) = delete;
 public:
@@ -21,10 +21,12 @@ public:
     void addPacket(Packet*);
     Packet* nextPacket() const;
     unsigned int amount() const;
+    QString& saveFileName();
+    const QString& saveFileName() const;
     void loadFromFile();
-    void loadFromFile(const QSrting&);
+    void loadFromFile(const QString&);
     void saveToFile() const;
-    void saveToFile(const QString&);
+    void saveToFile(const QString&) const;
 };
 
 #endif // PACKETSTORAGE_H
