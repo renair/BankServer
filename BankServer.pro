@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     DataBase/Access/transfer_table.cpp \
     BankSystem/BankManager.cpp \
     Protocol/Packets/UserAuthPacket.cpp \
-    Server/PacketStorage.cpp
+    Server/PacketStorage.cpp \
+    Server/ServerConfiguration.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -49,7 +50,8 @@ HEADERS += \
     BankSystem/BankManager.h \
     BankSystem/UserService.h \
     Protocol/Packets/UserAuthPacket.h \
-    Server/PacketStorage.h
+    Server/PacketStorage.h \
+    Server/ServerConfiguration.h
 
 DISTFILES += \
     .gitignore \
