@@ -19,7 +19,7 @@ public:
     void registerNewUser(const User*);
     bool isUserConnected(long);
 signals:
-    userDisconnected(long);
+    void userDisconnected(long);
 };
 
 #endif // USERSERVICE_H

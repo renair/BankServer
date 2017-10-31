@@ -16,7 +16,6 @@ private:
     Packet* specificClone() const;
     QByteArray specificDump() const;
     void specificLoad(QBuffer&);
-    void specificHandle() const;
 public:
     UserAuthPacket();
     UserAuthPacket(long long card, short pass);
