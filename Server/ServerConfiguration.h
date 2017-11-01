@@ -9,8 +9,6 @@ struct ServerConfiguration
 
     ServerConfiguration();
     ~ServerConfiguration();
-
-    static ServerConfiguration defaultConfiguration;
 };
 
 #endif // SERVERCONFIGURATION_H

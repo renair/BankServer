@@ -1,10 +1,8 @@
 #include "ServerConfiguration.h"
 
-ServerConfiguration::defaultConfiguration._waitingPacketsStorage = "WaitingPackets.pack";
-
-ServerConfiguration::ServerConfiguration()
-{
-    *this = ServerConfiguration::defaultConfiguration;
-}
+//default configuration
+ServerConfiguration::ServerConfiguration():
+    _waitingPacketsStorage("WaitingPackets.pack")
+{}
 
 ServerConfiguration::~ServerConfiguration(){}

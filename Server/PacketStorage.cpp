@@ -7,13 +7,15 @@ using namespace std;
 #include "QFile"
 
 PacketStorage::PacketStorage():
-    _saveFileName("pending_packets.bin")
+    _saveFileName("pending_packets.bin"),
+    _isSaved(true)
 {
     loadFromFile();
 }
 
 PacketStorage::PacketStorage(const QString& filename):
-    _saveFileName(filename)
+    _saveFileName(filename),
+    _isSaved(true)
 {
     loadFromFile();
 }
@@ -34,6 +36,7 @@ void PacketStorage::addPacket(Packet* p)
 {
     _mutex.lock();
     _packetsQueue.enqueue(p);
+    _isSaved = false;
     _mutex.unlock();
 }
 
@@ -41,6 +44,7 @@ Packet* PacketStorage::nextPacket() const
 {
     _mutex.lock();
     Packet* packet = _packetsQueue.dequeue();
+    _isSaved = false;
     _mutex.unlock();
     return packet;
 }
@@ -48,6 +52,11 @@ Packet* PacketStorage::nextPacket() const
 unsigned int PacketStorage::amount() const
 {
     return _packetsQueue.size();
+}
+
+bool PacketStorage::isSaved() const
+{
+    return _isSaved;
 }
 
 QString& PacketStorage::saveFileName()
@@ -82,6 +91,7 @@ void PacketStorage::loadFromFile(const QString& filename)
             cout << _packetsQueue.length() << endl;
             Packet::removeFirstPacket(data);
         }
+        _isSaved = true;
         _mutex.unlock();
     }
 }
@@ -93,17 +103,21 @@ void PacketStorage::saveToFile() const
 
 void PacketStorage::saveToFile(const QString& filename) const
 {
-    QFile file(filename);
-    file.open(QFile::WriteOnly);
-    //critical section - copy existed queue
-    _mutex.lock();
-    QQueue<Packet*> temp_queue(_packetsQueue);
-    temp_queue.detachShared();
-    _mutex.unlock();
-    //end of critical section
-    while(!temp_queue.isEmpty())
+    if(!isSaved())
     {
-        Packet* packet = temp_queue.dequeue();
-        file.write(packet->dump());
+        QFile file(filename);
+        file.open(QFile::WriteOnly);
+        //critical section - copy existed queue
+        _mutex.lock();
+        QQueue<Packet*> temp_queue(_packetsQueue);
+        temp_queue.detachShared();
+        _mutex.unlock();
+        //end of critical section
+        while(!temp_queue.isEmpty())
+        {
+            Packet* packet = temp_queue.dequeue();
+            file.write(packet->dump());
+        }
+        _isSaved = true;
     }
 }
