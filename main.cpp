@@ -9,6 +9,7 @@
 #include "DataBase/testingdb.h"
 #include "Server/PacketBuilder.h"
 #include "Protocol/Processors/UserAuthProcessor.h"
+#include "Server/PacketProcessorCenter.h"
 
 using namespace std;
 
@@ -18,25 +19,18 @@ int main(int argc, char** argv)
     PacketProcessor* proc = new UserAuthProcessor();
     Packet* pack = new UserAuthPacket();
 
-    proc->process(pack);
+    PacketProcessorCenter center(false); //not responsible center
+    center.registerProcessor(pack->getID(), proc);
 
+    center.processPacket(pack);
+    cout << center.isResponsible() << endl;
+    center.setResponsibility();
+    cout << center.isResponsible() << endl;
+    cout << center.processorsAmount() << endl;
+
+    center.setResponsibility(false);
     delete pack;
     delete proc;
-
-//    PacketStorage* storage = new PacketStorage("testfile.bin");
-//    append packets to the file! loading become slower!!!
-//    for(int i = 500;i > 0; --i)
-//    {
-//        storage->addPacket(new UserAuthPacket());
-//    }
-//    cout << "readed " << storage->amount() << " packets" << endl;
-//    cout << "saving to file" << endl;
-//    storage->saveToFile();
-//    cout << "saved!" << endl;
-//    QThread::sleep(15);
-//    delete storage;
-//    cout << "storage deleted!" << endl;
-//    cout << "finished" << endl;
 
 //    Server server;
 //    server.start(2000);
