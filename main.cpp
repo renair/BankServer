@@ -8,32 +8,20 @@
 #include "DataBase/Objects/transfer.h"
 #include "DataBase/testingdb.h"
 #include "Server/PacketBuilder.h"
+#include "Protocol/Processors/UserAuthProcessor.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    PacketStorage storage;
-    PacketBuilder builder(storage);
+    PacketProcessor* proc = new UserAuthProcessor();
+    Packet* pack = new UserAuthPacket();
 
-    QByteArray arr;
+    proc->process(pack);
 
-    Packet* p = new UserAuthPacket();
-
-    arr.append(p->dump());
-    arr.append(p->dump());
-    arr.append(p->dump());
-    arr.append(p->dump());
-    arr.append(p->dump());
-    arr.append(p->dump());
-
-    while(Packet::isPacket(arr))
-    {
-        builder.buildAndPut(arr);
-    }
-
-    cout << storage.amount() << endl;
+    delete pack;
+    delete proc;
 
 //    PacketStorage* storage = new PacketStorage("testfile.bin");
 //    append packets to the file! loading become slower!!!

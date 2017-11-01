@@ -1,10 +1,6 @@
 #include "PacketStorage.h"
 #include "../Protocol/Packet.h"
-
-#include <iostream>
-using namespace std;
-
-#include "QFile"
+#include <QFile>
 
 PacketStorage::PacketStorage():
     _saveFileName("pending_packets.bin"),
@@ -88,7 +84,6 @@ void PacketStorage::loadFromFile(const QString& filename)
             Packet* packet = Packet::getPacket(Packet::getPacketId(data));
             packet->load(data);
             _packetsQueue.enqueue(packet);
-            cout << _packetsQueue.length() << endl;
             Packet::removeFirstPacket(data);
         }
         _isSaved = true;
