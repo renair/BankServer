@@ -1,10 +1,14 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <QtGlobal> //to include qintptr
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <vector>
+#include "PacketBuilder.h"
+#include "PacketStorage.h"
+#include "PacketProcessorCenter.h"
+#include "ServerConfiguration.h"
+#include "Protocol/ProcessorsList.h"
+#include "Protocol/PacketsList.h"
 
 class Server : QObject
 {
@@ -12,11 +16,16 @@ class Server : QObject
 private:
     QTcpServer _tcpServer;
     QMap<int, QByteArray *> _connectionsMap;
+    ServerConfiguration _configuation;
+    PacketStorage _packetStorage;
+    PacketBuilder _packetBuilder;
+    PacketProcessorCenter _packetProcessor;
     //deleted methods
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 public:
     Server();
+    Server(const ServerConfiguration&);
     ~Server();
     void start(unsigned short port = 45654);
 private slots:

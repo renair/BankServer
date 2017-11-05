@@ -7,9 +7,9 @@ class Packet;
 class PacketProcessor
 {
 private:
-    virtual void specificPerform(Packet*) = 0;
+    virtual Packet* specificPerform(Packet*) = 0;
 public:
-    void process(Packet* p)
+    Packet* process(Packet* p)
     {
         return specificPerform(p);
     }

@@ -58,7 +58,8 @@ HEADERS += \
     Server/PacketBuilder.h \
     Protocol/PacketProcessor.h \
     Protocol/Processors/UserAuthProcessor.h \
-    Server/PacketProcessorCenter.h
+    Server/PacketProcessorCenter.h \
+    Protocol/ProcessorsList.h
 
 DISTFILES += \
     .gitignore \

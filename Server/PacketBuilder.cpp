@@ -12,7 +12,7 @@ PacketBuilder::~PacketBuilder()
 
 void PacketBuilder::buildAndPut(QByteArray& data)
 {
-    if(Packet::isPacket(data))
+    while(Packet::isPacket(data))
     {
         Packet* pack = Packet::getPacket(Packet::getPacketId(data));
         pack->load(data);

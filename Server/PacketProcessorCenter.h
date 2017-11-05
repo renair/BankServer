@@ -22,7 +22,7 @@ public:
     PacketProcessor* getPacketProcessor(char);
     const PacketProcessor* getPacketProcessor(char) const;
     void registerProcessor(char, PacketProcessor*);
-    void processPacket(Packet*);
+    Packet* processPacket(Packet*);
 };
 
 #endif // PACKETPROCESSORCENTER_H

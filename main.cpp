@@ -16,21 +16,25 @@ using namespace std;
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    PacketProcessor* proc = new UserAuthProcessor();
-    Packet* pack = new UserAuthPacket();
 
-    PacketProcessorCenter center(false); //not responsible center
-    center.registerProcessor(pack->getID(), proc);
+    Server serv;
+    serv.start();
 
-    center.processPacket(pack);
-    cout << center.isResponsible() << endl;
-    center.setResponsibility();
-    cout << center.isResponsible() << endl;
-    cout << center.processorsAmount() << endl;
+//    PacketProcessor* proc = new UserAuthProcessor();
+//    Packet* pack = new UserAuthPacket();
 
-    center.setResponsibility(false);
-    delete pack;
-    delete proc;
+//    PacketProcessorCenter center(false); //not responsible center
+//    center.registerProcessor(pack->getID(), proc);
+
+//    center.processPacket(pack);
+//    cout << center.isResponsible() << endl;
+//    center.setResponsibility();
+//    cout << center.isResponsible() << endl;
+//    cout << center.processorsAmount() << endl;
+
+//    center.setResponsibility(false);
+//    delete pack;
+//    delete proc;
 
 //    Server server;
 //    server.start(2000);
