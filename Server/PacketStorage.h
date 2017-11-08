@@ -3,14 +3,13 @@
 
 #include <QQueue>
 #include <QMutex>
-
-class Packet;
+#include "../Protocol/Packet.h"
 
 class PacketStorage
 {
 private:
     QString _saveFileName;
-    mutable QQueue<Packet*> _packetsQueue;
+    mutable QQueue<PacketHolder> _packetsQueue;
     mutable QMutex _mutex;
     mutable bool _isSaved;
     PacketStorage(const PacketStorage&) = delete;
@@ -19,8 +18,8 @@ public:
     PacketStorage();
     PacketStorage(const QString&);
     ~PacketStorage();
-    void addPacket(Packet*);
-    Packet* nextPacket() const;
+    void addPacket(PacketHolder&);
+    PacketHolder nextPacket() const;
     unsigned int amount() const;
     bool isSaved() const;
     QString& saveFileName();

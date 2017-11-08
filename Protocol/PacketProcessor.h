@@ -1,15 +1,15 @@
 #ifndef PACKETPROCESSOR_H
 #define PACKETPROCESSOR_H
 
-class Packet;
+#include "Packet.h"
 
 //packet processor interface
 class PacketProcessor
 {
 private:
-    virtual Packet* specificPerform(Packet*) = 0;
+    virtual PacketHolder specificPerform(PacketHolder&) = 0;
 public:
-    Packet* process(Packet* p)
+    PacketHolder process(PacketHolder& p)
     {
         return specificPerform(p);
     }

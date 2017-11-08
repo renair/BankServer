@@ -13,7 +13,7 @@ private:
 
     //interface methods
     char specificGetID() const;
-    Packet* specificClone() const;
+    PacketHolder specificClone() const;
     QByteArray specificDump() const;
     void specificLoad(QBuffer&);
 public:

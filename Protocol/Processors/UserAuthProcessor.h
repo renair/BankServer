@@ -6,7 +6,7 @@
 class UserAuthProcessor : public PacketProcessor
 {
 private:
-    virtual Packet* specificPerform(Packet*);
+    virtual PacketHolder specificPerform(PacketHolder&);
 public:
     UserAuthProcessor(); //reqire ClientService
     ~UserAuthProcessor();

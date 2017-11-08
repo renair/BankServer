@@ -12,9 +12,9 @@ UserAuthProcessor::~UserAuthProcessor()
 }
 
 //TODO add it to the sessions, etc.
-Packet* UserAuthProcessor::specificPerform(Packet* p)
+PacketHolder UserAuthProcessor::specificPerform(PacketHolder& p)
 {
-    const UserAuthPacket* packet = static_cast<const UserAuthPacket*>(p); //cast to needed type
+    const UserAuthPacket* packet = static_cast<const UserAuthPacket*>(p.data()); //cast to needed type
     long long num = packet->card();
     short pas = packet->password();
     return NULL;

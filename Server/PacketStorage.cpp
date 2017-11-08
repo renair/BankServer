@@ -22,13 +22,10 @@ PacketStorage::~PacketStorage()
     {
         saveToFile();
     }
-    while(!_packetsQueue.isEmpty())
-    {
-        delete _packetsQueue.dequeue();
-    }
+    _packetsQueue.clear(); //QSharedPtr will delete packets
 }
 
-void PacketStorage::addPacket(Packet* p)
+void PacketStorage::addPacket(PacketHolder& p)
 {
     _mutex.lock();
     _packetsQueue.enqueue(p);
@@ -36,10 +33,10 @@ void PacketStorage::addPacket(Packet* p)
     _mutex.unlock();
 }
 
-Packet* PacketStorage::nextPacket() const
+PacketHolder PacketStorage::nextPacket() const
 {
     _mutex.lock();
-    Packet* packet = _packetsQueue.dequeue();
+    PacketHolder packet = _packetsQueue.dequeue();
     _isSaved = false;
     _mutex.unlock();
     return packet;
@@ -81,7 +78,7 @@ void PacketStorage::loadFromFile(const QString& filename)
         _mutex.lock();
         while(Packet::isPacket(data))
         {
-            Packet* packet = Packet::getPacket(Packet::getPacketId(data));
+            PacketHolder packet = Packet::getPacket(Packet::getPacketId(data));
             packet->load(data);
             _packetsQueue.enqueue(packet);
             Packet::removeFirstPacket(data);
@@ -104,13 +101,13 @@ void PacketStorage::saveToFile(const QString& filename) const
         file.open(QFile::WriteOnly);
         //critical section - copy existed queue
         _mutex.lock();
-        QQueue<Packet*> temp_queue(_packetsQueue);
+        QQueue<PacketHolder> temp_queue(_packetsQueue);
         temp_queue.detachShared();
         _mutex.unlock();
         //end of critical section
         while(!temp_queue.isEmpty())
         {
-            Packet* packet = temp_queue.dequeue();
+            PacketHolder packet = temp_queue.dequeue();
             file.write(packet->dump());
         }
         _isSaved = true;

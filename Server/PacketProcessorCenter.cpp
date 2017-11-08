@@ -51,7 +51,7 @@ void PacketProcessorCenter::registerProcessor(char id, PacketProcessor* processo
     _registeredProcessors[id] = processor;
 }
 
-Packet* PacketProcessorCenter::processPacket(Packet* pack)
+PacketHolder PacketProcessorCenter::processPacket(PacketHolder& pack)
 {
     PacketProcessor* processor = getPacketProcessor(pack->getID());
     return processor != NULL ? processor->process(pack) : NULL;

@@ -2,21 +2,21 @@
 #include "PacketsList.h"
 
 bool Packet::_isInited = false;
-std::unordered_map<char, Packet*> Packet::_packetsMap;
+std::unordered_map<char, PacketHolder> Packet::_packetsMap;
 
 void Packet::init()
 {
-    _packetsMap[1] = new UserAuthPacket();
+    _packetsMap[1] = PacketHolder(new UserAuthPacket());
 }
 
-Packet* Packet::getPacket(char id)
+PacketHolder Packet::getPacket(char id)
 {
     if(!_isInited)
     {
         init();
         _isInited = true;
     }
-    for(std::unordered_map<char, Packet*>::iterator iterator = _packetsMap.begin();
+    for(std::unordered_map<char, PacketHolder>::iterator iterator = _packetsMap.begin();
         iterator != _packetsMap.end();
         ++iterator)
     {
@@ -25,7 +25,7 @@ Packet* Packet::getPacket(char id)
             return iterator->second->clone();
         }
     }
-    return NULL;
+    return PacketHolder(NULL);
 }
 
 void Packet::removeFirstPacket(QByteArray& data)
@@ -61,9 +61,9 @@ unsigned short Packet::getPacketSize(const QByteArray& byteArray)
 
 //virtual method
 
-void Packet::specificHandle() const
+PacketHolder Packet::specificHandle() const
 {
-    return;
+    return PacketHolder(NULL);
 }
 
 // Methods from NVI

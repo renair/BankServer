@@ -42,9 +42,9 @@ char UserAuthPacket::specificGetID() const
     return _ID;
 }
 
-Packet* UserAuthPacket::specificClone() const
+PacketHolder UserAuthPacket::specificClone() const
 {
-    return new UserAuthPacket(*this);
+    return PacketHolder(new UserAuthPacket(*this));
 }
 
 QByteArray UserAuthPacket::specificDump() const

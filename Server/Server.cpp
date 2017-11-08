@@ -68,14 +68,12 @@ void Server::dataReady()
     //TODO REPLACE WITH THREAD!!!
     while(_packetStorage.amount() > 0)
     {
-        Packet* pack = _packetStorage.nextPacket();
-        Packet* response = _packetProcessor.processPacket(pack);
-        if(response != NULL)
+        PacketHolder pack = _packetStorage.nextPacket();
+        PacketHolder response = _packetProcessor.processPacket(pack);
+        if(response)
         {
             caller->write(response->dump());
         }
-        delete pack;
-        delete response;
     }
 }
 

@@ -14,7 +14,7 @@ void PacketBuilder::buildAndPut(QByteArray& data)
 {
     while(Packet::isPacket(data))
     {
-        Packet* pack = Packet::getPacket(Packet::getPacketId(data));
+        PacketHolder pack = Packet::getPacket(Packet::getPacketId(data));
         pack->load(data);
         _packetStorage.addPacket(pack);
         Packet::removeFirstPacket(data);
