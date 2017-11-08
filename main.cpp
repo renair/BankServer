@@ -9,7 +9,7 @@
 #include "DataBase/testingdb.h"
 #include "Server/PacketBuilder.h"
 #include "Protocol/Processors/UserAuthProcessor.h"
-#include "Server/PacketProcessorCenter.h"
+#include "Server/PacketProcessor.h"
 
 using namespace std;
 

@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 #include "PacketBuilder.h"
 #include "PacketStorage.h"
-#include "PacketProcessorCenter.h"
+#include "PacketProcessor.h"
 #include "ServerConfiguration.h"
 #include "Protocol/ProcessorsList.h"
 #include "Protocol/PacketsList.h"
@@ -17,9 +17,8 @@ private:
     QTcpServer _tcpServer;
     QMap<int, QByteArray *> _connectionsMap;
     ServerConfiguration _configuation;
-    PacketStorage _packetStorage;
+    PacketProcessor _packetProcessor;
     PacketBuilder _packetBuilder;
-    PacketProcessorCenter _packetProcessor;
     //deleted methods
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;

@@ -2,35 +2,29 @@
 #include "../Protocol/Packet.h"
 
 Server::Server():
-    _packetBuilder(_packetStorage)
+    _packetBuilder(_packetProcessor.receivedPacket())
 {
-    _packetStorage.saveFileName() = _configuation._waitingPacketsStorage;
-    _packetStorage.loadFromFile();
+    PacketStorage& stor = _packetProcessor.receivedPacket();
+    stor.saveFileName() = _configuation._waitingPacketsStorage;
+    stor.loadFromFile();
     connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
 
-    //TODO make one function!
-    _packetProcessor.setResponsibility();
-    _packetProcessor.registerProcessor(1, new UserAuthProcessor());
 }
 
 Server::Server(const ServerConfiguration& config):
     _configuation(config),
-    _packetStorage(config._waitingPacketsStorage),
-    _packetBuilder(_packetStorage)
+//    _receivedPackets(config._waitingPacketsStorage),
+    _packetBuilder(_packetProcessor.receivedPacket())
 {
-    _packetStorage.loadFromFile();
+//    _receivedPackets.loadFromFile();
     connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
-
-    //TODO make one function!
-    _packetProcessor.setResponsibility();
-    _packetProcessor.registerProcessor(1, new UserAuthProcessor());
 }
 
 Server::~Server()
 {
-    //do some stuff before closing sockets
-    _packetStorage.saveToFile();
-    //delete all buffers
+//    do some stuff before closing sockets
+//    _receivedPackets.saveToFile();
+//    delete all buffers
     for(QMap<int, QByteArray*>::const_iterator iterator = _connectionsMap.begin();
         iterator != _connectionsMap.end();
         iterator++)
@@ -66,15 +60,15 @@ void Server::dataReady()
     callerData->append(caller->readAll());
     _packetBuilder.buildAndPut(*callerData);
     //TODO REPLACE WITH THREAD!!!
-    while(_packetStorage.amount() > 0)
-    {
-        PacketHolder pack = _packetStorage.nextPacket();
-        PacketHolder response = _packetProcessor.processPacket(pack);
-        if(response)
-        {
-            caller->write(response->dump());
-        }
-    }
+//    while(_receivedPackets.amount() > 0)
+//    {
+//        PacketHolder pack = _receivedPackets.nextPacket();
+//        PacketHolder response = _packetProcessor.processPacket(pack);
+//        if(response)
+//        {
+//            caller->write(response->dump());
+//        }
+//    }
 }
 
 void Server::clientDisconnected()

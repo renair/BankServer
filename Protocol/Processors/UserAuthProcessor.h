@@ -3,13 +3,13 @@
 
 #include "../PacketProcessor.h"
 
-class UserAuthProcessor : public PacketProcessor
-{
-private:
-    virtual PacketHolder specificPerform(PacketHolder&);
-public:
-    UserAuthProcessor(); //reqire ClientService
-    ~UserAuthProcessor();
-};
+//class UserAuthProcessor : public PacketProcessor
+//{
+//private:
+//    virtual PacketHolder specificPerform(PacketHolder&);
+//public:
+//    UserAuthProcessor(); //reqire ClientService
+//    ~UserAuthProcessor();
+//};
 
 #endif // USERAUTHPROCESSOR_H

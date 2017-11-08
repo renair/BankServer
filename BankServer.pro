@@ -25,8 +25,7 @@ SOURCES += main.cpp \
     Server/PacketStorage.cpp \
     Server/ServerConfiguration.cpp \
     Server/PacketBuilder.cpp \
-    Protocol/Processors/UserAuthProcessor.cpp \
-    Server/PacketProcessorCenter.cpp
+    Server/PacketProcessor.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -56,10 +55,8 @@ HEADERS += \
     Server/PacketStorage.h \
     Server/ServerConfiguration.h \
     Server/PacketBuilder.h \
-    Protocol/PacketProcessor.h \
-    Protocol/Processors/UserAuthProcessor.h \
-    Server/PacketProcessorCenter.h \
-    Protocol/ProcessorsList.h
+    Protocol/ProcessorsList.h \
+    Server/PacketProcessor.h
 
 DISTFILES += \
     .gitignore \
