@@ -8,6 +8,7 @@
 class Packet;
 
 typedef QSharedPointer<Packet> PacketHolder;
+Q_DECLARE_METATYPE(PacketHolder)
 
 class Packet
 {

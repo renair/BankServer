@@ -55,7 +55,6 @@ HEADERS += \
     Server/PacketStorage.h \
     Server/ServerConfiguration.h \
     Server/PacketBuilder.h \
-    Protocol/ProcessorsList.h \
     Server/PacketProcessor.h
 
 DISTFILES += \

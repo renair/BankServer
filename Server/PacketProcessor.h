@@ -9,7 +9,7 @@ class PacketProcessor : public QObject
     Q_OBJECT
 private:
     PacketStorage _receivedPackets;
-    PacketStorage _processedPackets;
+    bool _isRunning;
     PacketProcessor& operator=(const PacketProcessor&) = delete;
     PacketProcessor(const PacketProcessor&) = delete;
 public:
@@ -17,9 +17,13 @@ public:
     ~PacketProcessor();
     PacketStorage& receivedPacket();
     const PacketStorage& receivedPacket() const;
-    PacketStorage& processedPacket();
-    const PacketStorage& processedPacket() const;
+//    PacketStorage& processedPacket();
+//    const PacketStorage& processedPacket() const;
     void processPacket(PacketHolder&);
+    bool isRunning() const;
+public slots:
+    void startProcessing();
+    void stopProcessing();
 signals:
     void packetProcessed(PacketHolder packet);
 };

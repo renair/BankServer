@@ -8,7 +8,6 @@
 #include "DataBase/Objects/transfer.h"
 #include "DataBase/testingdb.h"
 #include "Server/PacketBuilder.h"
-#include "Protocol/Processors/UserAuthProcessor.h"
 #include "Server/PacketProcessor.h"
 
 using namespace std;
@@ -19,9 +18,6 @@ int main(int argc, char** argv)
 
     Server serv;
     serv.start();
-
-//    PacketProcessor* proc = new UserAuthProcessor();
-//    Packet* pack = new UserAuthPacket();
 
 //    PacketProcessorCenter center(false); //not responsible center
 //    center.registerProcessor(pack->getID(), proc);

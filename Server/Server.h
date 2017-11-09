@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QThread>
 #include "PacketBuilder.h"
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
@@ -16,8 +17,10 @@ private:
     QTcpServer _tcpServer;
     QMap<int, QByteArray *> _connectionsMap;
     ServerConfiguration _configuation;
+    QThread _processorThread;
     PacketProcessor _packetProcessor;
     PacketBuilder _packetBuilder;
+    void makeConnections() const;
     //deleted methods
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
@@ -32,6 +35,7 @@ private slots:
     //slots for clients
     void dataReady();
     void clientDisconnected();
+    void sendPacket(PacketHolder);
 };
 
 #endif // SERVER_H

@@ -7,17 +7,18 @@ Server::Server():
     PacketStorage& stor = _packetProcessor.receivedPacket();
     stor.saveFileName() = _configuation._waitingPacketsStorage;
     stor.loadFromFile();
-    connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
-
+    makeConnections();
+    _packetProcessor.moveToThread(&_processorThread);
+    _processorThread.start();
 }
 
 Server::Server(const ServerConfiguration& config):
     _configuation(config),
-//    _receivedPackets(config._waitingPacketsStorage),
     _packetBuilder(_packetProcessor.receivedPacket())
 {
-//    _receivedPackets.loadFromFile();
-    connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
+    makeConnections();
+    _packetProcessor.moveToThread(&_processorThread);
+    _processorThread.start();
 }
 
 Server::~Server()
@@ -25,12 +26,21 @@ Server::~Server()
 //    do some stuff before closing sockets
 //    _receivedPackets.saveToFile();
 //    delete all buffers
+    _processorThread.exit();
     for(QMap<int, QByteArray*>::const_iterator iterator = _connectionsMap.begin();
         iterator != _connectionsMap.end();
         iterator++)
     {
         delete iterator.value();
     }
+}
+
+void Server::makeConnections() const
+{
+    connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
+    connect(&_processorThread, SIGNAL(started()), &_packetProcessor, SLOT(startProcessing()));
+    connect(&_processorThread, SIGNAL(finished()), &_packetProcessor, SLOT(stopProcessing()));
+    connect(&_packetProcessor, SIGNAL(packetProcessed(PacketHolder)), this, SLOT(sendPacket(PacketHolder)));
 }
 
 void Server::start(unsigned short port)
@@ -77,4 +87,9 @@ void Server::clientDisconnected()
     caller->readAll();
     delete _connectionsMap[caller->socketDescriptor()];
     _connectionsMap.remove(caller->socketDescriptor());
+}
+
+void Server::sendPacket(PacketHolder)
+{
+    qDebug("Sending response packet.");
 }

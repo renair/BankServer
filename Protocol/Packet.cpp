@@ -6,6 +6,7 @@ std::unordered_map<char, PacketHolder> Packet::_packetsMap;
 
 void Packet::init()
 {
+    qRegisterMetaType<PacketHolder>();
     _packetsMap[1] = PacketHolder(new UserAuthPacket());
 }
 
