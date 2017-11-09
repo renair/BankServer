@@ -7,7 +7,6 @@
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
 #include "ServerConfiguration.h"
-#include "Protocol/ProcessorsList.h"
 #include "Protocol/PacketsList.h"
 
 class Server : QObject
