@@ -15,9 +15,7 @@ Transfer::Transfer(const int id,
   _technical_comment(tech_comment),
   _comment(comment),
   _periodicity(period)
-{
-    qDebug("New money widthraw");
-}
+{}
 
 Transfer::Transfer(const int payer_id,
                    const int receiver_id,
@@ -100,11 +98,12 @@ ostream& operator<<(ostream& os, const Transfer& t)
     time.setTime_t(t.time());
     //SetConsoleOutputCP(1251);
     //setlocale(LC_ALL, "rus");
-    return os<< "Transfer ID: " << t.id() <<endl
-             << "Payer ID: " << t.payerId() <<endl
-             << "Receiver ID: " << t.receiverId() <<endl
-             << "Time: " << time.toString().toStdString() <<endl
-             << "Period: " << t.period() << "seconds" <<endl
-             << "Technical comment: \"" << t.techComment().toUtf8().constData() << "\"" <<endl
-             << "Comment: \"" << t.comment().toUtf8().constData() << "\"" <<endl;
+    return os<< "Transfer" <<endl<< "{" <<endl
+             << " ID: " << t.id() <<endl
+             << " Payer ID: " << t.payerId() <<endl
+             << " Receiver ID: " << t.receiverId() <<endl
+             << " Time: " << time.toString().toStdString() <<endl
+             << " Period: " << t.period() << "seconds" <<endl
+             << " Technical comment: \"" << t.techComment().toUtf8().constData() << "\"" <<endl
+             << " Comment: \"" << t.comment().toUtf8().constData() << "\"" <<endl<< "}" <<endl;
 }

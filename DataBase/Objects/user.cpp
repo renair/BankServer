@@ -35,10 +35,11 @@ bool User::setNewPass(const QString &new_pass, const QString &old_pass)
 
 ostream& operator<<(ostream& os, const User& u)
 {
-    return os<< "User" <<endl<< "{ UPID: " << u.upid() <<endl
-             << "Passport number: " << u.passNumber().toStdString() <<endl
-             << "Name: " << u.name().toStdString() <<endl
-             << "Surname: " << u.surname().toStdString() <<endl
-             << "Father name: " << u.fatherName().toStdString() <<endl
-             << "Phone number: " << u.phoneNumber() << " }" <<endl;
+    return os<< "User" <<endl<< "{" <<endl
+             << " UPID: " << u.upid() <<endl
+             << " Passport number: " << u.passNumber().toStdString() <<endl
+             << " Name: " << u.name().toStdString() <<endl
+             << " Surname: " << u.surname().toStdString() <<endl
+             << " Father name: " << u.fatherName().toStdString() <<endl
+             << " Phone number: " << u.phoneNumber() <<endl<< "}" <<endl;
 }

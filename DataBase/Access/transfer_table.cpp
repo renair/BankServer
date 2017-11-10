@@ -18,12 +18,12 @@ bool TransferTable::create_new(const Transfer &t)
                         comment,\
                         periodicity) \
                 VALUES ('%1','%2','%3','%4','%5','%6')").
-                arg(t.payerId(),
-                    t.receiverId(),
-                    t.time(),
+                arg(QString::number(t.payerId()),
+                    QString::number(t.receiverId()),
+                    QString::number(t.time()),
                     t.techComment(),
                     t.comment(),
-                    t.period()));
+                    QString::number(t.period()))).first;
 }
 
 Transfer TransferTable::get_by_id(const int id)

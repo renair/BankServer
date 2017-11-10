@@ -33,22 +33,20 @@ void TestingDB::run()
 //    cout<< "File opened" <<endl;
     try{
 //        out<< transfers.get_by_id(1) <<endl;
-        cout<<endl<< "Transferr: " <<endl;
         cout<< transfers.get_by_id(1) <<endl;
-//        cout<<endl<< "User: " <<endl;
-//        quint64 upid(5553575000);
+        quint64 upid(5553575000);
 //        cout<< "Original num: " << upid <<endl;
 //        cout<< "QString num:  " << QString::number(upid).toStdString() <<endl;
-//        cout<< users.get_by_upid(upid) <<endl;
+        cout<< users.get_by_upid(upid) <<endl;
         User u(1,"pass","CT555","MyName","MySurname","MyFatherName",5553535);
         //cout<< "Is created new user: " << users.create_new(u) <<endl;
         u.name()="NewName";
-        cout<< "Is updated: " << users.update(u);
+        cout<< "Is updated: " << users.update(u) <<endl;
         //cout<< "User password: " << u.password() <<endl;
     }catch(const QString& error){
         cout<< "Error: " + error.toStdString() <<endl;
     }
 //    out.close();
-    cout<< "Completed!" <<endl;
+//    cout<< "Completed!" <<endl;
     return;
 }

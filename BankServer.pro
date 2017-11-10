@@ -52,7 +52,7 @@ HEADERS += \
     DataBase/Objects/payment.h \
     DataBase/Access/transfer_table.h \
     DataBase/Objects/user.h \
-    DataBase/Access/user_table.h
+    DataBase/Access/user_table.h \
     BankSystem/BankManager.h \
     BankSystem/UserService.h \
     Protocol/Packets/UserAuthPacket.h \
