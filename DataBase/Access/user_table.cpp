@@ -18,7 +18,8 @@ bool UserTable::create_new(const User & u)
                          WHERE UPID='%1'").arg(u.upid())).second;
             if(is_exist.next())
             throw QString("Unable to create an existing object");
-    bool q = _connection.execute(QString("INSERT INTO user(UPID,\
+    return _connection.execute(QString("INSERT INTO user(\
+                                              UPID,\
                                               password,\
                                               pass_number,\
                                               name,\
@@ -33,7 +34,6 @@ bool UserTable::create_new(const User & u)
                                 u.surname(),
                                 u.fatherName(),
                                 QString::number(u.phoneNumber()))).first;
-    return q;
 }
 
 bool UserTable::update(const User & u)

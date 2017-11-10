@@ -50,6 +50,5 @@ void TestingDB::run()
     }
 //    out.close();
     cout<< "Completed!" <<endl;
-//    delete connection;
     return;
 }

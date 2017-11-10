@@ -1,23 +1,23 @@
 #include "Packet.h"
 #include "PacketsList.h"
 
-using namespace Protocol;
-
 bool Packet::_isInited = false;
-std::unordered_map<char, Packet*> Packet::_packetsMap;
+std::unordered_map<char, PacketHolder> Packet::_packetsMap;
 
 void Packet::init()
 {
-    _packetsMap[1] = new UserAuthPacket();
+    qRegisterMetaType<PacketHolder>();
+    _packetsMap[1] = PacketHolder(new UserAuthPacket());
 }
 
-Packet* Packet::getPacket(char id)
+PacketHolder Packet::getPacket(char id)
 {
     if(!_isInited)
     {
         init();
+        _isInited = true;
     }
-    for(std::unordered_map<char, Packet*>::iterator iterator = _packetsMap.begin();
+    for(std::unordered_map<char, PacketHolder>::iterator iterator = _packetsMap.begin();
         iterator != _packetsMap.end();
         ++iterator)
     {
@@ -26,7 +26,16 @@ Packet* Packet::getPacket(char id)
             return iterator->second->clone();
         }
     }
-    return NULL;
+    return PacketHolder(NULL);
+}
+
+void Packet::removeFirstPacket(QByteArray& data)
+{
+    if(isPacket(data))
+    {
+        unsigned int size = getPacketSize(data);
+        data.remove(0,size+sizeof(char)+sizeof(short));
+    }
 }
 
 bool Packet::isPacket(const QByteArray& byteArray)
@@ -37,7 +46,7 @@ bool Packet::isPacket(const QByteArray& byteArray)
     }
     else
     {
-        return getPacketSize(byteArray) == (byteArray.length()-sizeof(char)-sizeof(short));
+        return getPacketSize(byteArray) <= (byteArray.length()-sizeof(char)-sizeof(short));
     }
 }
 
@@ -48,7 +57,14 @@ char Packet::getPacketId(const QByteArray& byteArray)
 
 unsigned short Packet::getPacketSize(const QByteArray& byteArray)
 {
-    return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1));
+    return *(reinterpret_cast<const unsigned short*>(byteArray.data()+1)); // + sizeof(char) + sizeof(short)
+}
+
+//virtual method
+
+PacketHolder Packet::specificHandle() const
+{
+    return PacketHolder(NULL);
 }
 
 // Methods from NVI

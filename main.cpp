@@ -1,11 +1,14 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "Protocol/Packet.h"
-#include "Protocol/Client/UserAuthPacket.h"
+#include "Protocol/Packets/UserAuthPacket.h"
 #include "Server/Server.h"
-#include "BankSystem/PaymentManager.h"
+#include "Server/PacketStorage.h"
+#include "BankSystem/BankManager.h"
 #include "DataBase/Objects/transfer.h"
 #include "DataBase/testingdb.h"
+#include "Server/PacketBuilder.h"
+#include "Server/PacketProcessor.h"
 
 using namespace std;
 
@@ -20,33 +23,28 @@ int main(int argc, char** argv)
     Payment* p4 = new PaymentStub(400);
     Payment* p5 = new PaymentStub(500);
 
-    PaymentManager manager;
-    manager.addPayment(p1);
-    manager.addPayment(p2);
-    manager.addPayment(p3);
-    manager.addPayment(p4);
-    manager.addPayment(p5);
+    Server serv;
+    serv.start();
 
-    delete p1;
-    delete p2;
-    delete p3;
-    delete p4;
-    delete p5;*/
-//    Protocol::UserAuthPacket p;
-//    p.card() = 12432423425;
-//    p.password() = 6294;
+//    PacketProcessorCenter center(false); //not responsible center
+//    center.registerProcessor(pack->getID(), proc);
 
-//    cout << boolalpha << Protocol::Packet::isPacket(p.dump()) << endl;
-//    cout << (int)Protocol::Packet::getPacketId(p.dump()) << endl;
-//    cout << Protocol::Packet::getPacketSize(p.dump()) << endl;
+//    center.processPacket(pack);
+//    cout << center.isResponsible() << endl;
+//    center.setResponsibility();
+//    cout << center.isResponsible() << endl;
+//    cout << center.processorsAmount() << endl;
+
+//    center.setResponsibility(false);
+//    delete pack;
+//    delete proc;
 
 //    Server server;
 //    server.start(2000);
-//    return a.exec();
-    {
-        TestingDB* test = new TestingDB();
-        test->run();
-        delete test;
-    }
-    return 0;
+//    {
+//        TestingDB* test = new TestingDB();
+//        test->run();
+//        delete test;
+//    }
+    return a.exec();
 }

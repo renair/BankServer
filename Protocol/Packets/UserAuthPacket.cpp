@@ -1,7 +1,5 @@
 #include "UserAuthPacket.h"
 
-using namespace Protocol;
-
 const char UserAuthPacket::_ID = 1;
 
 UserAuthPacket::UserAuthPacket():
@@ -44,9 +42,9 @@ char UserAuthPacket::specificGetID() const
     return _ID;
 }
 
-Packet* UserAuthPacket::specificClone() const
+PacketHolder UserAuthPacket::specificClone() const
 {
-    return new UserAuthPacket(*this);
+    return PacketHolder(new UserAuthPacket(*this));
 }
 
 QByteArray UserAuthPacket::specificDump() const
@@ -61,9 +59,4 @@ void UserAuthPacket::specificLoad(QBuffer& buff)
 {
     buff.read((char*)&_cardnum, sizeof(_cardnum));
     buff.read((char*)&_password, sizeof(_password));
-}
-
-void UserAuthPacket::specificHandle() const
-{
-    //do some stuff here
 }

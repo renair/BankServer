@@ -13,9 +13,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Protocol/Packet.cpp \
-    Protocol/Client/UserAuthPacket.cpp \
     Server/Server.cpp \
-    BankSystem/PaymentManager.cpp \
     BankSystem/PaymentService.cpp \
     DataBase/testingdb.cpp \
     DataBase/connection.cpp \
@@ -23,7 +21,13 @@ SOURCES += main.cpp \
     DataBase/Objects/transfer.cpp \
     DataBase/Access/transfer_table.cpp \
     DataBase/Objects/user.cpp \
-    DataBase/Access/user_table.cpp
+    DataBase/Access/user_table.cpp \
+    BankSystem/BankManager.cpp \
+    Protocol/Packets/UserAuthPacket.cpp \
+    Server/PacketStorage.cpp \
+    Server/ServerConfiguration.cpp \
+    Server/PacketBuilder.cpp \
+    Server/PacketProcessor.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -39,9 +43,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     Protocol/Packet.h \
     Protocol/PacketsList.h \
-    Protocol/Client/UserAuthPacket.h \
     Server/Server.h \
-    BankSystem/PaymentManager.h \
     BankSystem/PaymentService.h \
     DataBase/connection.h \
     DataBase/testingdb.h \
@@ -51,6 +53,13 @@ HEADERS += \
     DataBase/Access/transfer_table.h \
     DataBase/Objects/user.h \
     DataBase/Access/user_table.h
+    BankSystem/BankManager.h \
+    BankSystem/UserService.h \
+    Protocol/Packets/UserAuthPacket.h \
+    Server/PacketStorage.h \
+    Server/ServerConfiguration.h \
+    Server/PacketBuilder.h \
+    Server/PacketProcessor.h
 
 DISTFILES += \
     .gitignore \

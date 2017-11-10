@@ -1,21 +1,21 @@
-#ifndef PAYMENTMANAGER_H
-#define PAYMENTMANAGER_H
+#ifndef BANKMANAGER_H
+#define BANKMANAGER_H
 
 #include<QThread>
 #include "PaymentService.h"
 
 class Payment;
 
-class PaymentManager
+class BankManager
 {
 private:
     PaymentService _paymentService;
     QThread _paymentThread;
 public:
-    PaymentManager();
-    ~PaymentManager();
+    BankManager();
+    ~BankManager();
     void addPayment(Payment*);
     unsigned int paymentAmount() const;
 };
 
-#endif // PAYMENTMANAGER_H
+#endif // BANKMANAGER_H

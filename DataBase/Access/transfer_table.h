@@ -10,8 +10,8 @@ public:
     TransferTable(Connection&);
     ~TransferTable();
     bool create_new(const Transfer&);
-    bool update(const Transfer&);
-    bool delete_it(const int);
+//    bool update(const Transfer&);
+//    bool delete_it(const int);
     Transfer get_by_id(const int);
 private:
     Connection& _connection;
