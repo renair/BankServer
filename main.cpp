@@ -12,6 +12,8 @@ using namespace std;
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
+    //unsigned long long var = 5555555555;
+    //cout << sizeof(int) << endl;
     /*Payment* p1 = new PaymentStub(100);
     Payment* p2 = new PaymentStub(200);
     Payment* p3 = new PaymentStub(300);

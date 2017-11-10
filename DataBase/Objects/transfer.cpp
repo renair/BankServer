@@ -30,30 +30,24 @@ Transfer::Transfer(const int payer_id,
 
 Transfer::Transfer(const Transfer& src):
     _id(src.id()),
-    _account_payer_id(src.payer_id()),
-    _account_receiver_id(src.receiver_id()),
+    _account_payer_id(src.payerId()),
+    _account_receiver_id(src.receiverId()),
     _time(src.time()),
-    _technical_comment(src.tech_comment()),
+    _technical_comment(src.techComment()),
     _comment(src.comment()),
     _periodicity(src.period())
 {}
-
-bool Transfer::specificPerform()
-{
-    qDebug("Make money transaction!!!");
-    return true;
-}
 
 //Selectors
 const int& Transfer::id() const
 {
     return _id;
 }
-const int& Transfer::payer_id() const
+const int& Transfer::payerId() const
 {
     return _account_payer_id;
 }
-const int& Transfer::receiver_id() const
+const int& Transfer::receiverId() const
 {
     return _account_receiver_id;
 }
@@ -65,7 +59,7 @@ const long& Transfer::time() const
 {
     return _time;
 }
-const QString& Transfer::tech_comment() const
+const QString& Transfer::techComment() const
 {
     return _technical_comment;
 }
@@ -75,29 +69,29 @@ const QString& Transfer::comment() const
 }
 
 //Selector-modifiers
-int& Transfer::payer_id()
+int& Transfer::payerId()
 {
-    _account_payer_id;
+    return _account_payer_id;
 }
-int& Transfer::receiver_id()
+int& Transfer::receiverId()
 {
-    _account_receiver_id;
+    return _account_receiver_id;
 }
 int& Transfer::period()
 {
-    _periodicity;
+    return _periodicity;
 }
 long& Transfer::time()
 {
     return _time;
 }
-QString& Transfer::tech_comment()
+QString& Transfer::techComment()
 {
-    _technical_comment;
+    return _technical_comment;
 }
 QString& Transfer::comment()
 {
-    _comment;
+    return _comment;
 }
 
 ostream& operator<<(ostream& os, const Transfer& t)
@@ -107,10 +101,10 @@ ostream& operator<<(ostream& os, const Transfer& t)
     //SetConsoleOutputCP(1251);
     //setlocale(LC_ALL, "rus");
     return os<< "Transfer ID: " << t.id() <<endl
-             << "Payer ID: " << t.payer_id() <<endl
-             << "Receiver ID: " << t.receiver_id() <<endl
+             << "Payer ID: " << t.payerId() <<endl
+             << "Receiver ID: " << t.receiverId() <<endl
              << "Time: " << time.toString().toStdString() <<endl
              << "Period: " << t.period() << "seconds" <<endl
-             << "Technical comment: \"" << t.tech_comment().toUtf8().constData() << "\"" <<endl
+             << "Technical comment: \"" << t.techComment().toUtf8().constData() << "\"" <<endl
              << "Comment: \"" << t.comment().toUtf8().constData() << "\"" <<endl;
 }

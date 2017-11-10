@@ -9,11 +9,14 @@ class TransferTable
 public:
     TransferTable(Connection&);
     ~TransferTable();
-    bool create_new(Transfer&);
-    bool update(Transfer&);
-    Transfer get_by_id(int);
+    bool create_new(const Transfer&);
+    bool update(const Transfer&);
+    bool delete_it(const int);
+    Transfer get_by_id(const int);
 private:
-    Connection _connection;
+    Connection& _connection;
+
+    TransferTable();
 };
 
 #endif // TRANSFER_TABLE_H

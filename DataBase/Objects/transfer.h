@@ -7,7 +7,7 @@ using namespace std;
 
 #include "payment.h"
 
-class Transfer : public Payment
+class Transfer
 {
 public:
     explicit Transfer(const int id,
@@ -27,18 +27,18 @@ public:
     Transfer(const Transfer&);
     //Selectors
     const int& id() const;
-    const int& payer_id() const;
-    const int& receiver_id() const;
+    const int& payerId() const;
+    const int& receiverId() const;
     const int& period() const;
     const long& time() const;
-    const QString& tech_comment() const;
+    const QString& techComment() const;
     const QString& comment() const;
     //Selector-modifiers
-    int& payer_id();
-    int& receiver_id();
+    int& payerId();
+    int& receiverId();
     int& period();
     long& time();
-    QString& tech_comment();
+    QString& techComment();
     QString& comment();
 private:
     int& id();
