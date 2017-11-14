@@ -4,50 +4,43 @@
 #include <QString>
 #include <ostream>
 using namespace std;
-#include "payment.h"
 
-class Withdraw : public Payment
+class Withdraw
 {
 public:
-    explicit Withdraw(const int id,
-                      const int payer_id,
-                      const int atm_id,
-                      const long time,
+    explicit Withdraw(const quint64 id,
+                      const quint64 payer_id,
+                      const quint64 atm_id,
+                      const quint64 time,
                       const QString& tech_comment,
                       const QString& comment="");
-    Withdraw(const int payer_id=-1,
-             const int atm_id=-1,
-             const long time=0,
+    Withdraw(const quint64 payer_id=0,
+             const quint64 atm_id=0,
+             const quint64 time=0,
              const QString& tech_comment="withdraw",
              const QString& comment="");
     ~Withdraw();
     Withdraw(const Withdraw&);
     //Selectors
-    const int& id() const;
-    const int& payer_id() const;
-    const int& atm_id() const;
-    const long& time() const;
-    const QString& tech_comment() const;
-    const QString& comment() const;
+    const quint64& id() const       {return _id;}
+    const quint64& payerId() const {return _account_payer_id;}
+    const quint64& atmId() const   {return _atm_id;}
+    const quint64& time() const    {return _time;}
+    const QString& techComment()const {return _technical_comment;}
+    const QString& comment()     const {return _comment;}
     //Selector-modifiers
-    int& payer_id();
-    int& atm_id();
-    long& time();
-    QString& tech_comment();
-    QString& comment();
+    quint64& payerId(){return _account_payer_id;}
+    quint64& atmId(){return _atm_id;}
+    quint64& time(){return _time;}
+    QString& techComment(){return _technical_comment;}
+    QString& comment(){return _comment;}
 private:
-    int& id();
-    //Identifier, not initialized(NI): -1
-    int _id;
-    //The account from which transfer will be made, NI: -1
-    int _account_payer_id;
-    //The account is where the transfer will be made, NI: -1
-    int _atm_id;
-    //Number of seconds after start of Unix age
-    long _time;
-    /*The comment in which */
+    quint64& id();
+    quint64 _id;
+    quint64 _account_payer_id;
+    quint64 _atm_id;
+    quint64 _time;
     QString _technical_comment;
-    //The comment that was left by the user
     QString _comment;
 };
 

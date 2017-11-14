@@ -2,7 +2,9 @@
 #include <QFileInfo>
 #include "DataBase/connection.h"
 
-Connection::Connection(QString type, QString name, QString address):
+Connection Connection::_connection;
+
+Connection::Connection(const QString& type, const QString& name, const QString& address):
     _db_type(type),
     _db_name(name),
     _db_address(address),

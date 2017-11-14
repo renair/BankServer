@@ -7,7 +7,10 @@
 class Connection
 {
 public:
-    Connection(QString type="QSQLITE", QString name="database.db", QString address= "../BankServer/");
+    inline static Connection& getConnection()
+    {
+        return _connection;
+    }
     ~Connection();
     Connection(Connection&);
     std::pair<bool, QSqlQuery> execute(const QString&);
@@ -23,6 +26,8 @@ private:
     QSqlDatabase _data_base;
     bool _connected;
 
+    static Connection _connection;
+    Connection(const QString& type="QSQLITE", const QString& name="database.db", const QString& address= "../BankServer/");
     const QSqlDatabase& dataBase(){return _data_base;}
     bool& connected(){return _connected;}
 };

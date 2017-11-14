@@ -16,8 +16,9 @@ bool TransferTable::create_new(const Transfer &t)
                         time,\
                         technical_comment,\
                         comment,\
-                        periodicity) \
-                VALUES ('%1','%2','%3','%4','%5','%6')").
+                        periodicity,\
+                        is_withdraw) \
+                VALUES ('%1','%2','%3','%4','%5','%6',0)").
                 arg(QString::number(t.payerId()),
                     QString::number(t.receiverId()),
                     QString::number(t.time()),
@@ -26,7 +27,7 @@ bool TransferTable::create_new(const Transfer &t)
                     QString::number(t.period()))).first;
 }
 
-Transfer TransferTable::get_by_id(const int id)
+Transfer TransferTable::getById(const quint64 id)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT ID,payer,destination,time,technical_comment,comment,periodicity \
@@ -34,10 +35,10 @@ Transfer TransferTable::get_by_id(const int id)
                          WHERE id='%1' AND is_withdraw='0'").arg(QString::number(id))).second;
     if(!q.next())
             throw QString("Empty result");
-    Transfer t(q.value(0).toInt(),
-               q.value(1).toInt(),
-               q.value(2).toInt(),
-               q.value(3).toInt(),
+    Transfer t(q.value(0).toULongLong(),
+               q.value(1).toULongLong(),
+               q.value(2).toULongLong(),
+               q.value(3).toUInt(),
                q.value(4).toString(),
                q.value(5).toString());
 
