@@ -25,7 +25,7 @@ PacketStorage::~PacketStorage()
     _packetsQueue.clear(); //QSharedPtr will delete packets
 }
 
-void PacketStorage::addPacket(PacketHolder& p)
+void PacketStorage::addPacket(PacketHolder p)
 {
     _mutex.lock();
     _packetsQueue.enqueue(p);
@@ -78,7 +78,7 @@ void PacketStorage::loadFromFile(const QString& filename)
         _mutex.lock();
         while(Packet::isPacket(data))
         {
-            PacketHolder packet = Packet::getPacket(Packet::getPacketId(data));
+            PacketHolder packet = Packet::getPacket(Packet::getPacketId(data), 0);
             packet->load(data);
             _packetsQueue.enqueue(packet);
             Packet::removeFirstPacket(data);

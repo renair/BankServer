@@ -8,7 +8,7 @@ class UserAuthPacket : public Packet
 {
 private:
     static const char _ID;
-    long long _cardnum;
+    long long _cardNumber;
     short _password;
 
     //interface methods
@@ -16,6 +16,7 @@ private:
     PacketHolder specificClone() const;
     QByteArray specificDump() const;
     void specificLoad(QBuffer&);
+    PacketHolder specificHandle() const;
 public:
     UserAuthPacket();
     UserAuthPacket(long long card, short pass);

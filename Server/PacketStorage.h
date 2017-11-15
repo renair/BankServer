@@ -18,7 +18,7 @@ public:
     PacketStorage();
     PacketStorage(const QString&);
     ~PacketStorage();
-    void addPacket(PacketHolder&);
+    void addPacket(PacketHolder);
     PacketHolder nextPacket() const;
     unsigned int amount() const;
     bool isSaved() const;

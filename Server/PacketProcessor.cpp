@@ -20,22 +20,10 @@ const PacketStorage& PacketProcessor::receivedPacket() const
     return _receivedPackets;
 }
 
-//PacketStorage& PacketProcessor::processedPacket()
-//{
-//    return _processedPackets;
-//}
-
-//const PacketStorage& PacketProcessor::processedPacket() const
-//{
-//    return _processedPackets;
-//}
 
 void PacketProcessor::processPacket(PacketHolder& pack)
 {
     _receivedPackets.addPacket(pack);
-//    PacketHolder processed = pack->handle();
-//    _processedPackets.addPacket(processed);
-//    emit packetProcessed(processed);
 }
 
 bool PacketProcessor::isRunning() const
@@ -56,7 +44,10 @@ void PacketProcessor::startProcessing()
         if(_receivedPackets.amount() > 0)
         {
             PacketHolder processed = _receivedPackets.nextPacket()->handle();
-            emit packetProcessed(processed);
+            if(processed)
+            {
+                    emit packetProcessed(processed);
+            }
         }
         else
         {

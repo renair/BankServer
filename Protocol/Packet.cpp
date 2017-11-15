@@ -6,11 +6,16 @@ std::unordered_map<char, PacketHolder> Packet::_packetsMap;
 
 void Packet::init()
 {
+    if(_isInited)
+    {
+        return;
+    }
     qRegisterMetaType<PacketHolder>();
     _packetsMap[1] = PacketHolder(new UserAuthPacket());
+    _isInited = true;
 }
 
-PacketHolder Packet::getPacket(char id)
+PacketHolder Packet::getPacket(char id, int descriptor)
 {
     if(!_isInited)
     {
@@ -23,10 +28,17 @@ PacketHolder Packet::getPacket(char id)
     {
         if(iterator->first == id)
         {
-            return iterator->second->clone();
+            PacketHolder pack = iterator->second->clone();
+            pack->setSourceDescriptor(descriptor);
+            return pack;
         }
     }
     return PacketHolder(NULL);
+}
+
+void Packet::setSourceDescriptor(int descriptor) const
+{
+    _socketDescriptor = descriptor;
 }
 
 void Packet::removeFirstPacket(QByteArray& data)

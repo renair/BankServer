@@ -15,16 +15,20 @@ class Packet
 private:
     static std::unordered_map<char, PacketHolder> _packetsMap;
     static bool _isInited;
-    static void init();
     // specific methods for each packets
     virtual char specificGetID() const = 0;
     virtual PacketHolder specificClone() const = 0;
     virtual QByteArray specificDump() const = 0;
     virtual void specificLoad(QBuffer&) = 0;
     virtual PacketHolder specificHandle() const;
+protected:
+    // socket descriptor
+    mutable int _socketDescriptor;
+    void setSourceDescriptor(int)const;
 public:
     virtual ~Packet(){}
-    static PacketHolder getPacket(char id);
+    static void init();
+    static PacketHolder getPacket(char id, int descriptor);
     static void removeFirstPacket(QByteArray&);
     static bool isPacket(const QByteArray&);
     static char getPacketId(const QByteArray&);
@@ -33,6 +37,11 @@ public:
     QByteArray dump() const;
     void load(QByteArray& arr);
 
+    inline int sourceDescriptor() const
+    {
+        return _socketDescriptor;
+    }
+
     inline char getID() const
     {
         return specificGetID();
@@ -40,7 +49,9 @@ public:
 
     inline PacketHolder clone() const
     {
-        return specificClone();
+        PacketHolder pack = specificClone();
+        pack->setSourceDescriptor(sourceDescriptor());
+        return pack;
     }
 
     inline PacketHolder handle() const
