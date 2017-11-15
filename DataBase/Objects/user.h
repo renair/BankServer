@@ -9,13 +9,13 @@ class User
 {
     friend class UserTable;
 public:
-    User(const quint64 upid=0,
+    User(quint64 upid=0,
          const QString& password="",
          const QString& pass_number="",
          const QString& name="",
          const QString& surname="",
          const QString& father_name="",
-         const quint64 phone_number=0);
+         quint64 phone_number=0);
     //Selectors
     const quint64& upid() const           {return _upid;}
     const QString& passNumber() const  {return _pass_number;}

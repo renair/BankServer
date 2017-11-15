@@ -68,7 +68,6 @@ void Server::dataReady()
     QTcpSocket* caller = static_cast<QTcpSocket*>(sender());
     QByteArray* callerData = _connectionData[caller->socketDescriptor()];
     callerData->append(caller->readAll());
-    cout << "There are some data arrived: " << callerData->size() << endl;
     _packetBuilder.buildAndPut(*callerData, caller->socketDescriptor());
 }
 
@@ -87,11 +86,10 @@ void Server::clientDisconnected()
 void Server::sendPacket(PacketHolder packet)
 {
     int descriptor = packet->sourceDescriptor();
-    cout << "goint to send packet to " << descriptor << endl;
     if(descriptor != 0 && _connectionSocket.contains(descriptor))
     {
         QTcpSocket* socket = _connectionSocket[descriptor];
         socket->write(packet->dump());
-        cout << "packed writed to " << descriptor <<endl;
+        cout << "packed" << packet->getID() << " have been sent to " << descriptor << endl;
     }
 }

@@ -10,19 +10,19 @@ using namespace std;
 class Transfer
 {
 public:
-    explicit Transfer(const quint64 id,
-                      const quint64 payer_id,
-                      const quint64 receiver_id,
-                      const quint64 time,
+    Transfer(quint64 id,
+                      quint64 payer_id,
+                      quint64 receiver_id,
+                      quint64 time,
                       const QString& tech_comment,
                       const QString& comment="",
-                      const quint32 period=0);
-    Transfer(const quint64 payer_id=0,
-             const quint64 receiver_id=0,
-             const quint64 time=0,
+                      quint32 period=0);
+    explicit Transfer(quint64 payer_id=0,
+             quint64 receiver_id=0,
+             quint64 time=0,
              const QString& tech_comment="transfer",
              const QString& comment="",
-             const quint32 period=0);
+             quint32 period=0);
     ~Transfer(){}
     Transfer(const Transfer&);
     //Selectors

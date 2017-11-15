@@ -9,19 +9,19 @@ class Account
 {
     friend class AccountTable;
 public:
-    Account(const quint64 id=0,
-            const quint64 owner=0,
-            const int type=0,
+    Account(quint64 id=0,
+            quint64 owner=0,
+            int type=0,
             const QString& pin="",
-            const quint32 money=0);
+            quint32 money=0);
 
     const quint64& id() const {return _id;}
     const quint64& owner() const {return _owner;}
     const int& type() const {return _type;}
     const quint32& money_amount() const {return _money_amount;}
 
-    const quint32 money_add(const qint32);
-    const quint32 money_divide(const qint32);
+    quint32 money_add(qint32);
+    quint32 money_divide(qint32);
     bool checkPin(const QString&);
     bool setNewPin(const QString& new_pin, const QString& old_pin="");
 private:
