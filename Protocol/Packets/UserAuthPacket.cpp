@@ -3,23 +3,23 @@
 const char UserAuthPacket::_ID = 1;
 
 UserAuthPacket::UserAuthPacket():
-    _cardnum(0),
+    _cardNumber(0),
     _password(0)
 {}
 
 UserAuthPacket::UserAuthPacket(long long card, short pass):
-    _cardnum(card),
+    _cardNumber(card),
     _password(pass)
 {}
 
 UserAuthPacket::UserAuthPacket(const UserAuthPacket& pack):
-    _cardnum(pack._cardnum),
+    _cardNumber(pack._cardNumber),
     _password(pack._password)
 {}
 
 long long& UserAuthPacket::card()
 {
-    return _cardnum;
+    return _cardNumber;
 }
 
 short& UserAuthPacket::password()
@@ -29,7 +29,7 @@ short& UserAuthPacket::password()
 
 long long UserAuthPacket::card() const
 {
-    return _cardnum;
+    return _cardNumber;
 }
 
 short UserAuthPacket::password() const
@@ -50,13 +50,18 @@ PacketHolder UserAuthPacket::specificClone() const
 QByteArray UserAuthPacket::specificDump() const
 {
     QByteArray data;
-    data.append((char*)&_cardnum, sizeof(_cardnum));
+    data.append((char*)&_cardNumber, sizeof(_cardNumber));
     data.append((char*)&_password, sizeof(_password));
     return data;
 }
 
 void UserAuthPacket::specificLoad(QBuffer& buff)
 {
-    buff.read((char*)&_cardnum, sizeof(_cardnum));
+    buff.read((char*)&_cardNumber, sizeof(_cardNumber));
     buff.read((char*)&_password, sizeof(_password));
+}
+
+PacketHolder UserAuthPacket::specificHandle() const
+{
+    return PacketHolder(clone());
 }

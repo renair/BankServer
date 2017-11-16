@@ -8,17 +8,17 @@ using namespace std;
 class Withdraw
 {
 public:
-    explicit Withdraw(const quint64 id,
-                      const quint64 payer_id,
-                      const quint64 atm_id,
-                      const quint64 time,
-                      const QString& tech_comment,
-                      const QString& comment="");
-    Withdraw(const quint64 payer_id=0,
-             const quint64 atm_id=0,
-             const quint64 time=0,
-             const QString& tech_comment="withdraw",
+    Withdraw(quint64 id,
+             quint64 payer_id,
+             quint64 atm_id,
+             quint64 time,
+             const QString& tech_comment,
              const QString& comment="");
+    explicit Withdraw(quint64 payer_id=0,
+                      quint64 atm_id=0,
+                      quint64 time=0,
+                      const QString& tech_comment="withdraw",
+                      const QString& comment="");
     ~Withdraw();
     Withdraw(const Withdraw&);
     //Selectors

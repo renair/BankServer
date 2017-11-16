@@ -15,30 +15,22 @@ using namespace std;
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    //unsigned long long var = 5555555555;
-    //cout << sizeof(int) << endl;
-    Server serv;
-    serv.start();
 
-//    PacketProcessorCenter center(false); //not responsible center
-//    center.registerProcessor(pack->getID(), proc);
+//    Server serv;
+//    serv.start(45654);
 
-//    center.processPacket(pack);
-//    cout << center.isResponsible() << endl;
-//    center.setResponsibility();
-//    cout << center.isResponsible() << endl;
-//    cout << center.processorsAmount() << endl;
+    MakePaymentResponsePacket pack;
+    pack.setPaymentStatus(MakePaymentResponsePacket::PAYMENT_SUCCESSFULL);
 
-//    center.setResponsibility(false);
-//    delete pack;
-//    delete proc;
+    QByteArray dumped = pack.dump();
 
-//    Server server;
-//    server.start(2000);
-    {
-        TestingDB* test = new TestingDB();
-        test->run();
-        delete test;
-    }
+    MakePaymentResponsePacket pack2;
+    pack2.load(dumped);
+
+//    {
+//        TestingDB* test = new TestingDB();
+//        test->run();
+//        delete test;
+//    }
     return a.exec();
 }

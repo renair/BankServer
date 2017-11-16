@@ -1,9 +1,9 @@
 #include "withdraw.h"
 
-Withdraw::Withdraw(const quint64 id,
-                   const quint64 payer_id,
-                   const quint64 atm_id,
-                   const quint64 time,
+Withdraw::Withdraw(quint64 id,
+                   quint64 payer_id,
+                   quint64 atm_id,
+                   quint64 time,
                    const QString& tech_comment,
                    const QString& comment):
     _id(id),
@@ -14,17 +14,17 @@ Withdraw::Withdraw(const quint64 id,
     _comment(comment)
 {}
 
-Withdraw::Withdraw(const quint64 payer_id,
-                   const quint64 atm_id,
-                   const quint64 time,
-                   const QString &tech_comment,
-                   const QString &comment):
+Withdraw::Withdraw(quint64 payer_id,
+                   quint64 atm_id,
+                   quint64 time,
+                   const QString& tech_comment,
+                   const QString& comment):
     Withdraw(0,payer_id,atm_id,time,tech_comment,comment)
 {}
 
 Withdraw::~Withdraw(){}
 
-Withdraw::Withdraw(const Withdraw &src):
+Withdraw::Withdraw(const Withdraw& src):
     _id(src.id()),
     _account_payer_id(src.payerId()),
     _atm_id(src.atmId()),

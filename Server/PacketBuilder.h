@@ -13,7 +13,7 @@ private:
 public:
     PacketBuilder(PacketStorage&);
     ~PacketBuilder();
-    void buildAndPut(QByteArray&);
+    void buildAndPut(QByteArray&, int);
 };
 
 #endif // PACKETBUILDER_H

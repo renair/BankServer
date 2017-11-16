@@ -31,7 +31,9 @@ SOURCES += main.cpp \
     DataBase/Access/withdraw_table.cpp \
     DataBase/Objects/account.cpp \
     DataBase/Objects/session.cpp \
-    DataBase/Access/account_table.cpp
+    DataBase/Access/account_table.cpp \
+    Protocol/Packets/MakePaymentPacket.cpp \
+    Protocol/Packets/MakePaymentResponsePacket.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -67,7 +69,9 @@ HEADERS += \
     DataBase/Access/withdraw_table.h \
     DataBase/Objects/account.h \
     DataBase/Objects/session.h \
-    DataBase/Access/account_table.h
+    DataBase/Access/account_table.h \
+    Protocol/Packets/MakePaymentPacket.h \
+    Protocol/Packets/MakePaymentResponsePacket.h
 
 DISTFILES += \
     .gitignore \

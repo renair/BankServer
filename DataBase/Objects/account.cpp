@@ -1,10 +1,10 @@
 #include "account.h"
 
-Account::Account(const quint64 id,
-                 const quint64 owner,
-                 const int type,
+Account::Account(quint64 id,
+                 quint64 owner,
+                 int type,
                  const QString& pin,
-                 const quint32 money):
+                 quint32 money):
     _id(id),
     _owner(owner),
     _type(type),
@@ -14,7 +14,7 @@ Account::Account(const quint64 id,
 
 }
 
-quint32 Account::moneyAdd(const qint32 value)
+quint32 Account::moneyAdd(qint32 value)
 {
     if(value<0)
         throw AccountError(QString("Trying to add negative value ( %1 ), please, use money_divide(%2);")
@@ -22,22 +22,22 @@ quint32 Account::moneyAdd(const qint32 value)
     return _money_amount+=value;
 }
 
-quint32 Account::moneyDivide(const qint32 value)
+quint32 Account::moneyDivide(qint32 value)
 {
     if(value<0)
         throw AccountError(QString("Trying to divide negative value -(%1), please, use money_add(%2);")
                            .arg(QString::number(value),QString::number(value*(-1))));
-    if((_money_amount<(quint32)value)<0)
+    if(_money_amount < (quint32)value) //TODO fix it!
         throw AccountError("Not enough money.");
-    return _money_amount-=value;
+    return _money_amount-=(quint32)value;
 }
 
-bool Account::checkPin(const QString & pin)
+bool Account::checkPin(const QString& pin)
 {
     return _pin==pin;
 }
 
-bool Account::setNewPin(const QString &new_pin, const QString &old_pin)
+bool Account::setNewPin(const QString& new_pin, const QString& old_pin)
 {
     if(checkPin(old_pin))
     {

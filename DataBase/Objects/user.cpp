@@ -1,12 +1,12 @@
 #include "user.h"
 
-User::User(const quint64 upid,
+User::User(quint64 upid,
            const QString& password,
            const QString& pass_number,
            const QString& name,
            const QString& surname,
            const QString& father_name,
-           const quint64 phone_number):
+           quint64 phone_number):
     _upid(upid),
     _password(password),
     _pass_number(pass_number),
@@ -18,12 +18,12 @@ User::User(const quint64 upid,
 
 }
 
-bool User::checkPassword(const QString &password)
+bool User::checkPassword(const QString& password)
 {
     return _password==password;
 }
 
-bool User::setNewPass(const QString &new_pass, const QString &old_pass)
+bool User::setNewPass(const QString& new_pass, const QString& old_pass)
 {
     if(checkPassword(old_pass))
     {

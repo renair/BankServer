@@ -1,13 +1,13 @@
 #include "transfer.h"
 #include <QDateTime>
 
-Transfer::Transfer(const quint64 id,
-                   const quint64 payer_id,
-                   const quint64 receiver_id,
-                   const quint64 time,
+Transfer::Transfer(quint64 id,
+                   quint64 payer_id,
+                   quint64 receiver_id,
+                   quint64 time,
                    const QString& tech_comment,
                    const QString& comment,
-                   const quint32 period):
+                   quint32 period):
   _id(id),
   _account_payer_id(payer_id),
   _account_receiver_id(receiver_id),
@@ -17,12 +17,12 @@ Transfer::Transfer(const quint64 id,
   _periodicity(period)
 {}
 
-Transfer::Transfer(const quint64 payer_id,
-                   const quint64 receiver_id,
-                   const quint64 time,
+Transfer::Transfer(quint64 payer_id,
+                   quint64 receiver_id,
+                   quint64 time,
                    const QString& tech_comment,
                    const QString& comment,
-                   const quint32 period):
+                   quint32 period):
     Transfer(-1,payer_id,receiver_id,time,tech_comment,comment,period)
 {}
 

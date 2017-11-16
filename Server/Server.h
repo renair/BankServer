@@ -15,7 +15,8 @@ class Server : QObject
     Q_OBJECT
 private:
     QTcpServer _tcpServer;
-    QMap<int, QByteArray *> _connectionsMap;
+    QMap<int, QByteArray *> _connectionData;
+    QMap<int, QTcpSocket *> _connectionSocket;
     ServerConfiguration _configuation;
     QThread _processorThread;
     PacketProcessor _packetProcessor;
