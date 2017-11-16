@@ -31,6 +31,7 @@ SOURCES += main.cpp \
     DataBase/Access/withdraw_table.cpp \
     DataBase/Objects/account.cpp \
     DataBase/Objects/session.cpp \
+    DataBase/Access/account_table.cpp \
     Protocol/Packets/MakePaymentPacket.cpp \
     Protocol/Packets/MakePaymentResponsePacket.cpp \
     Protocol/Packets/GetPaymentsPacket.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     DataBase/Access/withdraw_table.h \
     DataBase/Objects/account.h \
     DataBase/Objects/session.h \
+    DataBase/Access/account_table.h \
     Protocol/Packets/MakePaymentPacket.h \
     Protocol/Packets/MakePaymentResponsePacket.h \
     Protocol/Packets/GetPaymentsPacket.h \

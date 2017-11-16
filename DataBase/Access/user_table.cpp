@@ -2,10 +2,8 @@
 #include <QDebug>
 #include "user_table.h"
 
-UserTable::UserTable(Connection& c): _connection(c)
-{
-
-}
+UserTable::UserTable(): _connection(Connection::getConnection())
+{}
 
 UserTable::~UserTable()
 {}
@@ -17,7 +15,7 @@ bool UserTable::create_new(const User & u)
                          FROM user \
                          WHERE UPID='%1'").arg(u.upid())).second;
             if(is_exist.next())
-            throw QString("Unable to create an existing object");
+            throw UserTableError("Unable to create an existing object");
     return _connection.execute(QString("INSERT INTO user(\
                                               UPID,\
                                               password,\
@@ -37,7 +35,12 @@ bool UserTable::create_new(const User & u)
 }
 
 bool UserTable::update(const User & u)
-{
+{QSqlQuery is_exist = _connection.execute(
+                QString("SELECT UPID \
+                         FROM user \
+                         WHERE UPID='%1'").arg(u.upid())).second;
+            if(!is_exist.next())
+            throw UserTableError("Unable to update non-existent object");
     return _connection.execute(
         QString("UPDATE user "
                 "SET password='%2',\
@@ -56,14 +59,14 @@ bool UserTable::update(const User & u)
                     QString::number(u.phoneNumber()))).first;
 }
 
-User UserTable::get_by_upid(const quint64 upid)
+User UserTable::getByUpid(const quint64 upid)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT UPID,password,pass_number,name,surname,father_name,phone_number \
                          FROM user \
                          WHERE UPID='%1'").arg(QString::number(upid))).second;
     if(!q.next())
-            throw QString("Empty result!");
+            throw UserTableError("The object does not exist");
     User u(q.value(0).toULongLong(),
            q.value(1).toString(),
            q.value(2).toString(),
@@ -74,3 +77,6 @@ User UserTable::get_by_upid(const quint64 upid)
 
     return u;
 }
+
+UserTable::UserTableError::UserTableError(const QString & reason): _reason(reason)
+{}
