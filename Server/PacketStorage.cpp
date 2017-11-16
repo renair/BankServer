@@ -79,11 +79,16 @@ void PacketStorage::loadFromFile(const QString& filename)
         while(Packet::isPacket(data))
         {
             PacketHolder packet = Packet::getPacket(Packet::getPacketId(data), 0);
-            packet->load(data);
-            _packetsQueue.enqueue(packet);
+            if(packet)
+            {
+                packet->load(data);
+                _packetsQueue.enqueue(packet);
+            }
             Packet::removeFirstPacket(data);
         }
         _isSaved = true;
+        file.close();
+        file.remove();
         _mutex.unlock();
     }
 }
@@ -109,7 +114,9 @@ void PacketStorage::saveToFile(const QString& filename) const
         {
             PacketHolder packet = temp_queue.dequeue();
             file.write(packet->dump());
+            file.flush();
         }
+        file.close();
         _isSaved = true;
     }
 }

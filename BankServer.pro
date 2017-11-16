@@ -32,7 +32,13 @@ SOURCES += main.cpp \
     DataBase/Objects/account.cpp \
     DataBase/Objects/session.cpp \
     Protocol/Packets/MakePaymentPacket.cpp \
-    Protocol/Packets/MakePaymentResponsePacket.cpp
+    Protocol/Packets/MakePaymentResponsePacket.cpp \
+    Protocol/Packets/GetPaymentsPacket.cpp \
+    Protocol/Packets/GetPaymentsResponsePacket.cpp \
+    Protocol/Packets/GetAccountMoneyPacket.cpp \
+    Protocol/Packets/GetAccountMoneyResponsePacket.cpp \
+    Protocol/Packets/GetCardsPacket.cpp \
+    Protocol/Packets/GetCardsResponsePacket.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -69,7 +75,13 @@ HEADERS += \
     DataBase/Objects/account.h \
     DataBase/Objects/session.h \
     Protocol/Packets/MakePaymentPacket.h \
-    Protocol/Packets/MakePaymentResponsePacket.h
+    Protocol/Packets/MakePaymentResponsePacket.h \
+    Protocol/Packets/GetPaymentsPacket.h \
+    Protocol/Packets/GetPaymentsResponsePacket.h \
+    Protocol/Packets/GetAccountMoneyPacket.h \
+    Protocol/Packets/GetAccountMoneyResponsePacket.h \
+    Protocol/Packets/GetCardsPacket.h \
+    Protocol/Packets/GetCardsResponsePacket.h
 
 DISTFILES += \
     .gitignore \

@@ -19,14 +19,6 @@ int main(int argc, char** argv)
 //    Server serv;
 //    serv.start(45654);
 
-    MakePaymentResponsePacket pack;
-    pack.setPaymentStatus(MakePaymentResponsePacket::PAYMENT_SUCCESSFULL);
-
-    QByteArray dumped = pack.dump();
-
-    MakePaymentResponsePacket pack2;
-    pack2.load(dumped);
-
 //    {
 //        TestingDB* test = new TestingDB();
 //        test->run();

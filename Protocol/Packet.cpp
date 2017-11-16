@@ -12,6 +12,14 @@ void Packet::init()
     }
     qRegisterMetaType<PacketHolder>();
     _packetsMap[1] = PacketHolder(new UserAuthPacket());
+    _packetsMap[2] = PacketHolder(new GetAccountMoneyPacket());
+    _packetsMap[-2] = PacketHolder(new GetAccountMoneyResponsePacket());
+    _packetsMap[3] = PacketHolder(new GetCardsPacket());
+    _packetsMap[-3] = PacketHolder(new GetCardsResponsePacket());
+    _packetsMap[4] = PacketHolder(new MakePaymentPacket());
+    _packetsMap[-4] = PacketHolder(new MakePaymentResponsePacket());
+    _packetsMap[5] = PacketHolder(new GetPaymentsPacket());
+    _packetsMap[-5] = PacketHolder(new GetPaymentsResponsePacket());
     _isInited = true;
 }
 
