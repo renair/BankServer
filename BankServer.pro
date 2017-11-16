@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     Server/PacketProcessor.cpp \
     DataBase/Access/withdraw_table.cpp \
     DataBase/Objects/account.cpp \
-    DataBase/Objects/session.cpp
+    DataBase/Objects/session.cpp \
+    DataBase/Access/account_table.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -65,7 +66,8 @@ HEADERS += \
     Server/PacketProcessor.h \
     DataBase/Access/withdraw_table.h \
     DataBase/Objects/account.h \
-    DataBase/Objects/session.h
+    DataBase/Objects/session.h \
+    DataBase/Access/account_table.h
 
 DISTFILES += \
     .gitignore \

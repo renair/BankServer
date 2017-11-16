@@ -18,10 +18,10 @@ public:
     const quint64& id() const {return _id;}
     const quint64& owner() const {return _owner;}
     const int& type() const {return _type;}
-    const quint32& money_amount() const {return _money_amount;}
+    const quint32& moneyAmount() const {return _money_amount;}
 
-    const quint32 money_add(const qint32);
-    const quint32 money_divide(const qint32);
+    quint32 moneyAdd(const qint32);
+    quint32 moneyDivide(const qint32);
     bool checkPin(const QString&);
     bool setNewPin(const QString& new_pin, const QString& old_pin="");
 private:
@@ -32,17 +32,8 @@ private:
     quint32 _money_amount;
 
     const QString& pin() const {return _pin;}
-//    quint64& id();
-//    quint64& owner();
-//    int& type();
-//    QString& pin();
-//    quint32& money_amount();
-//    Account(const qint64 id,
-//            const qint64 owner,
-//            const int type,
-//            const QString& pin,
-//            const qint64 money);
 
+public:
     class AccountError
     {
     public:
@@ -52,5 +43,7 @@ private:
         QString _reason;
     };
 };
+
+ostream& operator<<(ostream&, const Account&);
 
 #endif // ACCOUNT_H

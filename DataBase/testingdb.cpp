@@ -26,11 +26,12 @@ TestingDB::~TestingDB()
 void TestingDB::run()
 {
     cout<< "Test db connection" <<endl;
-//    Connection connection = Connection::getConnection();
+    Connection::getConnection();
 //    Connection* connection = &conn;//= new Connection();
-    cout<< "Is connected: " << Connection::getConnection().connect() <<endl;
-    //TransferTable transfers(connection);
-    //UserTable users(connection);
+//    cout<< "Is connected: " << Connection::getConnection().connect() <<endl;
+//    TransferTable transfers(Connection::getConnection());
+//    UserTable users(Connection::getConnection());
+    UserTable users;
     //WithdrawTable withdraws(connection);
 //    ofstream out;
 //    out.open("res.txt");
@@ -57,15 +58,16 @@ void TestingDB::run()
 //        cout<< "Original num: " << upid <<endl;
 //        cout<< "QString num:  " << QString::number(upid).toStdString() <<endl;
 //        cout<< users.get_by_upid(upid) <<endl;
-//        User u(1,"pass","CT555","MyName","MySurname","MyFatherName",5553535);
-        //cout<< "Is created new user: " << users.create_new(u) <<endl;
-//        u.name()="NewName";
-//        cout<< "Is updated: " << users.update(u) <<endl;
+        User u(1,"pass","CT555","MyName","MySurname","MyFatherName",5553535);
+        cout<< "Is created new user: " << users.create_new(u) <<endl;
+        u.name()="NewName1";
+//        cout<< "User 1: " << users.get_by_upid(1) <<endl;
+        cout<< "Is updated: " << users.update(u) <<endl;
 //        Withdraw w(1,1,155,"wth","comm");
 //        withdraws.create_new(w);
         //cout<< "User password: " << u.password() <<endl;
-    }catch(const QString& error){
-        cout<< "Error: " + error.toStdString() <<endl;
+    }catch(const UserTable::UserTableError& error){
+        cout<< "Error: " + error.reason().toStdString() <<endl;
     }
 //    out.close();
 //    cout<< "Completed!" <<endl;

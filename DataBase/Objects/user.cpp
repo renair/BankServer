@@ -43,3 +43,6 @@ ostream& operator<<(ostream& os, const User& u)
              << " Father name: " << u.fatherName().toStdString() <<endl
              << " Phone number: " << u.phoneNumber() <<endl<< "}" <<endl;
 }
+
+User::UserError::UserError(const QString & reason): _reason(reason)
+{}

@@ -8,19 +8,26 @@ class User;
 class UserTable
 {
 public:
-    UserTable(Connection&);
-    UserTable()=delete;
-    UserTable& operator =(const UserTable&)=delete;
+    UserTable();
     ~UserTable();
     bool create_new(const User&);
     bool update(const User&);
-    User get_by_upid(const quint64);
-    User get_by_upid(const User& u) {return get_by_upid(u.upid());}
+    User getByUpid(const quint64);
 private:
-//    static UserTable* _instance;
     Connection& _connection;
 
-    bool delete_it(const uint);
+    UserTable& operator =(const UserTable&);
+public:
+    class UserTableError
+    {
+    public:
+        UserTableError(const QString&);
+        const QString& reason() const {return _reason;}
+    private:
+        QString _reason;
+
+        UserTableError();
+    };
 };
 
 #endif // USER_TABLE_H

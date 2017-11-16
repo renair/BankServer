@@ -44,6 +44,16 @@ private:
     quint64 _phone_number;
 
     const QString& password() const {return _password;}
+
+    class UserError
+    {
+    public:
+        UserError(const QString&);
+        const QString& reason() const {return _reason;}
+    private:
+        QString _reason;
+        UserError();
+    };
 };
 
 ostream& operator<<(ostream&, const User&);
