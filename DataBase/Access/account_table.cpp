@@ -27,7 +27,7 @@ bool AccountTable::createNew(const Account & account)
                                 QString::number(account.type()),
                                 QString::number(account.owner()),
                                 account.pin(),
-                                QString::number(account.money_amount()))).first;
+                                QString::number(account.moneyAmount()))).first;
 }
 
 bool AccountTable::update(const Account & account)
@@ -45,7 +45,7 @@ bool AccountTable::update(const Account & account)
                  WHERE UPID='%1'").
                 arg(QString::number(account.id()),
                     account.pin(),
-                    QString::number(account.money_amount()))).first;
+                    QString::number(account.moneyAmount()))).first;
 }
 
 Account AccountTable::getById(const quint64 id)
