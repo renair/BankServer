@@ -19,10 +19,10 @@ int main(int argc, char** argv)
 //    Server serv;
 //    serv.start(45654);
 
-//    {
-//        TestingDB* test = new TestingDB();
-//        test->run();
-//        delete test;
-//    }
+    {
+        TestingDB* test = new TestingDB();
+        test->run();
+        delete test;
+    }
     return a.exec();
 }

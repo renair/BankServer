@@ -15,14 +15,14 @@ quint64 Session::authTime(quint64 time)
 {
     if(authTime())
         throw SessionError("Cannot change auth time");
-    return authTime()=time;
+    return _auth_time=time;
 }
 
 quint64 Session::userUpid(quint64 user)
 {
     if(userUpid())
         throw SessionError("Cannot change user");
-    return userUpid()=user;
+    return _user_upid=user;
 }
 
 quint64 Session::renewValidTime(quint64 time)
@@ -31,7 +31,7 @@ quint64 Session::renewValidTime(quint64 time)
         throw SessionError("Cannot change valid time");
     if(time<authTime())
         throw SessionError("Valid time cannot be less than auth time");
-    return validTime()=time;
+    return _valid_time=time;
 }
 
 ostream& operator <<(ostream& os, const Session& s)

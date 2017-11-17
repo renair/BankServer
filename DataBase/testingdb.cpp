@@ -25,51 +25,57 @@ TestingDB::~TestingDB()
 
 void TestingDB::run()
 {
-    cout<< "Test db connection" <<endl;
-    Connection::getConnection();
-//    Connection* connection = &conn;//= new Connection();
-//    cout<< "Is connected: " << Connection::getConnection().connect() <<endl;
-//    TransferTable transfers(Connection::getConnection());
-//    UserTable users(Connection::getConnection());
-    UserTable users;
-    //WithdrawTable withdraws(connection);
-//    ofstream out;
-//    out.open("res.txt");
-//    cout<< "File opened" <<endl;
-    try{
-//        Account acc(1,1,1,"1234",1);
-//        cout<< acc.id() <<endl;
-//        quint64 max(-1);
-//        quint64 next(max+1);
-//        while (next>max)
-//        {
-//            max=next;
-//            if((max%1000000000)==0)
-//                cout<< max/1000000000 << "mlrd - ";
-//            ++next;
-//        }
-//        cout<< "max: " << max <<endl;
-//        quint32 b(max);
-//        quint32 c(b+1);
-//        cout<< "b: " << b <<endl<< "b+1: " << c <<endl;
-//        out<< transfers.get_by_id(1) <<endl;
-//        cout<< transfers.getById(1) <<endl;
-//        quint64 upid(5553575000);
-//        cout<< "Original num: " << upid <<endl;
-//        cout<< "QString num:  " << QString::number(upid).toStdString() <<endl;
-//        cout<< users.get_by_upid(upid) <<endl;
-        User u(1,"pass","CT555","MyName","MySurname","MyFatherName",5553535);
-        cout<< "Is created new user: " << users.create_new(u) <<endl;
-        u.name()="NewName1";
-//        cout<< "User 1: " << users.get_by_upid(1) <<endl;
-        cout<< "Is updated: " << users.update(u) <<endl;
-//        Withdraw w(1,1,155,"wth","comm");
-//        withdraws.create_new(w);
-        //cout<< "User password: " << u.password() <<endl;
-    }catch(const UserTable::UserTableError& error){
-        cout<< "Error: " + error.reason().toStdString() <<endl;
+//    Clearing database
+    {
+        Connection::getConnection().
+               execute("DELETE \
+                        FROM payment \
+                        WHERE ID IN (SELECT ID \
+                                     FROM payment);");
+        Connection::getConnection().
+               execute("DELETE \
+                        FROM account \
+                        WHERE ID IN (SELECT ID \
+                                     FROM account);");
+        Connection::getConnection().
+               execute("DELETE \
+                        FROM cash_machine \
+                        WHERE id IN (SELECT id \
+                                     FROM cash_machine);");
+        Connection::getConnection().
+               execute("DELETE \
+                        FROM session \
+                        WHERE signature IN (SELECT signature \
+                                            FROM session);");
+        Connection::getConnection().
+               execute("DELETE \
+                        FROM user \
+                        WHERE UPID IN (SELECT UPID \
+                                       FROM user);");
     }
-//    out.close();
-//    cout<< "Completed!" <<endl;
+//    User
+    {
+        UserTable users;
+        User u1(1,"pass1","CT000001","1_name","1_surname","1_father_name",960000001);
+        User u2(2,"pass2","CT000002","2_name","2_surname","2_father_name",960000002);
+        try
+        {
+            users.create_new(u1);
+            users.create_new(u2);
+            users.getByUpid(u1.upid());
+            users.getByUpid(u2.upid());
+            u1.name()="New name";
+            u2.surname()="New surname";
+            if(u1.setNewPass("new_pass","pass2"))
+                users.update(u1);
+            if(u2.setNewPass("new_pass","pass2"))
+                users.update(u2);
+        }
+        catch(const UserTable::UserTableError& error)
+        {
+            qDebug()<< error.reason();
+        }
+
+    }
     return;
 }
