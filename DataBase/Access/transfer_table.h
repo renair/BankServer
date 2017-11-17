@@ -7,14 +7,25 @@
 class TransferTable
 {
 public:
-    TransferTable(Connection&);
+    TransferTable();
     ~TransferTable();
-    bool create_new(const Transfer&);
+    bool createNew(const Transfer&);
     Transfer getById(const quint64);
 private:
     Connection& _connection;
 
-    TransferTable();
+    TransferTable& operator=(const TransferTable&);
+public:
+    class TransferTableError
+    {
+    public:
+        TransferTableError(const QString&);
+        const QString& reason() {return _reason;}
+    private:
+        QString _reason;
+
+        TransferTableError();
+    };
 };
 
 #endif // TRANSFER_TABLE_H

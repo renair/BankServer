@@ -15,13 +15,13 @@ BankManager::~BankManager()
     _paymentThread.wait();
 }
 
-void BankManager::addPayment(Payment* newOperation)
-{
-    qDebug("Payment manager add Payment");
-    _paymentService.addPayment(newOperation);
-}
+//void BankManager::addPayment(Payment* newOperation)
+//{
+//    qDebug("Payment manager add Payment");
+//    _paymentService.addPayment(newOperation);
+//}
 
-unsigned int BankManager::paymentAmount() const
-{
-    return _paymentService.paymentsAmount();
-}
+//unsigned int BankManager::paymentAmount() const
+//{
+//    return _paymentService.paymentsAmount();
+//}

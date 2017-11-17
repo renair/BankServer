@@ -44,7 +44,7 @@ private:
     quint64 _phone_number;
 
     const QString& password() const {return _password;}
-
+public:
     class UserError
     {
     public:

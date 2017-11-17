@@ -39,7 +39,10 @@ SOURCES += main.cpp \
     Protocol/Packets/GetAccountMoneyPacket.cpp \
     Protocol/Packets/GetAccountMoneyResponsePacket.cpp \
     Protocol/Packets/GetCardsPacket.cpp \
-    Protocol/Packets/GetCardsResponsePacket.cpp
+    Protocol/Packets/GetCardsResponsePacket.cpp \
+    DataBase/Access/session_table.cpp \
+    DataBase/Objects/atm.cpp \
+    DataBase/Access/atm_table.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -61,7 +64,6 @@ HEADERS += \
     DataBase/testingdb.h \
     DataBase/Objects/withdraw.h \
     DataBase/Objects/transfer.h \
-    DataBase/Objects/payment.h \
     DataBase/Access/transfer_table.h \
     DataBase/Objects/user.h \
     DataBase/Access/user_table.h \
@@ -83,7 +85,10 @@ HEADERS += \
     Protocol/Packets/GetAccountMoneyPacket.h \
     Protocol/Packets/GetAccountMoneyResponsePacket.h \
     Protocol/Packets/GetCardsPacket.h \
-    Protocol/Packets/GetCardsResponsePacket.h
+    Protocol/Packets/GetCardsResponsePacket.h \
+    DataBase/Access/session_table.h \
+    DataBase/Objects/atm.h \
+    DataBase/Access/atm_table.h
 
 DISTFILES += \
     .gitignore \

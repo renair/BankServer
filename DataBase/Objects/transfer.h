@@ -5,8 +5,6 @@
 #include <ostream>
 using namespace std;
 
-#include "payment.h"
-
 class Transfer
 {
 public:
@@ -48,10 +46,6 @@ private:
     QString _technical_comment;
     QString _comment;
     quint32 _periodicity;
-
-    bool specificPerform();
-    bool specificIsPeriodic();
-    Payment* specificNextPayment();
 };
 
 ostream& operator<<(ostream&, const Transfer&);

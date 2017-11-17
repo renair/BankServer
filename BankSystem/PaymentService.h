@@ -10,7 +10,7 @@ class PaymentService : public QObject
 {
     Q_OBJECT
 private:
-    std::priority_queue<Payment*> _paymentQueue;
+//    std::priority_queue<Payment*> _paymentQueue;
     QMutex _mutex;
     //some DB connectors?
 private slots:
@@ -19,7 +19,7 @@ private slots:
 public:
     PaymentService();
     ~PaymentService();
-    void addPayment(Payment*);
+//    void addPayment(Payment*);
     unsigned int paymentsAmount() const;
 public slots:
     void startService();

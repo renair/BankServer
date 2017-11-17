@@ -14,7 +14,7 @@ bool AccountTable::createNew(const Account & account)
                 QString("SELECT ID \
                          FROM account \
                          WHERE ID='%1'").arg(account.id())).second;
-            if(is_exist.next())
+    if(is_exist.next())
             throw AccountTableError("Unable to create an existing object");
     return _connection.execute(QString("INSERT INTO account(\
                                               ID,\
@@ -41,8 +41,8 @@ bool AccountTable::update(const Account & account)
     return _connection.execute(
         QString("UPDATE account "
                 "SET pin='%2',\
-                     money_amount='%3',\
-                 WHERE UPID='%1'").
+                     money_amount='%3' \
+                 WHERE ID='%1'").
                 arg(QString::number(account.id()),
                     account.pin(),
                     QString::number(account.moneyAmount()))).first;

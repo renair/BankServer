@@ -10,9 +10,9 @@ class UserTable
 public:
     UserTable();
     ~UserTable();
-    bool create_new(const User&);
+    bool createNew(const User&);
     bool update(const User&);
-    User getByUpid(const quint64);
+    User getByUpid(quint64);
 private:
     Connection& _connection;
 
