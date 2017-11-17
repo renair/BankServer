@@ -8,7 +8,7 @@ UserTable::UserTable(): _connection(Connection::getConnection())
 UserTable::~UserTable()
 {}
 
-bool UserTable::create_new(const User & u)
+bool UserTable::createNew(const User & u)
 {
     QSqlQuery is_exist = _connection.execute(
                 QString("SELECT UPID \
@@ -59,7 +59,7 @@ bool UserTable::update(const User & u)
                     QString::number(u.phoneNumber()))).first;
 }
 
-User UserTable::getByUpid(const quint64 upid)
+User UserTable::getByUpid(quint64 upid)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT UPID,password,pass_number,name,surname,father_name,phone_number \

@@ -1,14 +1,20 @@
 #include <QVariant>
 #include "transfer_table.h"
 
-TransferTable::TransferTable(Connection& c): _connection(c)
+TransferTable::TransferTable(): _connection(Connection::getConnection())
 {}
 
 TransferTable::~TransferTable()
 {}
 
-bool TransferTable::create_new(const Transfer &t)
+bool TransferTable::createNew(const Transfer &t)
 {
+    QSqlQuery is_exist = _connection.execute(
+                QString("SELECT ID \
+                         FROM payment \
+                         WHERE ID='%1' AND is_withdraw='0'").arg(t.id())).second;
+    if(is_exist.next())
+            throw TransferTableError("Unable to create an existing object");
     return _connection.execute(
                 QString("INSERT INTO payment(\
                         payer,\
@@ -34,7 +40,7 @@ Transfer TransferTable::getById(const quint64 id)
                          FROM payment \
                          WHERE id='%1' AND is_withdraw='0'").arg(QString::number(id))).second;
     if(!q.next())
-            throw QString("Empty result");
+            throw TransferTableError("Empty result");
     Transfer t(q.value(0).toULongLong(),
                q.value(1).toULongLong(),
                q.value(2).toULongLong(),
@@ -44,3 +50,6 @@ Transfer TransferTable::getById(const quint64 id)
 
     return t;
 }
+
+TransferTable::TransferTableError::TransferTableError(const QString & reason): _reason(reason)
+{}

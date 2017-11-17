@@ -60,8 +60,8 @@ void TestingDB::run()
         User u2(2,"pass2","CT000002","2_name","2_surname","2_father_name",960000002);
         try
         {
-            users.create_new(u1);
-            users.create_new(u2);
+            users.createNew(u1);
+            users.createNew(u2);
             users.getByUpid(u1.upid());
             users.getByUpid(u2.upid());
             u1.name()="New name";

@@ -7,14 +7,25 @@
 class WithdrawTable
 {
 public:
-    WithdrawTable(Connection&);
+    WithdrawTable();
     ~WithdrawTable();
-    bool create_new(const Withdraw&);
+    bool createNew(const Withdraw&);
     Withdraw getById(const quint64);
 private:
     Connection& _connection;
 
-    WithdrawTable();
+    WithdrawTable& operator=(const WithdrawTable&);
+public:
+    class WithdrawTableError
+    {
+    public:
+        WithdrawTableError(const QString&);
+        const QString& reason() {return _reason;}
+    private:
+        QString _reason;
+
+        WithdrawTableError();
+    };
 };
 
 #endif // WITHDRAW_TABLE_H

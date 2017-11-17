@@ -25,13 +25,13 @@ void PaymentService::loadPendingPayments()
     qDebug("Payment Service load pending tasks!");
 }
 
-void PaymentService::addPayment(Payment* newOperation)
-{
-    //TODO fix it bacouse for ptrs defined comparison operation
-    _paymentQueue.push(newOperation);
-}
+//void PaymentService::addPayment(Payment* newOperation)
+//{
+//    //TODO fix it bacouse for ptrs defined comparison operation
+//    _paymentQueue.push(newOperation);
+//}
 
-unsigned int PaymentService::paymentsAmount() const
-{
-    return _paymentQueue.size();
-}
+//unsigned int PaymentService::paymentsAmount() const
+//{
+//    return _paymentQueue.size();
+//}

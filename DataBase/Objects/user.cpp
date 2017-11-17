@@ -14,9 +14,7 @@ User::User(quint64 upid,
     _surname(surname),
     _father_name(father_name),
     _phone_number(phone_number)
-{
-
-}
+{}
 
 bool User::checkPassword(const QString& password)
 {

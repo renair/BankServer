@@ -1,14 +1,20 @@
 #include <QVariant>
 #include "withdraw_table.h"
 
-WithdrawTable::WithdrawTable(Connection& c): _connection(c)
+WithdrawTable::WithdrawTable(): _connection(Connection::getConnection())
 {}
 
 WithdrawTable::~WithdrawTable()
 {}
 
-bool WithdrawTable::create_new(const Withdraw &w)
+bool WithdrawTable::createNew(const Withdraw &w)
 {
+    QSqlQuery is_exist = _connection.execute(
+                QString("SELECT ID \
+                         FROM payment \
+                         WHERE ID='%1' AND is_withdraw='1'").arg(w.id())).second;
+    if(is_exist.next())
+            throw WithdrawTableError("Unable to create an existing object");
     return _connection.execute(
                 QString("INSERT INTO payment(\
                         payer,\
@@ -32,7 +38,7 @@ Withdraw WithdrawTable::getById(const quint64 id)
                          FROM payment \
                          WHERE id='%1' AND is_withdraw='1'").arg(QString::number(id))).second;
     if(!q.next())
-            throw QString("Empty result");
+            throw WithdrawTableError("Empty result");
     return Withdraw(q.value(0).toInt(),
                     q.value(1).toInt(),
                     q.value(2).toInt(),
@@ -42,3 +48,6 @@ Withdraw WithdrawTable::getById(const quint64 id)
 
 //    return w;
 }
+
+WithdrawTable::WithdrawTableError::WithdrawTableError(const QString & reason): _reason(reason)
+{}
