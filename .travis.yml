@@ -5,19 +5,22 @@ compiler: g++
 dist: trusty
 
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
-  - sudo apt-get update -qq
+  - "sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty"
+  - "sudo apt-get update -qq"
 
 install:
-  - sudo apt-get -y install qt55[QTPACKAGE]
+  - "sudo apt-get -y install qt55[QTPACKAGE]"
 
 script:
-  - source /opt/qt55/bin/qt55-env.sh
-  - /opt/qt55/bin/qmake BankServer.pro
-  - make
+  - "source /opt/qt55/bin/qt55-env.sh"
+  - "mkdir build && cd build"
+  - "/opt/qt55/bin/qmake ../BankServer.pro"
+  - "make && cd .."
 
 deploy:
   provider: s3
-  access_key_id: "AKIAJY2M6WP2IDPWZ7IA"
-  secret_access_key: "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"
+  access_key_id: "AKIAIWBASIUYXGJDT2XQ"
+  secret_access_key:
+    secure: "AmdKaTognSdr+bddDHxLEkWNLdBUHBlQJ2uiCKJ209CLJTEq50hzGYPu+DzgEjOEKbe27IpIhUkIyXNdUdTWCMsFO373c+/nB4SN1NayWyPWu85F/a4TOO7yufIui1IOnDhDlzvyX6LOyoqHQZ1aUef26CmOxUweBbw5+iy1ooLGa2gdW9YdYJBvoqyQqAvsuTCGCVTYMcD2XJJfuUFxrZlYmjo5QkY1EqL2sZoiPh5/tVDosPtGM/HQzc+2Pxk8q15J/zh/yb+B7XXnFjlk2+mkn0hb22+hC3zdEaoyFl6L8fh3gFympbnI63zVImVC6z0SoqJp0NT9iR5b5a2jF/jvMLHtrByKiXbXUpoIc2svMgrvCXZ9DUTusOTaNm26bG9ZtuFvyyNZx72wicN0pIB7+oDOzbvknTvV3gcoMu7ouPhB3K+A2eGNA6rtfMzxzCUCcjGnPVuGKz/o+bx37nq0qjigQOvTFA8XeglbeMN3cDqLsf0VFx59s96F/vwG+a/wijTeZmJEqYELMjQV0h3VmJMYzqGnxR0hx3sIYfOFPl5ax/ls6Rv1oIK64ZnyIQAFkopfrXxV8hmq7c6Wd9fE+xo7NxUNK1v8BGK62G8+KrE3BjSTLnET/i86CtygSykeWbj59ZvIy/VhkU8m+yFW81mHoOAr75I0iSb+xUM="
   bucket: "bank-server"
+  skip_cleanup: true
