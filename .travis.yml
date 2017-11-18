@@ -3,24 +3,20 @@ sudo: required
 os: linux
 compiler: g++
 dist: trusty
-
 before_install:
-  - "sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty"
-  - "sudo apt-get update -qq"
-
+- sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+- sudo apt-get update -qq
 install:
-  - "sudo apt-get -y install qt55[QTPACKAGE]"
-
+- sudo apt-get -y install qt55[QTPACKAGE]
 script:
-  - "source /opt/qt55/bin/qt55-env.sh"
-  - "mkdir build && cd build"
-  - "/opt/qt55/bin/qmake ../BankServer.pro"
-  - "make && cd .."
-
+- source /opt/qt55/bin/qt55-env.sh
+- mkdir build && cd build
+- "/opt/qt55/bin/qmake ../BankServer.pro"
+- make && cd ..
 deploy:
   provider: s3
-  access_key_id: "AKIAIWBASIUYXGJDT2XQ"
-  secret_access_key:
-    secure: "AmdKaTognSdr+bddDHxLEkWNLdBUHBlQJ2uiCKJ209CLJTEq50hzGYPu+DzgEjOEKbe27IpIhUkIyXNdUdTWCMsFO373c+/nB4SN1NayWyPWu85F/a4TOO7yufIui1IOnDhDlzvyX6LOyoqHQZ1aUef26CmOxUweBbw5+iy1ooLGa2gdW9YdYJBvoqyQqAvsuTCGCVTYMcD2XJJfuUFxrZlYmjo5QkY1EqL2sZoiPh5/tVDosPtGM/HQzc+2Pxk8q15J/zh/yb+B7XXnFjlk2+mkn0hb22+hC3zdEaoyFl6L8fh3gFympbnI63zVImVC6z0SoqJp0NT9iR5b5a2jF/jvMLHtrByKiXbXUpoIc2svMgrvCXZ9DUTusOTaNm26bG9ZtuFvyyNZx72wicN0pIB7+oDOzbvknTvV3gcoMu7ouPhB3K+A2eGNA6rtfMzxzCUCcjGnPVuGKz/o+bx37nq0qjigQOvTFA8XeglbeMN3cDqLsf0VFx59s96F/vwG+a/wijTeZmJEqYELMjQV0h3VmJMYzqGnxR0hx3sIYfOFPl5ax/ls6Rv1oIK64ZnyIQAFkopfrXxV8hmq7c6Wd9fE+xo7NxUNK1v8BGK62G8+KrE3BjSTLnET/i86CtygSykeWbj59ZvIy/VhkU8m+yFW81mHoOAr75I0iSb+xUM="
-  bucket: "bank-server"
+  access_key_id: AKIAJSCFUPPZW7MOAXIQ
+  bucket: bank-server
   skip_cleanup: true
+  secret_access_key:
+    secure: jdY2RgtYCubfFi1irOusQB73jm3KSCCyykzAPYfxlkClKmEJ772OOzjSqykFMaQ9pzgnXrJRM3ZxdyICO1nw467pEQKiqKq3nDa8r0eqpI1WvD72GA8wcobR2sIoI4iFaVFeszyEvR/MdlzAiLeGV3jmcV+yx9ixcTndWcaGHrsvOWHGpVPRn2x8keCbLwFZgKNnVS8XOUFGKiTguQMIrglGPxt7nLR0BBvUw5zvg3IR2xLfMWoBmzPjl/sZ5h6lbjlPdBwz9yVGOxu9XUXriXnZ8V8dh4yZVw0ZYb2ahABkJLU8/VXLqEhZTYs9AWViqh08f651on0boOX1gesgJXLqiOf0OPeXCw0qou3Wk5wxK3i3MHvsy9IDUF7PPiQr3u69QaR7Kb7fmrZ238V30tetXvR4WVvJb1wZfnadI952X/58LWf8plbMCHocKbBkep07ku8BCetmpdBVB7BgWYQYa45qdM43czOmP1Osc0JGFncKez9W0SP+xHyh4hKenkXETsIyX4ffhxwKTo0+w6VH1cb4BeQhoQSfSkxALV8GMcLHm+HGMOtrbWOn+4d5MkL6DBVS+jWIJQV9T7JKKhz3M9s4ycW4M9dlQtrK0JoyskB0Y5nb7nyqgrUyhSIOMDi1eF436K4E5WVTOHYOjUcz9B4gkTkHILwEmcik3tQ=

@@ -56,13 +56,13 @@ Account AccountTable::getById(const quint64 id)
                          WHERE ID='%1'").arg(QString::number(id))).second;
     if(!q.next())
             throw AccountTableError("The object does not exist");
-    Account a(q.value(0).toULongLong(),
-           q.value(1).toULongLong(),
-           q.value(2).toInt(),
-           q.value(3).toString(),
-           q.value(4).toULongLong());
+    return Account(q.value(0).toULongLong(),
+                   q.value(1).toULongLong(),
+                   q.value(2).toInt(),
+                   q.value(3).toString(),
+                   q.value(4).toULongLong());
 
-    return a;
+//    return a;
 }
 
 QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
