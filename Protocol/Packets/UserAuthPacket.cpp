@@ -51,14 +51,17 @@ QByteArray UserAuthPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
-    data.append((char*)&_password, sizeof(_password));
+    data.append(_password.data(), _password.size()+1);
     return data;
 }
 
 void UserAuthPacket::specificLoad(QBuffer& buff)
 {
     buff.read((char*)&_cardNumber, sizeof(_cardNumber));
-    buff.read((char*)&_password, sizeof(_password));
+    char* pass = new char[buff.bytesAvailable()];
+    buff.read(pass, buff.bytesAvailable());
+    _password = QString(pass);
+    delete data;
 }
 
 PacketHolder UserAuthPacket::specificHandle() const
