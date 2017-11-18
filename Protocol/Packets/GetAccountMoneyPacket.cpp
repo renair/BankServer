@@ -1,4 +1,8 @@
+#include <QDebug>
 #include "GetAccountMoneyPacket.h"
+#include "GetAccountMoneyResponsePacket.h"
+#include "DataBase/Objects/account.h"
+#include "DataBase/Access/account_table.h"
 
 GetAccountMoneyPacket::GetAccountMoneyPacket():
     _token(0),
@@ -42,6 +46,22 @@ PacketHolder GetAccountMoneyPacket::specificHandle() const
 {
     // TODO implement this method.
     // Must return -2 Packet.
-    qDebug("GetAccountMoneyPacket is not implemented yet!");
-    return PacketHolder(NULL);
+    AccountTable accounts;
+    Account acc;
+    try
+    {
+        acc = accounts.getById(accountId());
+    }
+    catch(const AccountTable::AccountTableError& error)
+    {
+        qDebug()<< error.reason();
+    }
+    catch(const Connection::ConnectionError& error)
+    {
+        qDebug()<< error.reason();
+    }
+
+    GetAccountMoneyResponsePacket response(acc.id(),acc.moneyAmount());
+//    qDebug("GetAccountMoneyPacket is not implemented yet!");
+    return PacketHolder(&response);
 }

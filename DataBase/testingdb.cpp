@@ -12,6 +12,7 @@ using namespace std;
 #include "DataBase/Objects/withdraw.h"
 #include "DataBase/Access/withdraw_table.h"
 #include "DataBase/Objects/account.h"
+#include "DataBase/Access/account_table.h"
 
 TestingDB::TestingDB()
 {
@@ -75,7 +76,35 @@ void TestingDB::run()
         {
             qDebug()<< error.reason();
         }
+        catch(const Connection::ConnectionError& error)
+        {
+            qDebug()<< error.reason();
+        }
 
+    }
+//    Account
+    {
+        AccountTable accounts;
+        Account acc1(1,1,1,"pin1",10);
+        Account acc2(2,1,2,"pin1",1000);
+        Account acc3(3,1,3,"pin1",100);
+        Account acc4(4,2,1,"pin2",0);
+        try
+        {
+            accounts.createNew(acc1);
+            accounts.createNew(acc2);
+            accounts.createNew(acc3);
+            accounts.createNew(acc4);
+//            cout<< "Size: " << accounts.getUserAccountsList(1).size();
+        }
+        catch(const AccountTable::AccountTableError& error)
+        {
+            qDebug()<<error.reason();
+        }
+        catch(const Connection::ConnectionError& error)
+        {
+            qDebug()<< error.reason();
+        }
     }
     return;
 }

@@ -19,13 +19,15 @@ bool WithdrawTable::createNew(const Withdraw &w)
                 QString("INSERT INTO payment(\
                         payer,\
                         destination,\
+                        amount,\
                         time,\
                         technical_comment,\
                         comment,\
                         is_withdraw) \
-                VALUES ('%1','%2','%3','%4','%5',1)").
+                VALUES ('%1','%2','%3','%4','%5','%6',1)").
                 arg(QString::number(w.payerId()),
                     QString::number(w.atmId()),
+                    QString::number(w.amount()),
                     QString::number(w.time()),
                     w.techComment(),
                     w.comment())).first;
@@ -34,17 +36,18 @@ bool WithdrawTable::createNew(const Withdraw &w)
 Withdraw WithdrawTable::getById(const quint64 id)
 {
     QSqlQuery q = _connection.execute(
-                QString("SELECT ID,payer,destination,time,technical_comment,comment \
+                QString("SELECT ID,payer,destination,amount,time,technical_comment,comment \
                          FROM payment \
                          WHERE id='%1' AND is_withdraw='1'").arg(QString::number(id))).second;
     if(!q.next())
             throw WithdrawTableError("Empty result");
-    return Withdraw(q.value(0).toInt(),
-                    q.value(1).toInt(),
-                    q.value(2).toInt(),
-                    q.value(3).toInt(),
-                    q.value(4).toString(),
-                    q.value(5).toString());
+    return Withdraw(q.value(0).toULongLong(),
+                    q.value(1).toULongLong(),
+                    q.value(2).toULongLong(),
+                    q.value(3).toULongLong(),
+                    q.value(4).toULongLong(),
+                    q.value(5).toString(),
+                    q.value(6).toString());
 
 //    return w;
 }

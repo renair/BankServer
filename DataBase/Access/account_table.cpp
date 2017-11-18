@@ -65,5 +65,23 @@ Account AccountTable::getById(const quint64 id)
     return a;
 }
 
+QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
+{
+    QSqlQuery q = _connection.execute(
+                QString("SELECT ID,type\
+                         FROM account \
+                         WHERE owner='%1'").arg(QString::number(user_upid))).second;
+    if(!q.next())
+            throw AccountTableError("The user have not any cards");
+    QMap<quint64, quint8> result;
+    do
+    {
+        result.insert(q.value(0).toULongLong(),q.value(1).toUInt());
+    }
+    while(q.next());
+
+    return result;
+}
+
 AccountTable::AccountTableError::AccountTableError(const QString & reason): _reason(reason)
 {}

@@ -11,7 +11,8 @@ public:
     ~AccountTable();
     bool createNew(const Account&);
     bool update(const Account&);
-    Account getById(const quint64);
+    Account getById(const quint64 account_id);
+    QMap<quint64, quint8> getUserAccountsList(const quint64 user_upid);
 private:
     Connection& _connection;
 
@@ -22,7 +23,7 @@ public:
     {
     public:
         AccountTableError(const QString&);
-        const QString& reason() {return _reason;}
+        const QString& reason() const {return _reason;}
     private:
         QString _reason;
 

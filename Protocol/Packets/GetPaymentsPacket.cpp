@@ -1,4 +1,7 @@
+#include <QDebug>
 #include "GetPaymentsPacket.h"
+#include "GetPaymentsResponsePacket.h"
+#include "DataBase/Access/transfer_table.h"
 
 GetPaymentsPacket::GetPaymentsPacket()
 {}
@@ -33,6 +36,24 @@ void GetPaymentsPacket::specificLoad(QBuffer& data)
 PacketHolder GetPaymentsPacket::specificHandle() const
 {
     //TODO implement it!
+    TransferTable transfers;
+    GetPaymentsResponsePacket response;
+    try
+    {
+        QList<Transfer> list = transfers.getTransfersFromAccount(cardNumber());
+        for(int i=0;i<list.size();++i)
+        {
+            response.addPayment(list[i].receiverId(),list[i].amount());
+        }
+    }
+    catch(const TransferTable::TransferTableError& error)
+    {
+        qDebug()<< error.reason();
+    }
+    catch(const Connection::ConnectionError& error)
+    {
+        qDebug()<< error.reason();
+    }
     qWarning("GetPaymentsPacket handling not implemented yet!");
-    return PacketHolder(NULL);
+    return PacketHolder(&response);
 }

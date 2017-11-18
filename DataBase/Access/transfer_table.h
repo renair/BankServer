@@ -11,6 +11,7 @@ public:
     ~TransferTable();
     bool createNew(const Transfer&);
     Transfer getById(const quint64);
+    QList<Transfer> getTransfersFromAccount(const quint64);
 private:
     Connection& _connection;
 
@@ -20,7 +21,7 @@ public:
     {
     public:
         TransferTableError(const QString&);
-        const QString& reason() {return _reason;}
+        const QString& reason() const {return _reason;}
     private:
         QString _reason;
 

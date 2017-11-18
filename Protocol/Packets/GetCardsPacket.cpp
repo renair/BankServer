@@ -1,4 +1,7 @@
+#include <QDebug>
 #include "GetCardsPacket.h"
+#include "GetCardsResponsePacket.h"
+#include "DataBase/Access/account_table.h"
 
 GetCardsPacket::GetCardsPacket():
     _token(0),
@@ -41,6 +44,20 @@ PacketHolder GetCardsPacket::specificHandle() const
 {
     // TODO implement this method.
     // Must return -3 Packet.
-    qDebug("GetCardsPacket is not implemented yet!");
-    return PacketHolder(NULL);
+    AccountTable accounts;
+    GetCardsResponsePacket response;
+    try
+    {
+        response.cards()= accounts.getUserAccountsList(userId());
+    }
+    catch(const AccountTable::AccountTableError& error)
+    {
+        qDebug()<< error.reason();
+    }
+    catch(const Connection::ConnectionError& error)
+    {
+        qDebug()<< error.reason();
+    }
+//    qDebug("GetCardsPacket is not implemented yet!");
+    return PacketHolder(&response);
 }
