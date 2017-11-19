@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     DataBase/Access/session_table.cpp \
     DataBase/Objects/atm.cpp \
     DataBase/Access/atm_table.cpp \
-    Protocol/Packets/ErrorPacket.cpp
+    Protocol/Packets/ErrorPacket.cpp \
+    Protocol/Packets/UserAuthResponsePacket.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -90,7 +91,8 @@ HEADERS += \
     DataBase/Access/session_table.h \
     DataBase/Objects/atm.h \
     DataBase/Access/atm_table.h \
-    Protocol/Packets/ErrorPacket.h
+    Protocol/Packets/ErrorPacket.h \
+    Protocol/Packets/UserAuthResponsePacket.h
 
 DISTFILES += \
     .gitignore \

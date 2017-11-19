@@ -3,6 +3,8 @@
 
 //#1
 #include "Packets/UserAuthPacket.h"
+//#-1
+#include "Packets/UserAuthResponsePacket.h"
 //#2
 #include "Packets/GetAccountMoneyPacket.h"
 //#-2

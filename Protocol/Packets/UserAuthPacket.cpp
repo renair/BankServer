@@ -4,7 +4,7 @@ const char UserAuthPacket::_ID = 1;
 
 UserAuthPacket::UserAuthPacket():
     _cardNumber(0),
-    _password(0)
+    _password("")
 {}
 
 UserAuthPacket::UserAuthPacket(long long card, short pass):
@@ -22,7 +22,7 @@ long long& UserAuthPacket::card()
     return _cardNumber;
 }
 
-short& UserAuthPacket::password()
+QString& UserAuthPacket::password()
 {
     return _password;
 }
@@ -32,7 +32,7 @@ long long UserAuthPacket::card() const
     return _cardNumber;
 }
 
-short UserAuthPacket::password() const
+const QString& UserAuthPacket::password() const
 {
     return _password;
 }
@@ -51,14 +51,17 @@ QByteArray UserAuthPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
-    data.append((char*)&_password, sizeof(_password));
+    data.append(_password);
     return data;
 }
 
 void UserAuthPacket::specificLoad(QBuffer& buff)
 {
     buff.read((char*)&_cardNumber, sizeof(_cardNumber));
-    buff.read((char*)&_password, sizeof(_password));
+    char* pass = new char[buff.bytesAvailable()];
+    buff.read(pass, buff.bytesAvailable());
+    _password = QString(pass);
+    delete pass;
 }
 
 PacketHolder UserAuthPacket::specificHandle() const

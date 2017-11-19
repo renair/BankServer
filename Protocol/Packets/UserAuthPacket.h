@@ -9,7 +9,7 @@ class UserAuthPacket : public Packet
 private:
     static const char _ID;
     long long _cardNumber;
-    short _password;
+    QString _password;
 
     //interface methods
     char specificGetID() const;
@@ -23,10 +23,10 @@ public:
     UserAuthPacket(const UserAuthPacket&);
     //selectors-modifiers
     long long& card();
-    short& password();
+    QString& password();
     //selectors
     long long card() const;
-    short password() const;
+    const QString& password() const;
 };
 
 
