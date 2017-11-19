@@ -1,4 +1,6 @@
 #include "MakePaymentPacket.h"
+#include "ErrorPacket.h"
+#include "DataBase/Objects/transfer.h"
 
 MakePaymentPacket::MakePaymentPacket()
 {}
@@ -40,6 +42,6 @@ PacketHolder MakePaymentPacket::specificHandle() const
 {
     //TODO implement this method
     //  Must return -4 Packet
-    qDebug("MakePaymentPacket doesnt implemented yet!");
+
     return PacketHolder(NULL);
 }
