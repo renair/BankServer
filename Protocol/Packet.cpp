@@ -1,5 +1,8 @@
 #include "Packet.h"
 #include "PacketsList.h"
+#include <iostream>
+
+using namespace std;
 
 bool Packet::_isInited = false;
 std::unordered_map<char, PacketHolder> Packet::_packetsMap;
@@ -10,6 +13,7 @@ void Packet::init()
     {
         return;
     }
+    cout << "Initializing packets..."; //LOG
     qRegisterMetaType<PacketHolder>();
     //we needn't handle response packets
     _packetsMap[1] = PacketHolder(new UserAuthPacket());
@@ -23,6 +27,7 @@ void Packet::init()
     _packetsMap[5] = PacketHolder(new GetPaymentsPacket());
 //    _packetsMap[-5] = PacketHolder(new GetPaymentsResponsePacket());
     _isInited = true;
+    cout << "\tdone" << endl; //LOG
 }
 
 PacketHolder Packet::getPacket(char id, int descriptor)

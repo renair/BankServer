@@ -1,5 +1,8 @@
 #include <QThread>
+#include <iostream>
 #include "PacketProcessor.h"
+
+using namespace std;
 
 PacketProcessor::PacketProcessor():
     _receivedPackets("received_packets.pack")
@@ -8,6 +11,7 @@ PacketProcessor::PacketProcessor():
 PacketProcessor::~PacketProcessor()
 {
     _receivedPackets.saveToFile();
+    cout << "Unprocessed packets saved to " << _receivedPackets.saveFileName().toStdString().c_str() << endl;
 }
 
 PacketStorage& PacketProcessor::receivedPacket()
@@ -38,6 +42,7 @@ void PacketProcessor::stopProcessing()
 
 void PacketProcessor::startProcessing()
 {
+    cout << "Packet processor have been started" << endl; //LOG
     _isRunning = true;
     while(_isRunning)
     {
@@ -54,4 +59,5 @@ void PacketProcessor::startProcessing()
             QThread::msleep(500); //wait half a second
         }
     }
+    cout << "Packet processor have been stopped" << endl; //LOG
 }

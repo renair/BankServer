@@ -1,28 +1,43 @@
 #include <QCoreApplication>
 #include <iostream>
-#include "Protocol/Packet.h"
-#include "Protocol/Packets/UserAuthPacket.h"
 #include "Server/Server.h"
-#include "Server/PacketStorage.h"
-#include "BankSystem/BankManager.h"
-#include "DataBase/Objects/transfer.h"
-#include "DataBase/testingdb.h"
-#include "Server/PacketBuilder.h"
-#include "Server/PacketProcessor.h"
+
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
 
-//    Server serv;
-//    serv.start(45654);
-
+    Server serv;
+    QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
+    try
     {
-        TestingDB* test = new TestingDB();
-        test->run();
-        delete test;
+        serv.start(45654);
     }
-    return a.exec();
+    catch(const QTcpSocket::SocketError& err)
+    {
+        cout << "Can't start server!" << endl;
+        cout << "Reason: ";
+        switch(err)
+        {
+        case QAbstractSocket::AddressInUseError:
+            cout << "Address already in use.";
+            break;
+        case QAbstractSocket::SocketAccessError:
+            cout << "You have no privilages to run server. Try root or administrative.";
+            break;
+        case QAbstractSocket::SocketResourceError:
+            cout << "No availab;e rsources to start server.";
+            break;
+        case QAbstractSocket::NetworkError:
+            cout << "Unexpected network error.";
+            break;
+        default:
+            cout << "Unknown error. Code #" << err;
+        }
+        cout << endl;
+    }
+
+    return app.exec();
 }
