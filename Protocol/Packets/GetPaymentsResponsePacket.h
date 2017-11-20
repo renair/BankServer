@@ -20,6 +20,30 @@ public:
     {
         return _paymentsAmount;
     }
+    quint64& to(quint16 i)
+    {
+        i = std::min(i, _paymentsAmount);
+        return *(reinterpret_cast<quint64*>(_paymentsFields.data()+((i*2)*sizeof(quint64))));
+    }
+
+    quint64& amount(quint16 i)
+    {
+        i = std::min(i, _paymentsAmount);
+        return *(reinterpret_cast<quint64*>(_paymentsFields.data()+((i*2+1)*sizeof(quint64))));
+    }
+
+    quint64 to(quint16 i) const
+    {
+        i = std::min(i, _paymentsAmount);
+        return *(reinterpret_cast<const quint64*>(_paymentsFields.data()+((i*2)*sizeof(quint64))));
+    }
+
+    quint64 amount(quint16 i) const
+    {
+        i = std::min(i, _paymentsAmount);
+        return *(reinterpret_cast<const quint64*>(_paymentsFields.data()+((i*2+1)*sizeof(quint64))));
+    }
+
     void addPayment(quint64 to, quint64 amount);
 };
 

@@ -77,14 +77,14 @@ PacketHolder UserAuthPacket::specificHandle() const
         User user = UserTable().getByUpid(AccountTable().getById(card()).owner());
         pair<bool,quint64> result = SessionTable().isAuthorized(user.upid());
         if(result.first)
-            return PacketHolder(new UserAuthResponsePacket(QString::number(result.second)));
+            return PacketHolder(new UserAuthResponsePacket(result.second));
         quint64 auth_time = QDateTime::currentDateTime().toTime_t();
         Session session(auth_time,user.upid(),auth_time+1800);
         SessionTable().createNew(session);
         //Database create session signature (ID)
         result = SessionTable().isAuthorized(user.upid());
         if(result.first)
-            return PacketHolder(new UserAuthResponsePacket(QString::number(result.second)));
+            return PacketHolder(new UserAuthResponsePacket(result.second));
         return PacketHolder(new ErrorPacket("Database error"));
     }
     catch(const SessionTable::SessionTableError& error)

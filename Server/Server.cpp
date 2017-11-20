@@ -42,6 +42,7 @@ void Server::start(unsigned short port)
     {
         throw _tcpServer.serverError();
     }
+    cout << "Server started." << endl; //LOG
 }
 
 void Server::stop()

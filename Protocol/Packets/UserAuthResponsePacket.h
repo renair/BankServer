@@ -7,20 +7,20 @@ class UserAuthResponsePacket : public Packet
 {
 private:
     //fields
-    QString _token;
+    quint64 _token;
     virtual char specificGetID() const;
     virtual PacketHolder specificClone() const;
     virtual QByteArray specificDump() const;
     virtual void specificLoad(QBuffer&);
 public:
     UserAuthResponsePacket();
-    UserAuthResponsePacket(const QString&);
+    UserAuthResponsePacket(const quint64&);
     ~UserAuthResponsePacket();
-    inline QString& token()
+    inline quint64& token()
     {
         return _token;
     }
-    inline QString token() const
+    inline quint64 token() const
     {
         return _token;
     }

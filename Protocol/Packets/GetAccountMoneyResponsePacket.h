@@ -5,10 +5,6 @@
 
 class GetAccountMoneyResponsePacket : public Packet
 {
-public:
-    GetAccountMoneyResponsePacket();
-    GetAccountMoneyResponsePacket(quint64 accountId, quint64 amount);
-    ~GetAccountMoneyResponsePacket();
 private:
     // Fields.
     quint64 _accountId;
@@ -18,6 +14,30 @@ private:
     virtual PacketHolder specificClone() const;
     virtual QByteArray specificDump() const;
     virtual void specificLoad(QBuffer&);
+public:
+    GetAccountMoneyResponsePacket();
+    GetAccountMoneyResponsePacket(quint64 accountId, quint64 amount);
+    ~GetAccountMoneyResponsePacket();
+
+    quint64& accountId()
+    {
+        return _accountId;
+    }
+
+    quint64& amount()
+    {
+        return _amount;
+    }
+
+    quint64 accountId() const
+    {
+        return _accountId;
+    }
+
+    quint64 amount() const
+    {
+        return _amount;
+    }
 };
 
 #endif // GETACCOUNTMONEYRESPONSEPACKET_H

@@ -3,7 +3,7 @@
 UserAuthResponsePacket::UserAuthResponsePacket()
 {}
 
-UserAuthResponsePacket::UserAuthResponsePacket(const QString& token):
+UserAuthResponsePacket::UserAuthResponsePacket(const quint64& token):
     _token(token)
 {}
 
@@ -23,11 +23,11 @@ PacketHolder UserAuthResponsePacket::specificClone() const
 QByteArray UserAuthResponsePacket::specificDump() const
 {
     QByteArray data;
-    data.append(_token);
+    data.append((char*)&_token, sizeof(_token));
     return data;
 }
 
 void UserAuthResponsePacket::specificLoad(QBuffer& buffer)
 {
-    buffer.read(sizeof(_token));
+    buffer.read((char*)&_token, sizeof(_token));
 }
