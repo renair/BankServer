@@ -35,9 +35,13 @@ void PacketStorage::addPacket(PacketHolder p)
 
 PacketHolder PacketStorage::nextPacket() const
 {
+    PacketHolder packet(NULL);
     _mutex.lock();
-    PacketHolder packet = _packetsQueue.dequeue();
-    _isSaved = false;
+    if(_packetsQueue.length() > 0)
+    {
+        packet = _packetsQueue.dequeue();
+        _isSaved = false;
+    }
     _mutex.unlock();
     return packet;
 }

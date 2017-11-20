@@ -1,6 +1,7 @@
 #include <QThread>
 #include <iostream>
 #include "PacketProcessor.h"
+#include "../Protocol/Packets/ErrorPacket.h"
 
 using namespace std;
 
@@ -48,7 +49,17 @@ void PacketProcessor::startProcessing()
     {
         if(_receivedPackets.amount() > 0)
         {
-            PacketHolder processed = _receivedPackets.nextPacket()->handle();
+            PacketHolder packet = _receivedPackets.nextPacket();
+            PacketHolder processed(NULL);
+            try
+            {
+                processed = packet->handle();
+            }
+            catch(...)
+            {
+                cout << "Unexpected exception during handling packet with ID#" << (int)packet->getID() << endl; //LOG
+                processed = PacketHolder(new ErrorPacket("Unexpected server error"));
+            }
             if(processed)
             {
                     emit packetProcessed(processed);
