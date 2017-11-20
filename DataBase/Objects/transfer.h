@@ -51,6 +51,16 @@ private:
     QString _technical_comment;
     QString _comment;
     quint32 _periodicity;
+public:
+    class TransferError
+    {
+    public:
+        TransferError(const QString&);
+        const QString& reason() const {return _reason;}
+    private:
+        QString _reason;
+        TransferError();
+    };
 };
 
 ostream& operator<<(ostream&, const Transfer&);

@@ -25,11 +25,6 @@ Server::~Server()
     stop();
 }
 
-void Server::deleted(QObject* o)
-{
-    cout << "Deleted" << endl;
-}
-
 void Server::makeConnections() const
 {
     //contains metatype registration(PacketHolder)

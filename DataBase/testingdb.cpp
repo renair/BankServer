@@ -94,6 +94,7 @@ void TestingDB::run()
             accounts.createNew(acc1);
             accounts.createNew(acc2);
             accounts.createNew(acc3);
+//            Connection::getConnection().rollback();
             accounts.createNew(acc4);
 //            cout<< "Size: " << accounts.getUserAccountsList(1).size();
         }

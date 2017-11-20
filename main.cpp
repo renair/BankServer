@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Server/Server.h"
 
+#include "DataBase/testingdb.h"
 
 using namespace std;
 
@@ -38,6 +39,9 @@ int main(int argc, char** argv)
         }
         cout << endl;
     }
+
+//    TestingDB test;
+//    test.run();
 
     return app.exec();
 }

@@ -11,7 +11,8 @@ public:
     ~SessionTable();
     bool createNew(const Session&);
     bool update(const Session&);
-    Session getBySignature(quint64);
+    Session getBySignature(const quint64);
+    bool renewSession(const quint64);
 private:
     Connection& _connection;
 

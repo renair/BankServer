@@ -34,7 +34,6 @@ public:
 public slots:
     void stop();
 private slots:
-    void deleted(QObject*);
     //slot for server
     void clientConnected();
     //slots for clients
