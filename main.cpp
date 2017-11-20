@@ -16,8 +16,8 @@ int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
 
-//    Server serv;
-//    serv.start(45654);
+    Server serv;
+    serv.start(45654);
 
     {
         TestingDB* test = new TestingDB();
