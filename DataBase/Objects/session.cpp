@@ -11,6 +11,11 @@ Session::Session(quint64 signature,
     _valid_time(valid_time)
 {}
 
+Session::Session(const quint64 auth_time, const quint64 user_upid, const quint64 valid_time)
+{
+    Session(0,auth_time,user_upid,valid_time);
+}
+
 quint64 Session::authTime(quint64 time)
 {
     if(authTime())

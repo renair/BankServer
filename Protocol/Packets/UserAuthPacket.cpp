@@ -1,8 +1,7 @@
+#include <QDateTime>
 #include "ErrorPacket.h"
 #include "UserAuthPacket.h"
-#include "DataBase/Objects/account.h"
-#include "DataBase/Objects/user.h"
-//#include "DataBase/Objects/session.h"
+#include "UserAuthResponsePacket.h"
 #include "DataBase/Access/account_table.h"
 #include "DataBase/Access/user_table.h"
 #include "DataBase/Access/session_table.h"
@@ -73,6 +72,43 @@ void UserAuthPacket::specificLoad(QBuffer& buff)
 
 PacketHolder UserAuthPacket::specificHandle() const
 {
-//    if(SessionTable().)
-    return PacketHolder(clone());
+    try
+    {
+        User user = UserTable().getByUpid(AccountTable().getById(card()).owner());
+        pair<bool,quint64> result = SessionTable().isAuthorized(user.upid());
+        if(result.first)
+            return PacketHolder(new UserAuthResponsePacket(QString::number(result.second)));
+        quint64 auth_time = QDateTime::currentDateTime().toTime_t();
+        Session session(auth_time,user.upid(),auth_time+1800);
+        SessionTable().createNew(session);
+        //Database create session signature (ID)
+        result = SessionTable().isAuthorized(user.upid());
+        if(result.first)
+            return PacketHolder(new UserAuthResponsePacket(QString::number(result.second)));
+        return PacketHolder(new ErrorPacket("Database error"));
+    }
+    catch(const SessionTable::SessionTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const AccountTable::AccountTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const UserTable::UserTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const Connection::ConnectionError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const Account::AccountError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const User::UserError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
 }

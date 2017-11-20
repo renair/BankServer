@@ -8,8 +8,11 @@ using namespace std;
 class Session
 {
 public:
-    Session(const quint64 signature=0,
-            const quint64 auth_time=0,
+    Session(const quint64 signature,
+            const quint64 auth_time,
+            const quint64 user_upid,
+            const quint64 valid_time);
+    Session(const quint64 auth_time=0,
             const quint64 user_upid=0,
             const quint64 valid_time=0);
     quint64 signature() const {return _signature;}

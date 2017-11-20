@@ -13,7 +13,7 @@ public:
     bool update(const Session&);
     Session getBySignature(const quint64);
     bool renewSession(const quint64);
-    bool isAuthorized(const quint64 user_upid);
+    pair<bool,quint64> isAuthorized(const quint64 user_upid);
 private:
     Connection& _connection;
 

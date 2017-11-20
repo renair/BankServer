@@ -81,14 +81,21 @@ bool SessionTable::renewSession(const quint64 signature)
     }
 }
 
-bool SessionTable::isAuthorized(const quint64 user_upid)
+pair<bool,quint64> SessionTable::isAuthorized(const quint64 user_upid)
 {
+    QSqlQuery q = _connection.execute(
+                QString("SELECT signature,auth_time,user_upid,valid \
+                         FROM session \
+                         WHERE user_upid='%1' AND valid>'%2'").arg(QString::number(user_upid),QDateTime::currentDateTime().toTime_t())).second;
+    if(q.next())
+    {
+        return make_pair(true,q.value(0).toULongLong());
+    }
+    else
+    {
+        return make_pair(false,0);
+    }
 
-//    QSqlQuery q = _connection.execute(
-//                QString("SELECT signature,auth_time,user_upid,valid \
-//                         FROM session \
-//                         WHERE user_upid='%1' AND valid='%2'").arg(QString::number(user_upid))).second;
-            return false;
 }
 
 SessionTable::SessionTableError::SessionTableError(const QString & reason): _reason(reason)
