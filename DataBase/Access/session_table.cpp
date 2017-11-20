@@ -52,23 +52,23 @@ Session SessionTable::getBySignature(const quint64 signature)
                          WHERE signature='%1'").arg(QString::number(signature))).second;
     if(!q.next())
             throw SessionTableError("It seems you want to hack me)");
-    Session s(q.value(0).toULongLong(),
+    return Session(q.value(0).toULongLong(),
               q.value(1).toULongLong(),
               q.value(2).toULongLong(),
               q.value(3).toULongLong());
 
-    return s;
+//    return s;
 }
 
 bool SessionTable::renewSession(const quint64 signature)
 {
     try
     {
-        QDateTime time;
+        quint64 time = QDateTime::currentDateTime().toTime_t();
         Session session = getBySignature(signature);
-        if(session.validTime()<(quint64)time.currentSecsSinceEpoch())
+        if(session.validTime()<time)
             return false;
-        session.renewValidTime(time.currentSecsSinceEpoch()+1800);
+        session.renewValidTime(time+1800);
         return update(session);
     }
     catch(const SessionTable::SessionTableError&)
@@ -79,6 +79,16 @@ bool SessionTable::renewSession(const quint64 signature)
     {
         return false;
     }
+}
+
+bool SessionTable::isAuthorized(const quint64 user_upid)
+{
+
+//    QSqlQuery q = _connection.execute(
+//                QString("SELECT signature,auth_time,user_upid,valid \
+//                         FROM session \
+//                         WHERE user_upid='%1' AND valid='%2'").arg(QString::number(user_upid))).second;
+            return false;
 }
 
 SessionTable::SessionTableError::SessionTableError(const QString & reason): _reason(reason)

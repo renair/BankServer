@@ -1,4 +1,11 @@
+#include "ErrorPacket.h"
 #include "UserAuthPacket.h"
+#include "DataBase/Objects/account.h"
+#include "DataBase/Objects/user.h"
+//#include "DataBase/Objects/session.h"
+#include "DataBase/Access/account_table.h"
+#include "DataBase/Access/user_table.h"
+#include "DataBase/Access/session_table.h"
 
 const char UserAuthPacket::_ID = 1;
 
@@ -66,5 +73,6 @@ void UserAuthPacket::specificLoad(QBuffer& buff)
 
 PacketHolder UserAuthPacket::specificHandle() const
 {
+//    if(SessionTable().)
     return PacketHolder(clone());
 }
