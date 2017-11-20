@@ -49,9 +49,14 @@ PacketHolder GetCardsPacket::specificHandle() const
     GetCardsResponsePacket* response = new GetCardsResponsePacket();
     try
     {
-        response->cards() = AccountTable().getUserAccountsList(userId());
+        response->cards() = AccountTable().getUserAccountsList(
+                    SessionTable().getUserBySignature(token()));
     }
     catch(const AccountTable::AccountTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const SessionTable::SessionTableError& error)
     {
         return PacketHolder(new ErrorPacket(error.reason()));
     }
