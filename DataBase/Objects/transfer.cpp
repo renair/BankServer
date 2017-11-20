@@ -54,3 +54,6 @@ ostream& operator<<(ostream& os, const Transfer& t)
              << " Technical comment: \"" << t.techComment().toUtf8().constData() << "\"" <<endl
              << " Comment: \"" << t.comment().toUtf8().constData() << "\"" <<endl<< "}" <<endl;
 }
+
+Transfer::TransferError::TransferError(const QString& reason):_reason(reason)
+{}

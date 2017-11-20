@@ -1,53 +1,68 @@
 #include "Server.h"
 #include "../Protocol/Packet.h"
-
 #include <iostream>
+#include <cassert>
+
 using namespace std;
 
 Server::Server():
     _packetBuilder(_packetProcessor.receivedPacket())
 {
-    Packet::init();
     makeConnections();
     _packetProcessor.moveToThread(&_processorThread);
-    _processorThread.start();
 }
 
 Server::Server(const ServerConfiguration& config):
     _configuation(config),
     _packetBuilder(_packetProcessor.receivedPacket())
 {
-    Packet::init();
     makeConnections();
     _packetProcessor.moveToThread(&_processorThread);
-    _processorThread.start();
 }
 
 Server::~Server()
 {
-    _processorThread.exit();
-    for(QMap<int, QByteArray*>::const_iterator iterator = _connectionData.begin();
-        iterator != _connectionData.end();
-        iterator++)
-    {
-        delete iterator.value();
-    }
+    stop();
 }
 
 void Server::makeConnections() const
 {
+    //contains metatype registration(PacketHolder)
+    Packet::init();
     connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
     connect(&_processorThread, SIGNAL(started()), &_packetProcessor, SLOT(startProcessing()));
-    connect(&_processorThread, SIGNAL(finished()), &_packetProcessor, SLOT(stopProcessing()));
     connect(&_packetProcessor, SIGNAL(packetProcessed(PacketHolder)), this, SLOT(sendPacket(PacketHolder)), Qt::QueuedConnection); //will call async
 }
 
 void Server::start(unsigned short port)
 {
+    cout << "Starting server... " << endl; //LOG
+    _processorThread.start();
     if(_tcpServer.isListening() || !_tcpServer.listen(QHostAddress::Any, port))
     {
         throw _tcpServer.serverError();
     }
+}
+
+void Server::stop()
+{
+    cout << "Stoping server..." << endl; //LOG
+    //PacketProcessor will save all unprocessed packets
+    _packetProcessor.stopProcessing();
+    //close all opened connection
+    for(QMap<int, QByteArray*>::const_iterator iterator = _connectionData.begin();
+        iterator != _connectionData.end();
+        iterator++)
+    {
+        delete iterator.value();
+        _connectionSocket.take(iterator.key())->deleteLater();
+    }
+
+    assert(_connectionSocket.size() == 0);
+
+    //close main server
+    _tcpServer.close();
+    cout << "\tdone";
 }
 
 void Server::clientConnected()
@@ -57,39 +72,36 @@ void Server::clientConnected()
         QTcpSocket* client = _tcpServer.nextPendingConnection();
         connect(client, SIGNAL(readyRead()), this , SLOT(dataReady()));
         connect(client, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
-        _connectionData.insert(client->socketDescriptor(), new QByteArray());
-        _connectionSocket.insert(client->socketDescriptor(), client);
-        cout << "New client connected " << client->socketDescriptor() << endl;
+        int peerPort = client->peerPort();
+        _connectionData.insert(peerPort, new QByteArray());
+        _connectionSocket.insert(peerPort, client);
+        cout << "New client connected " << peerPort << endl; //LOG
     }
 }
 
 void Server::dataReady()
 {
     QTcpSocket* caller = static_cast<QTcpSocket*>(sender());
-    QByteArray* callerData = _connectionData[caller->socketDescriptor()];
-    callerData->append(caller->readAll());
-    _packetBuilder.buildAndPut(*callerData, caller->socketDescriptor());
+    QByteArray* data = _connectionData[caller->peerPort()];
+    data->append(caller->readAll());
+    _packetBuilder.buildAndPut(*data, caller->peerPort());
 }
 
 void Server::clientDisconnected()
 {
     QTcpSocket* caller = static_cast<QTcpSocket*>(sender());
-    caller->readAll();
-    int descriptor = caller->socketDescriptor();
-    delete _connectionData[descriptor];
-    _connectionData.remove(descriptor);
-    delete _connectionSocket[descriptor];
-    _connectionSocket.remove(descriptor);
-    cout << "Client disconnected " << descriptor << endl;
+    int peerPort = caller->peerPort();
+    delete _connectionData.take(peerPort); //take - remove
+    _connectionSocket.remove(peerPort);
+    caller->deleteLater();
+    cout << "Client disconnected " << peerPort << endl; //LOG
 }
 
 void Server::sendPacket(PacketHolder packet)
 {
     int descriptor = packet->sourceDescriptor();
-    if(descriptor != 0 && _connectionSocket.contains(descriptor))
+    if(_connectionSocket.contains(descriptor))
     {
-        QTcpSocket* socket = _connectionSocket[descriptor];
-        socket->write(packet->dump());
-        cout << "packed" << packet->getID() << " have been sent to " << descriptor << endl;
+        _connectionSocket[descriptor]->write(packet->dump());
     }
 }

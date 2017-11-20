@@ -4,6 +4,7 @@
 #include "ErrorPacket.h"
 #include "DataBase/Objects/account.h"
 #include "DataBase/Access/account_table.h"
+#include "DataBase/Access/session_table.h"
 
 GetAccountMoneyPacket::GetAccountMoneyPacket():
     _token(0),
@@ -45,6 +46,8 @@ void GetAccountMoneyPacket::specificLoad(QBuffer& data)
 
 PacketHolder GetAccountMoneyPacket::specificHandle() const
 {
+    if(!SessionTable().renewSession(token()))
+        return PacketHolder(new ErrorPacket("You are not authorized"));
     Account acc;
     try
     {

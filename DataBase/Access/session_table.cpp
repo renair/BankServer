@@ -1,5 +1,6 @@
 #include <QVariant>
 #include <QDebug>
+#include <QDateTime>
 #include "session_table.h"
 
 SessionTable::SessionTable(): _connection(Connection::getConnection())
@@ -43,20 +44,41 @@ bool SessionTable::update(const Session& s)
                     QString::number(s.validTime()))).first;
 }
 
-Session SessionTable::getBySignature(quint64 signature)
+Session SessionTable::getBySignature(const quint64 signature)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT signature,auth_time,user_upid,valid \
                          FROM session \
                          WHERE signature='%1'").arg(QString::number(signature))).second;
     if(!q.next())
-            throw SessionTableError("The object does not exist");
+            throw SessionTableError("It seems you want to hack me)");
     Session s(q.value(0).toULongLong(),
               q.value(1).toULongLong(),
               q.value(2).toULongLong(),
               q.value(3).toULongLong());
 
     return s;
+}
+
+bool SessionTable::renewSession(const quint64 signature)
+{
+    try
+    {
+        QDateTime time;
+        Session session = getBySignature(signature);
+        if(session.validTime()<(quint64)time.currentSecsSinceEpoch())
+            return false;
+        session.renewValidTime(time.currentSecsSinceEpoch()+1800);
+        return update(session);
+    }
+    catch(const SessionTable::SessionTableError&)
+    {
+        return false;
+    }
+    catch(const Session::SessionError&)
+    {
+        return false;
+    }
 }
 
 SessionTable::SessionTableError::SessionTableError(const QString & reason): _reason(reason)

@@ -48,6 +48,11 @@ bool Connection::connect()
     return _connected=dataBase().open();
 }
 
+bool Connection::rollback()
+{
+    return _data_base.rollback();
+}
+
 void Connection::close()
 {
     dataBase().close();

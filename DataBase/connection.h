@@ -18,6 +18,7 @@ public:
                    const QString& name,
                    const QString& address);
     bool connected(){return _connected;}
+    bool rollback();
 private:
     QString _db_type;
     QString _db_name;

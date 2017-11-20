@@ -1,6 +1,17 @@
+#include <QDateTime>
+#include "DataBase/Access/session_table.h"
 #include "MakePaymentPacket.h"
+#include "MakePaymentResponsePacket.h"
 #include "ErrorPacket.h"
+#include "DataBase/Access/session_table.h"
+#include "DataBase/Access/account_table.h"
+#include "DataBase/Access/atm_table.h"
+#include "DataBase/Access/transfer_table.h"
+#include "DataBase/Access/withdraw_table.h"
+#include "DataBase/Objects/account.h"
+#include "DataBase/Objects/atm.h"
 #include "DataBase/Objects/transfer.h"
+#include "DataBase/Objects/withdraw.h"
 
 MakePaymentPacket::MakePaymentPacket()
 {}
@@ -40,8 +51,46 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
 
 PacketHolder MakePaymentPacket::specificHandle() const
 {
-    //TODO implement this method
-    //  Must return -4 Packet
-
-    return PacketHolder(NULL);
+    if(!SessionTable().renewSession(token()))
+        return PacketHolder(new ErrorPacket("You are not authorized"));
+    Account payer;
+    Account recipient;
+    Transfer transfer;
+    QDateTime time;
+    try
+    {
+        payer = AccountTable().getById(from());
+        recipient = AccountTable().getById(to());
+        payer.moneyDivide(amount());
+        recipient.moneyAdd(amount());
+        transfer = Transfer(from(),
+                            to(),
+                            amount(),
+                            (quint64)time.currentSecsSinceEpoch(),
+                            "transfer",
+                            comment(),
+                            0);
+        TransferTable().createNew(transfer);
+        AccountTable().update(payer);
+        AccountTable().update(recipient);
+    }
+    catch(const Account::AccountError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const Transfer::TransferError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const AccountTable::AccountTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    catch(const TransferTable::TransferTableError& error)
+    {
+        return PacketHolder(new ErrorPacket(error.reason()));
+    }
+    MakePaymentResponsePacket* result = new MakePaymentResponsePacket();
+    result->setPaymentStatus(MakePaymentResponsePacket::PaymentStatus::PAYMENT_SUCCESSFULL);
+    return PacketHolder(result);
 }

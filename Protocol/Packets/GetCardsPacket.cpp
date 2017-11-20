@@ -2,6 +2,7 @@
 #include "GetCardsPacket.h"
 #include "GetCardsResponsePacket.h"
 #include "ErrorPacket.h"
+#include "DataBase/Access/session_table.h"
 #include "DataBase/Access/account_table.h"
 
 GetCardsPacket::GetCardsPacket():
@@ -43,6 +44,8 @@ void GetCardsPacket::specificLoad(QBuffer& data)
 
 PacketHolder GetCardsPacket::specificHandle() const
 {
+    if(!SessionTable().renewSession(token()))
+        return PacketHolder(new ErrorPacket("You are not authorized"));
     GetCardsResponsePacket* response = new GetCardsResponsePacket();
     try
     {

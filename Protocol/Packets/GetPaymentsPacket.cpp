@@ -2,6 +2,7 @@
 #include "GetPaymentsPacket.h"
 #include "GetPaymentsResponsePacket.h"
 #include "ErrorPacket.h"
+#include "DataBase/Access/session_table.h"
 #include "DataBase/Access/transfer_table.h"
 
 GetPaymentsPacket::GetPaymentsPacket()
@@ -36,6 +37,8 @@ void GetPaymentsPacket::specificLoad(QBuffer& data)
 
 PacketHolder GetPaymentsPacket::specificHandle() const
 {
+    if(!SessionTable().renewSession(token()))
+        return PacketHolder(new ErrorPacket("You are not authorized"));
     GetPaymentsResponsePacket* response = new GetPaymentsResponsePacket();
     try
     {

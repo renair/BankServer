@@ -4,19 +4,20 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>
+#include <QPair>
 #include "PacketBuilder.h"
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
 #include "ServerConfiguration.h"
 #include "Protocol/PacketsList.h"
 
-class Server : QObject
+class Server : public QObject
 {
     Q_OBJECT
 private:
     QTcpServer _tcpServer;
-    QMap<int, QByteArray *> _connectionData;
-    QMap<int, QTcpSocket *> _connectionSocket;
+    QMap<int, QByteArray*> _connectionData;
+    QMap<int, QTcpSocket*> _connectionSocket;
     ServerConfiguration _configuation;
     QThread _processorThread;
     PacketProcessor _packetProcessor;
@@ -30,6 +31,8 @@ public:
     Server(const ServerConfiguration&);
     ~Server();
     void start(unsigned short port = 45654);
+public slots:
+    void stop();
 private slots:
     //slot for server
     void clientConnected();
