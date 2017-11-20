@@ -98,5 +98,16 @@ pair<bool,quint64> SessionTable::isAuthorized(const quint64 user_upid)
 
 }
 
+quint64 SessionTable::getUserBySignature(const quint64 session_signature)
+{
+    QSqlQuery q = _connection.execute(
+                QString("SELECT user_upid \
+                         FROM session \
+                         WHERE signature='%1'").arg(session_signature)).second;
+    if(q.next())
+            return q.value(0).toULongLong();
+    throw SessionTableError("Session does not exist");
+}
+
 SessionTable::SessionTableError::SessionTableError(const QString & reason): _reason(reason)
 {}
