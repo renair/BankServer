@@ -56,7 +56,7 @@ PacketHolder MakePaymentPacket::specificHandle() const
     Account payer;
     Account recipient;
     Transfer transfer;
-    QDateTime time;
+    quint64 time = QDateTime::currentDateTime().toTime_t();
     try
     {
         payer = AccountTable().getById(from());
@@ -66,7 +66,7 @@ PacketHolder MakePaymentPacket::specificHandle() const
         transfer = Transfer(from(),
                             to(),
                             amount(),
-                            (quint64)time.currentSecsSinceEpoch(),
+                            time,
                             "transfer",
                             comment(),
                             0);
