@@ -56,7 +56,9 @@ public:
 
     inline PacketHolder handle() const
     {
-        return specificHandle();
+        PacketHolder result = specificHandle();
+        result->setSourceDescriptor(sourceDescriptor());
+        return result;
     }
 };
 

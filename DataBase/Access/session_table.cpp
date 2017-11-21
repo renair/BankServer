@@ -9,7 +9,7 @@ SessionTable::SessionTable(): _connection(Connection::getConnection())
 SessionTable::~SessionTable()
 {}
 
-bool SessionTable::createNew(const Session & s)
+bool SessionTable::createNew(Session& s)
 {
     QSqlQuery is_exist = _connection.execute(
                 QString("SELECT signature \
@@ -17,16 +17,18 @@ bool SessionTable::createNew(const Session & s)
                          WHERE signature='%1'").arg(s.signature())).second;
             if(is_exist.next())
             throw SessionTableError("Unable to create an existing object");
-    return _connection.execute(QString("INSERT INTO session(\
-                                       signature,\
-                                       auth_time,\
-                                       user_upid,\
-                                       valid) \
-                            VALUES ('%1','%2','%3','%4')").
-                            arg(QString::number(s.signature()),
-                                QString::number(s.authTime()),
-                                QString::number(s.userUpid()),
-                                QString::number(s.validTime()))).first;
+    std::pair<bool, QSqlQuery> result =
+            _connection.execute(QString("INSERT INTO session(\
+                                                   signature,\
+                                                   auth_time,\
+                                                   user_upid,\
+                                                   valid) \
+                                        VALUES (null,'%1','%2','%3')"). //null bacause of auto increment!!!
+                                        arg(QString::number(s.authTime()),
+                                            QString::number(s.userUpid()),
+                                            QString::number(s.validTime())));
+    s.signature() = result.second.lastInsertId().toInt();
+    return result.first;
 }
 
 bool SessionTable::update(const Session& s)

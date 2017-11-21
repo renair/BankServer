@@ -57,35 +57,34 @@ QByteArray UserAuthPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
-    data.append(_password);
+    std::string str = _password.toStdString();
+    data.append(str.c_str(), str.length()+1);
     return data;
 }
 
 void UserAuthPacket::specificLoad(QBuffer& buff)
 {
     buff.read((char*)&_cardNumber, sizeof(_cardNumber));
-    char* pass = new char[buff.bytesAvailable()];
-    buff.read(pass, buff.bytesAvailable());
-    _password = QString(pass);
-    delete pass;
+    _password = QString(buff.readAll());
 }
 
 PacketHolder UserAuthPacket::specificHandle() const
 {
     try
     {
-        User user = UserTable().getByUpid(AccountTable().getById(card()).owner());
-        pair<bool,quint64> result = SessionTable().isAuthorized(user.upid());
-        if(result.first)
-            return PacketHolder(new UserAuthResponsePacket(result.second));
-        quint64 auth_time = QDateTime::currentDateTime().toTime_t();
-        Session session(auth_time,user.upid(),auth_time+1800);
-        SessionTable().createNew(session);
-        //Database create session signature (ID)
-        result = SessionTable().isAuthorized(user.upid());
-        if(result.first)
-            return PacketHolder(new UserAuthResponsePacket(result.second));
-        return PacketHolder(new ErrorPacket("Database error"));
+        AccountTable accountTable;
+        SessionTable sessionTable;
+        if(accountTable.getById(card()).checkPin(password()))
+        {
+            quint64 auth_time = QDateTime::currentDateTime().toTime_t();
+            Session session(auth_time, card(), auth_time + 60*10); //ten minutes
+            sessionTable.createNew(session);
+            return PacketHolder(new UserAuthResponsePacket(session.signature()));
+        }
+        else
+        {
+            return PacketHolder(new ErrorPacket("Incorrect card number or password."));
+        }
     }
     catch(const SessionTable::SessionTableError& error)
     {

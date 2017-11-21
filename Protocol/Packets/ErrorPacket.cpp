@@ -19,8 +19,8 @@ PacketHolder ErrorPacket::specificClone() const
 
 QByteArray ErrorPacket::specificDump() const
 {
-    return QByteArray()
-            .append(_info.toStdString().c_str(), _info.length());
+    std::string str = _info.toStdString();
+    return QByteArray().append(str.c_str(), str.length()+1);
 }
 
 void ErrorPacket::specificLoad(QBuffer& data)

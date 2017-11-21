@@ -54,6 +54,8 @@ void PacketProcessor::startProcessing()
             try
             {
                 processed = packet->handle();
+                cout << "Packet ID#" << (int)packet->getID() << " from " << packet->sourceDescriptor() << " processed. "; //LOG
+                cout << "Response with ID#" << (int)(processed ? processed->getID() : -100) << endl; //LOG
             }
             catch(...)
             {

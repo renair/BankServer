@@ -105,4 +105,8 @@ void Server::sendPacket(PacketHolder packet)
     {
         _connectionSocket[descriptor]->write(packet->dump());
     }
+    else
+    {
+        cout << "There is no connection: " << descriptor << ". Skip packet ID#" << (int)packet->getID() << endl; //LOG
+    }
 }
