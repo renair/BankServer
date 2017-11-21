@@ -9,7 +9,6 @@ class Connection
 public:
 //    Connection(const Connection&);
     inline static Connection& getConnection(){return _connection;}
-    ~Connection();
     std::pair<bool, QSqlQuery> execute(const QString&);
     const QString& DBtype() const{return _db_type;}
     const QString& DBname() const{return _db_name;}
@@ -30,6 +29,9 @@ private:
     Connection(const QString& type="QSQLITE",
                const QString& name="database.db",
                const QString& address= "../BankServer/");
+    Connection(const Connection&) = delete;
+    Connection& operator=(const Connection&) = delete;
+    ~Connection();
     bool connect();
     void close();
     QString& DBtype(){return _db_type;}
