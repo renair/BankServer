@@ -31,7 +31,7 @@ bool Connection::reconnect(const QString &type, const QString &name, const QStri
     return connect();
 }
 
-//Connection::Connection(Connection& c):
+//Connection::Connection(const Connection& c):
 //    _db_type(c.DBtype()),
 //    _db_name(c.DBname()),
 //    _db_address(c.DBaddress()),

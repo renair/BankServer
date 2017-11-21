@@ -13,7 +13,7 @@ UserAuthPacket::UserAuthPacket():
     _password("")
 {}
 
-UserAuthPacket::UserAuthPacket(long long card, short pass):
+UserAuthPacket::UserAuthPacket(long long card, QString pass):
     _cardNumber(card),
     _password(pass)
 {}

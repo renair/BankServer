@@ -7,7 +7,7 @@
 class Connection
 {
 public:
-//    Connection(Connection&);
+//    Connection(const Connection&);
     inline static Connection& getConnection(){return _connection;}
     ~Connection();
     std::pair<bool, QSqlQuery> execute(const QString&);

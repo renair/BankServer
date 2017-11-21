@@ -19,7 +19,7 @@ private:
     PacketHolder specificHandle() const;
 public:
     UserAuthPacket();
-    UserAuthPacket(long long card, short pass);
+    UserAuthPacket(long long card, QString pass);
     UserAuthPacket(const UserAuthPacket&);
     //selectors-modifiers
     long long& card();
