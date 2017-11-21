@@ -50,10 +50,12 @@ PacketHolder GetPaymentsPacket::specificHandle() const
     }
     catch(const TransferTable::TransferTableError& err)
     {
+        delete response;
         return PacketHolder(new ErrorPacket (err.reason()));
     }
     catch(const Connection::ConnectionError& err)
     {
+        delete response;
         return PacketHolder(new ErrorPacket (err.reason()));
     }
     return PacketHolder(response);
