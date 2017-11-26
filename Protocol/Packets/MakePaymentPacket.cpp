@@ -36,7 +36,8 @@ QByteArray MakePaymentPacket::specificDump() const
     data.append((char*)&_from, sizeof(_from));
     data.append((char*)&_to, sizeof(_to));
     data.append((char*)&_amount, sizeof(_amount));
-    data.append(_comment.toStdString().c_str(), _comment.toStdString().length());
+    std::string str = _comment.toStdString();
+    data.append(str.c_str(), str.length()+1);
     return data;
 }
 

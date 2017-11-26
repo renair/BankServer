@@ -33,7 +33,7 @@ int main(int argc, char** argv)
             cout << "You have no privilages to run server. Try root or administrative.";
             break;
         case QAbstractSocket::SocketResourceError:
-            cout << "No availab;e rsources to start server.";
+            cout << "No available resources to start server.";
             break;
         case QAbstractSocket::NetworkError:
             cout << "Unexpected network error.";

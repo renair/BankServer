@@ -1,4 +1,5 @@
 #include <QDebug>
+#include "DataBase/Access/session_table.h"
 #include "GetAccountMoneyPacket.h"
 #include "GetAccountMoneyResponsePacket.h"
 #include "ErrorPacket.h"
@@ -51,7 +52,7 @@ PacketHolder GetAccountMoneyPacket::specificHandle() const
     Account acc;
     try
     {
-        acc = AccountTable().getById(accountId());
+        acc = AccountTable().getById(SessionTable().getUserBySignature(token()));
     }
     catch(const AccountTable::AccountTableError& err)
     {

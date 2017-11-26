@@ -98,8 +98,7 @@ void TestingDB::run()
 //            Connection::getConnection().rollback();
             accounts.createNew(acc4);
 //            cout<< "Size: " << accounts.getUserAccountsList(1).size();
-            Connection connection(Connection::getConnection());
-            cout<< "connected: " << connection.connected() <<endl;
+            cout<< "connected: " << Connection::getConnection().connected() <<endl;
         }
         catch(const AccountTable::AccountTableError& error)
         {

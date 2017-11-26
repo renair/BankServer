@@ -49,8 +49,9 @@ PacketHolder GetCardsPacket::specificHandle() const
     GetCardsResponsePacket* response = new GetCardsResponsePacket();
     try
     {
-        response->cards() = AccountTable().getUserAccountsList(
-                    SessionTable().getUserBySignature(token()));
+        quint64 s = SessionTable().getUserBySignature(token());
+        response->cards() = AccountTable().getUserAccountsList(s);
+//                    SessionTable().getUserBySignature(token()));
     }
     catch(const AccountTable::AccountTableError& error)
     {

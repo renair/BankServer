@@ -9,7 +9,7 @@ class SessionTable
 public:
     SessionTable();
     ~SessionTable();
-    bool createNew(const Session&);
+    bool createNew(Session&);
     bool update(const Session&);
     Session getBySignature(const quint64);
     quint64 getUserBySignature(const quint64);

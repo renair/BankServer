@@ -1,8 +1,11 @@
 #include "ErrorPacket.h"
+#include <QDebug>
 
 ErrorPacket::ErrorPacket(const QString info):
     _info(info)
-{}
+{
+    qDebug()<< "Error create: " << info;
+}
 
 ErrorPacket::~ErrorPacket()
 {}
@@ -19,8 +22,8 @@ PacketHolder ErrorPacket::specificClone() const
 
 QByteArray ErrorPacket::specificDump() const
 {
-    return QByteArray()
-            .append(_info.toStdString().c_str(), _info.length());
+    std::string str = _info.toStdString();
+    return QByteArray().append(str.c_str(), str.length()+1);
 }
 
 void ErrorPacket::specificLoad(QBuffer& data)

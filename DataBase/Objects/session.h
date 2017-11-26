@@ -15,6 +15,11 @@ public:
     Session(const quint64 auth_time=0,
             const quint64 user_upid=0,
             const quint64 valid_time=0);
+    quint64& signature() {return _signature;}
+    quint64& authTime() {return _auth_time;}
+    quint64& userUpid() {return _user_upid;}
+    quint64& validTime() {return _valid_time;}
+
     quint64 signature() const {return _signature;}
     quint64 authTime() const {return _auth_time;}
     quint64 userUpid() const {return _user_upid;}

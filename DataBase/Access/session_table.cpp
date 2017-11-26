@@ -3,13 +3,16 @@
 #include <QDateTime>
 #include "session_table.h"
 
+#include <iostream>
+using namespace std;
+
 SessionTable::SessionTable(): _connection(Connection::getConnection())
 {}
 
 SessionTable::~SessionTable()
 {}
 
-bool SessionTable::createNew(const Session & s)
+bool SessionTable::createNew(Session& s)
 {
     QSqlQuery is_exist = _connection.execute(
                 QString("SELECT signature \
@@ -17,16 +20,18 @@ bool SessionTable::createNew(const Session & s)
                          WHERE signature='%1'").arg(s.signature())).second;
             if(is_exist.next())
             throw SessionTableError("Unable to create an existing object");
-    return _connection.execute(QString("INSERT INTO session(\
-                                       signature,\
-                                       auth_time,\
-                                       user_upid,\
-                                       valid) \
-                            VALUES ('%1','%2','%3','%4')").
-                            arg(QString::number(s.signature()),
-                                QString::number(s.authTime()),
-                                QString::number(s.userUpid()),
-                                QString::number(s.validTime()))).first;
+    std::pair<bool, QSqlQuery> result =
+            _connection.execute(QString("INSERT INTO session(\
+                                                   signature,\
+                                                   auth_time,\
+                                                   user_upid,\
+                                                   valid) \
+                                        VALUES (null,'%1','%2','%3')"). //null bacause of auto increment!!!
+                                        arg(QString::number(s.authTime()),
+                                            QString::number(s.userUpid()),
+                                            QString::number(s.validTime())));
+    s.signature() = result.second.lastInsertId().toInt();
+    return result.first;
 }
 
 bool SessionTable::update(const Session& s)
@@ -36,12 +41,11 @@ bool SessionTable::update(const Session& s)
                          WHERE signature='%1'").arg(s.signature())).second;
             if(!is_exist.next())
             throw SessionTableError("Unable to update non-existent object");
-    return _connection.execute(
-        QString("UPDATE session "
-                "SET valid='%2',\
-                 WHERE UPID='%1'").
-                arg(QString::number(s.signature()),
-                    QString::number(s.validTime()))).first;
+    return _connection.execute(QString("UPDATE session "
+                                       "SET valid='%2'\
+                                        WHERE user_upid='%1'").
+                                       arg(QString::number(s.signature()),
+                                           QString::number(s.validTime()))).first;
 }
 
 Session SessionTable::getBySignature(const quint64 signature)
@@ -66,10 +70,11 @@ bool SessionTable::renewSession(const quint64 signature)
     {
         quint64 time = QDateTime::currentDateTime().toTime_t();
         Session session = getBySignature(signature);
-        if(session.validTime()<time)
+        if(time>session.validTime())
             return false;
-        session.renewValidTime(time+1800);
-        return update(session);
+        session.renewValidTime(time+600);
+        bool b = update(session);
+        return b;
     }
     catch(const SessionTable::SessionTableError&)
     {
