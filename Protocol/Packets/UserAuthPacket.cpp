@@ -77,7 +77,7 @@ PacketHolder UserAuthPacket::specificHandle() const
         if(accountTable.getById(card()).checkPin(password()))
         {
             quint64 auth_time = QDateTime::currentDateTime().toTime_t();
-            Session session(auth_time, card(), auth_time + 60*10); //ten minutes
+            Session session(auth_time, accountTable.getOwnerById(card()), auth_time + 60*10); //ten minutes
             sessionTable.createNew(session);
             return PacketHolder(new UserAuthResponsePacket(session.signature()));
         }

@@ -35,15 +35,16 @@ bool UserTable::createNew(const User & u)
 }
 
 bool UserTable::update(const User & u)
-{QSqlQuery is_exist = _connection.execute(
+{
+    QSqlQuery is_exist = _connection.execute(
                 QString("SELECT UPID \
                          FROM user \
                          WHERE UPID='%1'").arg(u.upid())).second;
             if(!is_exist.next())
             throw UserTableError("Unable to update non-existent object");
     return _connection.execute(
-        QString("UPDATE user "
-                "SET password='%2',\
+        QString("UPDATE user \
+                 SET password='%2',\
                      pass_number='%3',\
                      name='%4',\
                      surname='%5',\

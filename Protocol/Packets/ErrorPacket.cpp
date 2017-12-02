@@ -3,9 +3,7 @@
 
 ErrorPacket::ErrorPacket(const QString info):
     _info(info)
-{
-    qDebug()<< "Error create: " << info;
-}
+{}
 
 ErrorPacket::~ErrorPacket()
 {}

@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
     try
     {
-        serv.start(45654);
+        serv.start(21025);//21025);
     }
     catch(const QTcpSocket::SocketError& err)
     {

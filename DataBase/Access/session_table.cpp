@@ -73,8 +73,7 @@ bool SessionTable::renewSession(const quint64 signature)
         if(time>session.validTime())
             return false;
         session.renewValidTime(time+600);
-        bool b = update(session);
-        return b;
+        return update(session);
     }
     catch(const SessionTable::SessionTableError&)
     {

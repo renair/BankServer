@@ -47,12 +47,15 @@ void GetAccountMoneyPacket::specificLoad(QBuffer& data)
 
 PacketHolder GetAccountMoneyPacket::specificHandle() const
 {
-    if(!SessionTable().renewSession(token()))
+    SessionTable session;
+    if(!session.renewSession(token()))
         return PacketHolder(new ErrorPacket("You are not authorized"));
     Account acc;
     try
     {
-        acc = AccountTable().getById(SessionTable().getUserBySignature(token()));
+        acc = AccountTable().getById(accountId());
+        if(acc.owner()!=session.getUserBySignature(token()))
+        {return PacketHolder(new ErrorPacket("It is not your card"));}
     }
     catch(const AccountTable::AccountTableError& err)
     {

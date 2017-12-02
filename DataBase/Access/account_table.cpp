@@ -71,16 +71,22 @@ QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
                 QString("SELECT ID,type\
                          FROM account \
                          WHERE owner='%1'").arg(QString::number(user_upid))).second;
-    if(!q.next())
-            throw AccountTableError("The user have not any cards");
     QMap<quint64, quint8> result;
-    do
+    while(q.next())
     {
         result.insert(q.value(0).toULongLong(),q.value(1).toUInt());
     }
-    while(q.next());
-
     return result;
+}
+
+quint64 AccountTable::getOwnerById(const quint64 card_id)
+{
+    QSqlQuery q = _connection.execute(
+                QString("SELECT owner\
+                         FROM account \
+                         WHERE ID='%1'").arg(QString::number(card_id))).second;
+            if(!q.next()) {throw AccountTableError("Wrong card number");}
+            return q.value(0).toULongLong();
 }
 
 AccountTable::AccountTableError::AccountTableError(const QString & reason): _reason(reason)

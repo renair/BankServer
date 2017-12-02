@@ -5,6 +5,9 @@
 #include "DataBase/Access/session_table.h"
 #include "DataBase/Access/account_table.h"
 
+#include <iostream>
+using namespace std;
+
 GetCardsPacket::GetCardsPacket():
     _token(0),
     _userId(0)
@@ -50,6 +53,7 @@ PacketHolder GetCardsPacket::specificHandle() const
     try
     {
         quint64 s = SessionTable().getUserBySignature(token());
+        cout<< "user upid: " << s <<endl;
         QMap<quint64, quint8> temp(AccountTable().getUserAccountsList(s));
         response->cards().swap(temp);
 //                    SessionTable().getUserBySignature(token()));

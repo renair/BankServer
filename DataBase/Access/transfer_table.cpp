@@ -1,4 +1,5 @@
 #include <QVariant>
+#include <QDateTime>
 #include "transfer_table.h"
 
 TransferTable::TransferTable(): _connection(Connection::getConnection())
@@ -60,10 +61,8 @@ QList<Transfer> TransferTable::getTransfersFromAccount(const quint64 id)
     QSqlQuery q = _connection.execute(
                 QString("SELECT ID,payer,destination,amount,time,technical_comment,comment,periodicity \
                          FROM payment \
-                         WHERE payer='%1' AND is_withdraw='0'").arg(QString::number(id))).second;
-    if(!q.next())
-            throw TransferTableError("Empty result");
-    do
+                         WHERE payer='%1' AND is_withdraw='0'").arg(QString::number(id))).second;         
+    while(q.next())
     {
         list.append(
            Transfer(q.value(0).toULongLong(),
@@ -74,8 +73,63 @@ QList<Transfer> TransferTable::getTransfersFromAccount(const quint64 id)
                     q.value(5).toString(),
                     q.value(6).toString()));
     }
-    while(q.next());
+    return list;
+}
 
+bool TransferTable::setPaymentNonPeriodic(const quint64 id)
+{
+    QSqlQuery is_exist = _connection.execute(
+                QString("SELECT ID \
+                         FROM payment \
+                         WHERE ID='%1' AND is_withdraw='0'").arg(id)).second;
+            if(!is_exist.next())
+            throw TransferTableError("Unable to update non-existent object");
+    return _connection.execute(
+        QString("UPDATE payment \
+                 SET periodicity=0,\
+                 WHERE UPID='%1'").
+                arg(QString::number(id))).first;
+}
+
+bool TransferTable::setPaymentNonPeriodic(Transfer &t)
+{
+    t.period()=0;
+    return setPaymentNonPeriodic(t.id());
+}
+
+//bool TransferTable::doPeriodicTransfer(Transfer &t)
+//{
+//    quint64 time = QDateTime::currentDateTime().toTime_t();
+//    quint64 period = t.period();
+//    setPaymentNonPeriodic(t);
+//    createNew(Transfer(t.payerId(),
+//                       t.receiverId(),
+//                       t.amount(),
+//                       time,
+//                       "periodic transfer",
+//                       "",
+//                       period));
+//}
+
+QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
+{
+    QList<Transfer> list;
+    quint64 time = QDateTime::currentDateTime().toTime_t();
+    QSqlQuery q = _connection.execute(
+                QString("SELECT ID,payer,destination,amount,time,technical_comment,comment,periodicity \
+                         FROM payment \
+                         WHERE periodicity BETWEEN 1 AND %1").arg(QString::number(time))).second;
+    while(q.next())
+    {
+        list.append(
+           Transfer(q.value(0).toULongLong(),
+                    q.value(1).toULongLong(),
+                    q.value(2).toULongLong(),
+                    q.value(3).toULongLong(),
+                    q.value(4).toUInt(),
+                    q.value(5).toString(),
+                    q.value(6).toString()));
+    }
     return list;
 }
 
