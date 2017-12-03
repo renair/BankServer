@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     DataBase/Access/atm_table.cpp \
     Protocol/Packets/ErrorPacket.cpp \
     Protocol/Packets/UserAuthResponsePacket.cpp \
-    BankSystem/TasksPool.cpp
+    TaskPool/TasksPool.cpp \
+    TaskPool/Tasks/PeriodicPaymentTask.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -89,8 +90,9 @@ HEADERS += \
     DataBase/Access/atm_table.h \
     Protocol/Packets/ErrorPacket.h \
     Protocol/Packets/UserAuthResponsePacket.h \
-    BankSystem/TasksPool.h \
-    BankSystem/AbstractTask.h
+    TaskPool/AbstractTask.h \
+    TaskPool/TasksPool.h \
+    TaskPool/Tasks/PeriodicPaymentTask.h
 
 DISTFILES += \
     .gitignore \

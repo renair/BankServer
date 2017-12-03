@@ -118,7 +118,7 @@ QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
     QSqlQuery q = _connection.execute(
                 QString("SELECT ID,payer,destination,amount,time,technical_comment,comment,periodicity \
                          FROM payment \
-                         WHERE periodicity BETWEEN 1 AND %1").arg(QString::number(time))).second;
+                         WHERE periodicity > 0 AND time+periodicity < %1").arg(QString::number(time))).second;
     while(q.next())
     {
         list.append(

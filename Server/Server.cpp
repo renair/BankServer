@@ -1,5 +1,6 @@
 #include "Server.h"
 #include "../Protocol/Packet.h"
+#include "../TaskPool/Tasks/PeriodicPaymentTask.h"
 #include <iostream>
 #include <cassert>
 
@@ -10,6 +11,7 @@ Server::Server():
 {
     makeConnections();
     _packetProcessor.moveToThread(&_processorThread);
+    _tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::Server(const ServerConfiguration& config):
@@ -18,6 +20,7 @@ Server::Server(const ServerConfiguration& config):
 {
     makeConnections();
     _packetProcessor.moveToThread(&_processorThread);
+    //_tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::~Server()
@@ -96,6 +99,8 @@ void Server::clientDisconnected()
     _connectionSocket.remove(peerPort);
     caller->deleteLater();
     cout << "Client disconnected " << peerPort << endl; //LOG
+//    _tasksPool.stopAll();
+//    cout << "Tasks finished " << endl;
 }
 
 void Server::sendPacket(PacketHolder packet)

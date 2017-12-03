@@ -15,8 +15,8 @@ private:
 public:
     TasksPool();
     ~TasksPool();
-    unsigned int addNewTask(AbstractTaskHolder);
-    AbstractTaskHolder getTask(unsigned int) const;
+    unsigned int addNewTask(const AbstractTask&);
+    const AbstractTask& getTask(unsigned int) const;
     void stopTask(unsigned int);
     unsigned int restartTask(unsigned int);
     void stopAll();
