@@ -17,14 +17,6 @@ int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
 
-    //DO NOT DELETE!
-//    TasksPool p;
-//    p.addNewTask(PeriodicPaymentTask());
-//    QThread::sleep(5);
-//    cout << "Stoping ..." << endl;
-//    p.stopAll();
-//    cout << "Done" << endl;
-
     Server serv;
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
     try
