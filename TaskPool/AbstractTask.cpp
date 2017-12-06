@@ -54,7 +54,7 @@ void AbstractTask::startTaskLoop()
 {
     if(_loopThread == NULL)
     {
-        _loopThread = new thread(run, this);
+        _loopThread = new thread(&AbstractTask::run, this);
         _loopThread->detach();
     }
 }
