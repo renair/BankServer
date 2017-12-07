@@ -8,8 +8,9 @@ class UserAuthPacket : public Packet
 {
 private:
     static const char _ID;
-    long long _cardNumber;
+    quint64 _cardNumber;
     QString _password;
+    quint32 _machineId;
 
     //interface methods
     char specificGetID() const;
@@ -19,14 +20,15 @@ private:
     PacketHolder specificHandle() const;
 public:
     UserAuthPacket();
-    UserAuthPacket(long long card, const QString& pass);
-    UserAuthPacket(const UserAuthPacket&);
+    UserAuthPacket(quint64 card, const QString& pass, quint32 machineId);
     //selectors-modifiers
-    long long& card();
+    quint64& card();
     QString& password();
+    quint32& machineId();
     //selectors
-    long long card() const;
+    quint64 card() const;
     const QString& password() const;
+    quint32 machineId() const;
 };
 
 

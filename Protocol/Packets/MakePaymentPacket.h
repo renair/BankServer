@@ -8,6 +8,7 @@ class  MakePaymentPacket : public Packet
 private:
     //fields
     quint64 _token;
+    quint32 _machineId;
     quint64 _from;
     quint64 _to;
     quint64 _amount;
@@ -27,18 +28,27 @@ public:
      {
          return _token;
      }
+
+     quint32& machineId()
+     {
+         return _machineId;
+     }
+
      quint64& from()
      {
         return _from;
      }
+
      quint64& to()
      {
          return _to;
      }
+
      quint64& amount()
      {
          return _amount;
      }
+
      QString& comment()
      {
          return _comment;
@@ -49,18 +59,27 @@ public:
      {
          return _token;
      }
+
+     quint32 machineId() const
+     {
+         return _machineId;
+     }
+
      quint64 from() const
      {
         return _from;
      }
+
      quint64 to() const
      {
          return _to;
      }
+
      quint64 amount() const
      {
          return _amount;
      }
+
      const QString& comment() const
      {
          return _comment;

@@ -33,6 +33,7 @@ QByteArray MakePaymentPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_token, sizeof(_token));
+    data.append((char*)&_machineId, sizeof(_machineId));
     data.append((char*)&_from, sizeof(_from));
     data.append((char*)&_to, sizeof(_to));
     data.append((char*)&_amount, sizeof(_amount));
@@ -44,6 +45,7 @@ QByteArray MakePaymentPacket::specificDump() const
 void MakePaymentPacket::specificLoad(QBuffer& data)
 {
     data.read((char*)&_token, sizeof(_token));
+    data.read((char*)&_machineId, sizeof(_machineId));
     data.read((char*)&_from, sizeof(_from));
     data.read((char*)&_to, sizeof(_to));
     data.read((char*)&_amount, sizeof(_amount));
@@ -53,7 +55,9 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
 PacketHolder MakePaymentPacket::specificHandle() const
 {
     if(!SessionTable().renewSession(token()))
+    {
         return PacketHolder(new ErrorPacket("You are not authorized"));
+    }
     Account payer;
     Account recipient;
     Transfer transfer;

@@ -5,7 +5,16 @@
 #include "DataBase/Access/session_table.h"
 #include "DataBase/Access/transfer_table.h"
 
-GetPaymentsPacket::GetPaymentsPacket()
+GetPaymentsPacket::GetPaymentsPacket():
+    _token(0),
+    _machineId(0),
+    _cardNumber(0)
+{}
+
+GetPaymentsPacket::GetPaymentsPacket(quint64 token, quint32 machineId, quint64 carnNum):
+    _token(token),
+    _machineId(machineId),
+    _cardNumber(carnNum)
 {}
 
 GetPaymentsPacket::~GetPaymentsPacket()
@@ -25,6 +34,7 @@ QByteArray GetPaymentsPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_token, sizeof(_token));
+    data.append((char*)&_machineId, sizeof(_machineId));
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
     return data;
 }
@@ -32,20 +42,23 @@ QByteArray GetPaymentsPacket::specificDump() const
 void GetPaymentsPacket::specificLoad(QBuffer& data)
 {
     data.read((char*)&_token, sizeof(_token));
+    data.read((char*)&_machineId, sizeof(_machineId));
     data.read((char*)&_cardNumber, sizeof(_cardNumber));
 }
 
 PacketHolder GetPaymentsPacket::specificHandle() const
 {
     if(!SessionTable().renewSession(token()))
+    {
         return PacketHolder(new ErrorPacket("You are not authorized"));
+    }
     GetPaymentsResponsePacket* response = new GetPaymentsResponsePacket();
     try
     {
         QList<Transfer> list = TransferTable().getTransfersFromAccount(cardNumber());
-        for(int i=0;i<list.size();++i)
+        for(int i = 0;i < list.size();++i)
         {
-            response->addPayment(list[i].receiverId(),list[i].amount());
+            response->addPayment(list[i].receiverId(), list[i].amount());
         }
     }
     catch(const TransferTable::TransferTableError& err)

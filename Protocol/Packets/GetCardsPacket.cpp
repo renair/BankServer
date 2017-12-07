@@ -10,11 +10,13 @@ using namespace std;
 
 GetCardsPacket::GetCardsPacket():
     _token(0),
+    _machineId(0),
     _userId(0)
 {}
 
-GetCardsPacket::GetCardsPacket(const quint64 token, const quint64 userId):
+GetCardsPacket::GetCardsPacket(quint64 token, quint32 machineId ,quint64 userId):
     _token(token),
+    _machineId(machineId),
     _userId(userId)
 {}
 
@@ -35,6 +37,7 @@ QByteArray GetCardsPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_token, sizeof(_token));
+    data.append((char*)&_machineId, sizeof(_machineId));
     data.append((char*)&_userId, sizeof(_userId));
     return data;
 }
@@ -42,21 +45,24 @@ QByteArray GetCardsPacket::specificDump() const
 void GetCardsPacket::specificLoad(QBuffer& data)
 {
     data.read((char*)&_token, sizeof(_token));
+    data.read((char*)&_machineId, sizeof(_machineId));
     data.read((char*)&_userId, sizeof(_userId));
 }
 
 PacketHolder GetCardsPacket::specificHandle() const
 {
     if(!SessionTable().renewSession(token()))
+    {
         return PacketHolder(new ErrorPacket("You are not authorized"));
+    }
     GetCardsResponsePacket* response = new GetCardsResponsePacket();
     try
     {
         quint64 s = SessionTable().getUserBySignature(token());
-        cout<< "user upid: " << s <<endl;
+//        cout<< "user upid: " << s <<endl;
         QMap<quint64, quint8> temp(AccountTable().getUserAccountsList(s));
         response->cards().swap(temp);
-//                    SessionTable().getUserBySignature(token()));
+//        SessionTable().getUserBySignature(token()));
     }
     catch(const AccountTable::AccountTableError& error)
     {

@@ -9,12 +9,14 @@
 
 GetAccountMoneyPacket::GetAccountMoneyPacket():
     _token(0),
+    _machineId(0),
     _accountId(0)
 {}
 
 GetAccountMoneyPacket::GetAccountMoneyPacket
-    (const quint64 token, const quint64 accountId):
+    (quint64 token, quint32 machineId, quint64 accountId):
     _token(token),
+    _machineId(machineId),
     _accountId(accountId)
 {}
 
@@ -35,6 +37,7 @@ QByteArray GetAccountMoneyPacket::specificDump() const
 {
     QByteArray data;
     data.append((char*)&_token, sizeof(_token));
+    data.append((char*)&_machineId, sizeof(_machineId));
     data.append((char*)&_accountId, sizeof(_accountId));
     return data;
 }
@@ -42,6 +45,7 @@ QByteArray GetAccountMoneyPacket::specificDump() const
 void GetAccountMoneyPacket::specificLoad(QBuffer& data)
 {
     data.read((char*)&_token, sizeof(_token));
+    data.read((char*)&_machineId, sizeof(_machineId));
     data.read((char*)&_accountId, sizeof(_accountId));
 }
 
@@ -49,13 +53,17 @@ PacketHolder GetAccountMoneyPacket::specificHandle() const
 {
     SessionTable session;
     if(!session.renewSession(token()))
+    {
         return PacketHolder(new ErrorPacket("You are not authorized"));
+    }
     Account acc;
     try
     {
         acc = AccountTable().getById(accountId());
-        if(acc.owner()!=session.getUserBySignature(token()))
-        {return PacketHolder(new ErrorPacket("It is not your card"));}
+        if(acc.owner() != session.getUserBySignature(token()))
+        {
+            return PacketHolder(new ErrorPacket("It is not your card"));
+        }
     }
     catch(const AccountTable::AccountTableError& err)
     {
