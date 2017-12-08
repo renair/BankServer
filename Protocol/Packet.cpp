@@ -26,6 +26,7 @@ void Packet::init()
 //    _packetsMap[-4] = PacketHolder(new MakePaymentResponsePacket());
     _packetsMap[5] = PacketHolder(new GetPaymentsPacket());
 //    _packetsMap[-5] = PacketHolder(new GetPaymentsResponsePacket());
+    _packetsMap[6] = PacketHolder(new UserLogoutPacket());
     _isInited = true;
     cout << "\tdone" << endl; //LOG
 }
@@ -51,7 +52,7 @@ PacketHolder Packet::getPacket(char id, int descriptor)
     return PacketHolder(NULL);
 }
 
-void Packet::setSourceDescriptor(int descriptor) const
+void Packet::setSourceDescriptor(int descriptor)
 {
     _socketDescriptor = descriptor;
 }

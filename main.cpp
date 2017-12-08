@@ -10,9 +10,6 @@
 //#include <QDateTime>
 using namespace std;
 
-#include "TaskPool/TasksPool.h"
-#include "TaskPool/Tasks/PeriodicPaymentTask.h"
-
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
