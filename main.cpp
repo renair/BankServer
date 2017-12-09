@@ -10,15 +10,26 @@
 //#include <QDateTime>
 using namespace std;
 
+#include "TaskPool/TasksPool.h"
+#include "TaskPool/Tasks/PeriodicPaymentTask.h"
+
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
+
+    //DO NOT DELETE!
+//    TasksPool p;
+//    p.addNewTask(PeriodicPaymentTask());
+//    QThread::sleep(5);
+//    cout << "Stoping ..." << endl;
+//    p.stopAll();
+//    cout << "Done" << endl;
 
     Server serv;
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
     try
     {
-        serv.start(21025);//21025);
+        serv.start(21025);
     }
     catch(const QTcpSocket::SocketError& err)
     {

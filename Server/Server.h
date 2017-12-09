@@ -9,7 +9,8 @@
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
 #include "ServerConfiguration.h"
-#include "Protocol/PacketsList.h"
+//#include "Protocol/PacketsList.h"
+#include "../TaskPool/TasksPool.h"
 
 class Server : public QObject
 {
@@ -22,6 +23,8 @@ private:
     QThread _processorThread;
     PacketProcessor _packetProcessor;
     PacketBuilder _packetBuilder;
+    TasksPool _tasksPool;
+
     void makeConnections() const;
     //deleted methods
     Server(const Server&) = delete;

@@ -74,16 +74,36 @@ PacketHolder UserAuthPacket::specificHandle() const
     {
         AccountTable accountTable;
         SessionTable sessionTable;
-        if(accountTable.getById(card()).checkPin(password()))
+        Account account = accountTable.getById(card());
+        quint64 owner = accountTable.getOwnerById(card());
+        if(account.checkPin(password()))
         {
-            quint64 auth_time = QDateTime::currentDateTime().toTime_t();
-            Session session(auth_time, accountTable.getOwnerById(card()), auth_time + 60*10); //ten minutes
-            sessionTable.createNew(session);
-            return PacketHolder(new UserAuthResponsePacket(session.signature()));
+            pair<bool, quint64> bool_signature;
+            bool_signature = sessionTable.isAuthorized(owner,card());
+            if(bool_signature.first)
+            {
+                if(sessionTable.getBySignature(bool_signature.second).atmId()==0/*atm()*/
+                        && sessionTable.renewSession(bool_signature.second))
+                {
+                    return PacketHolder(new UserAuthResponsePacket(bool_signature.second));
+                }
+                else
+                {
+                    return PacketHolder(new ErrorPacket("You are already authorized from another ATM."));
+                }
+            }
+            else
+            {
+                quint64 auth_time = QDateTime::currentDateTime().toTime_t();
+                //TODO
+                Session session(auth_time, owner, card(), /*atm(),*/0, auth_time + 60*10); //ten minutes
+                sessionTable.createNew(session);
+                return PacketHolder(new UserAuthResponsePacket(session.signature()));
+            }
         }
         else
         {
-            return PacketHolder(new ErrorPacket("Incorrect card number or password."));
+            return PacketHolder(new ErrorPacket("Incorrect password."));
         }
     }
     catch(const SessionTable::SessionTableError& error)

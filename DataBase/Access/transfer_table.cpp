@@ -97,20 +97,6 @@ bool TransferTable::setPaymentNonPeriodic(Transfer &t)
     return setPaymentNonPeriodic(t.id());
 }
 
-//bool TransferTable::doPeriodicTransfer(Transfer &t)
-//{
-//    quint64 time = QDateTime::currentDateTime().toTime_t();
-//    quint64 period = t.period();
-//    setPaymentNonPeriodic(t);
-//    createNew(Transfer(t.payerId(),
-//                       t.receiverId(),
-//                       t.amount(),
-//                       time,
-//                       "periodic transfer",
-//                       "",
-//                       period));
-//}
-
 QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
 {
     QList<Transfer> list;
@@ -118,7 +104,7 @@ QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
     QSqlQuery q = _connection.execute(
                 QString("SELECT ID,payer,destination,amount,time,technical_comment,comment,periodicity \
                          FROM payment \
-                         WHERE (time+periodicity) BETWEEN 1 AND %1").arg(QString::number(time))).second;
+                         WHERE periodicity > 0 AND time+periodicity < %1").arg(QString::number(time))).second;
     while(q.next())
     {
         list.append(
