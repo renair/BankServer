@@ -6,8 +6,8 @@
 class ATM
 {
 public:
-    ATM(quint64 id,
-        const QString& address,
+    ATM(quint64 id=0,
+        const QString& address="",
         uint uhr_10=0,
         uint uhr_20=0,
         uint uhr_50=0,

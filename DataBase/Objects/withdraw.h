@@ -47,6 +47,16 @@ private:
     quint64 _time;
     QString _technical_comment;
     QString _comment;
+public:
+    class WithdrawError
+    {
+    public:
+        WithdrawError(const QString&);
+        const QString& reason() const {return _reason;}
+    private:
+        QString _reason;
+        WithdrawError();
+    };
 };
 
 #endif // WITHDRAW_H

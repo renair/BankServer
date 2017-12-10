@@ -36,3 +36,6 @@ Withdraw::Withdraw(const Withdraw& src):
     _technical_comment(src.techComment()),
     _comment(src.comment())
 {}
+
+Withdraw::WithdrawError::WithdrawError(const QString& reason):_reason(reason)
+{}
