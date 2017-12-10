@@ -21,14 +21,13 @@ private:
     virtual QByteArray specificDump() const = 0;
     virtual void specificLoad(QBuffer&) = 0;
     virtual PacketHolder specificHandle() const;
-protected:
     // socket descriptor
-    mutable int _socketDescriptor;
-    void setSourceDescriptor(int)const;
+    int _socketDescriptor;
+    void setSourceDescriptor(int);
 public:
     virtual ~Packet(){}
     static void init();
-    static PacketHolder getPacket(char id, int descriptor);
+    static PacketHolder getPacket(char id, int descriptor = 0);
     static void removeFirstPacket(QByteArray&);
     static bool isPacket(const QByteArray&);
     static char getPacketId(const QByteArray&);

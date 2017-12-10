@@ -2,53 +2,33 @@
 #define ABSTRACTTASK_H
 
 #include <QObject>
-#include <QThread>
+#include <thread>
+#include <chrono>
 #include <memory>
 
 class AbstractTask;
 typedef std::shared_ptr<AbstractTask> AbstractTaskHolder;
 
-class AbstractTask : public QObject
+class AbstractTask
 {
-Q_OBJECT
 private:
-    bool _isActive;
+    bool _isActive; //is process executing now
+    bool _isFinished; //is process fully stoped
+    std::thread* _loopThread;
     virtual void specificStartTaskLoop() = 0;
     virtual AbstractTaskHolder specificClone() const = 0;
+    AbstractTask& operator=(const AbstractTask&) = delete;
+    void run();
 public:
-    AbstractTask():
-        _isActive(false)
-    {}
-    virtual ~AbstractTask(){}
-    inline bool isActive() const;
-    inline AbstractTaskHolder clone() const;
-public slots:
-    inline void startTaskLoop();
-    inline void stopTaskLoop();
-signals:
-    void loopStoped();
+    AbstractTask();
+    AbstractTask(const AbstractTask&);
+    virtual ~AbstractTask();
+    bool isActive() const;
+    bool isFinished() const;
+    AbstractTaskHolder clone() const;
+    void startTaskLoop();
+    void stopTaskLoop();
+    void wait();
 };
-
-bool AbstractTask::isActive() const
-{
-    return _isActive;
-}
-
-AbstractTaskHolder AbstractTask::clone() const
-{
-    return specificClone();
-}
-
-void AbstractTask::startTaskLoop()
-{
-    _isActive = true;
-    specificStartTaskLoop();
-    emit loopStoped();
-}
-
-void AbstractTask::stopTaskLoop()
-{
-    _isActive = false;
-}
 
 #endif // ABSTRACTTASK_H

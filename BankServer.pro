@@ -44,7 +44,9 @@ SOURCES += main.cpp \
     Protocol/Packets/ErrorPacket.cpp \
     Protocol/Packets/UserAuthResponsePacket.cpp \
     TaskPool/TasksPool.cpp \
-    TaskPool/Tasks/PeriodicPaymentTask.cpp
+    TaskPool/Tasks/PeriodicPaymentTask.cpp \
+    TaskPool/AbstractTask.cpp \
+    Protocol/Packets/UserLogoutPacket.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -92,7 +94,8 @@ HEADERS += \
     Protocol/Packets/UserAuthResponsePacket.h \
     TaskPool/AbstractTask.h \
     TaskPool/TasksPool.h \
-    TaskPool/Tasks/PeriodicPaymentTask.h
+    TaskPool/Tasks/PeriodicPaymentTask.h \
+    Protocol/Packets/UserLogoutPacket.h
 
 DISTFILES += \
     .gitignore \

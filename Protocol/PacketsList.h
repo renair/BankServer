@@ -21,4 +21,6 @@
 #include "Packets/GetPaymentsPacket.h"
 //#-5
 #include "Packets/GetPaymentsResponsePacket.h"
+//#6
+#include "Packets/UserLogoutPacket.h"
 #endif // PACKETSLIST_H

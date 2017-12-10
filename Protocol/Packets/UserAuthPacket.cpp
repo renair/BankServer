@@ -10,20 +10,17 @@ const char UserAuthPacket::_ID = 1;
 
 UserAuthPacket::UserAuthPacket():
     _cardNumber(0),
-    _password("")
+    _password(""),
+    _machineId(0)
 {}
 
-UserAuthPacket::UserAuthPacket(long long card, const QString& pass):
+UserAuthPacket::UserAuthPacket(quint64 card, const QString& pass, quint32 machineId):
     _cardNumber(card),
-    _password(pass)
+    _password(pass),
+    _machineId(machineId)
 {}
 
-UserAuthPacket::UserAuthPacket(const UserAuthPacket& pack):
-    _cardNumber(pack._cardNumber),
-    _password(pack._password)
-{}
-
-long long& UserAuthPacket::card()
+quint64& UserAuthPacket::card()
 {
     return _cardNumber;
 }
@@ -33,7 +30,12 @@ QString& UserAuthPacket::password()
     return _password;
 }
 
-long long UserAuthPacket::card() const
+quint32& UserAuthPacket::machineId()
+{
+    return _machineId;
+}
+
+quint64 UserAuthPacket::card() const
 {
     return _cardNumber;
 }
@@ -48,6 +50,11 @@ char UserAuthPacket::specificGetID() const
     return _ID;
 }
 
+quint32 UserAuthPacket::machineId() const
+{
+    return _machineId;
+}
+
 PacketHolder UserAuthPacket::specificClone() const
 {
     return PacketHolder(new UserAuthPacket(*this));
@@ -59,13 +66,16 @@ QByteArray UserAuthPacket::specificDump() const
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
     std::string str = _password.toStdString();
     data.append(str.c_str(), str.length()+1);
+    data.append((char*)&_machineId, sizeof(_machineId));
     return data;
 }
 
 void UserAuthPacket::specificLoad(QBuffer& buff)
 {
     buff.read((char*)&_cardNumber, sizeof(_cardNumber));
-    _password = QString(buff.readAll());
+    QByteArray str = buff.readLine(6); //to read 5 bytes
+    _password = QString(str);
+    buff.read((char*)&_machineId, sizeof(_machineId));
 }
 
 PacketHolder UserAuthPacket::specificHandle() const
@@ -74,6 +84,7 @@ PacketHolder UserAuthPacket::specificHandle() const
     {
         AccountTable accountTable;
         SessionTable sessionTable;
+        sessionTable.clearATM(machineId());
         Account account = accountTable.getById(card());
         quint64 owner = accountTable.getOwnerById(card());
         if(account.checkPin(password()))
@@ -82,7 +93,7 @@ PacketHolder UserAuthPacket::specificHandle() const
             bool_signature = sessionTable.isAuthorized(owner,card());
             if(bool_signature.first)
             {
-                if(sessionTable.getBySignature(bool_signature.second).atmId()==0/*atm()*/
+                if(sessionTable.getBySignature(bool_signature.second).atmId()==machineId()
                         && sessionTable.renewSession(bool_signature.second))
                 {
                     return PacketHolder(new UserAuthResponsePacket(bool_signature.second));
@@ -95,8 +106,7 @@ PacketHolder UserAuthPacket::specificHandle() const
             else
             {
                 quint64 auth_time = QDateTime::currentDateTime().toTime_t();
-                //TODO
-                Session session(auth_time, owner, card(), /*atm(),*/0, auth_time + 60*10); //ten minutes
+                Session session(auth_time, owner, card(), machineId(), auth_time + 60*10); //ten minutes
                 sessionTable.createNew(session);
                 return PacketHolder(new UserAuthResponsePacket(session.signature()));
             }

@@ -2,28 +2,11 @@
 #include <iostream>
 #include "Server/Server.h"
 
-//#include "DataBase/testingdb.h"
-//#include "DataBase/Access/account_table.h"
-//#include "DataBase/Access/user_table.h"
-//#include "Protocol/PacketsList.h"
-//#include "DataBase/Access/session_table.h"
-//#include <QDateTime>
 using namespace std;
-
-#include "TaskPool/TasksPool.h"
-#include "TaskPool/Tasks/PeriodicPaymentTask.h"
 
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-
-    //DO NOT DELETE!
-//    TasksPool p;
-//    p.addNewTask(PeriodicPaymentTask());
-//    QThread::sleep(5);
-//    cout << "Stoping ..." << endl;
-//    p.stopAll();
-//    cout << "Done" << endl;
 
     Server serv;
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));

@@ -55,8 +55,6 @@ quint64 Session::atmId(quint64 atm)
 
 quint64 Session::renewValidTime(quint64 time)
 {
-    if(validTime()==0 || time<validTime())
-        throw SessionError("Cannot change valid time");
     if(time<authTime())
         throw SessionError("Valid time cannot be less than auth time");
     return _valid_time=time;

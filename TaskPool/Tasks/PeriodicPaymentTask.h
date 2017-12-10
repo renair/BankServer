@@ -15,7 +15,9 @@ private:
     PeriodicPaymentTask& operator=(const PeriodicPaymentTask&) = delete;
 public:
     PeriodicPaymentTask();
-    PeriodicPaymentTask(const PeriodicPaymentTask&) {} //to create new TransferTable instead of copying it
+    PeriodicPaymentTask(const PeriodicPaymentTask& that):
+        AbstractTask(that)
+    {} //to create new TransferTable instead of copying it
     ~PeriodicPaymentTask();
 };
 

@@ -1,6 +1,5 @@
 #include <QVariant>
 #include <QDebug>
-#include <QDateTime>
 #include "session_table.h"
 
 #include <iostream>
@@ -45,8 +44,8 @@ bool SessionTable::update(const Session& s)
                          WHERE signature='%1'").arg(s.signature())).second;
             if(!is_exist.next())
             throw SessionTableError("Unable to update non-existent object");
-    return _connection.execute(QString("UPDATE session "
-                                       "SET valid='%2' \
+    return _connection.execute(QString("UPDATE session \
+                                        SET valid='%2' \
                                         WHERE signature='%1'").
                                        arg(QString::number(s.signature()),
                                            QString::number(s.validTime()))).first;
@@ -65,8 +64,6 @@ Session SessionTable::getBySignature(const quint64 signature)
                    q.value(2).toULongLong(),
                    q.value(3).toULongLong(),
                    q.value(4).toULongLong());
-
-//    return s;
 }
 
 bool SessionTable::renewSession(const quint64 signature)
@@ -88,6 +85,23 @@ bool SessionTable::renewSession(const quint64 signature)
 //    {
 //        return false;
 //    }
+}
+
+bool SessionTable::clearATM(const quint64 atm_id)
+{
+    try
+    {
+        quint64 time = QDateTime::currentDateTime().toTime_t();
+        return _connection.execute(QString("UPDATE session \
+                                            SET valid='%2' \
+                                            WHERE atm_id='%1' AND valid>'%2'").
+                                        arg(QString::number(atm_id),
+                                            QString::number(time))).first;
+    }
+    catch(...)
+    {
+        return false;
+    }
 }
 
 pair<bool,quint64> SessionTable::isAuthorized(const quint64 user_upid,

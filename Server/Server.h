@@ -9,7 +9,6 @@
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
 #include "ServerConfiguration.h"
-//#include "Protocol/PacketsList.h"
 #include "../TaskPool/TasksPool.h"
 
 class Server : public QObject

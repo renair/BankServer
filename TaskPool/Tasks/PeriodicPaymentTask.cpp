@@ -1,19 +1,17 @@
 #include <QList>
 #include <QThread>
+#include <QDateTime>
 #include "PeriodicPaymentTask.h"
+#include "DataBase/Access/account_table.h"
 
 #include <iostream>
 using namespace std;
 
 PeriodicPaymentTask::PeriodicPaymentTask()
-{
-    qDebug("Periodic payment service initialized");
-}
+{}
 
 PeriodicPaymentTask::~PeriodicPaymentTask()
-{
-    qDebug("Periodic payment service deinitialized");
-}
+{}
 
 AbstractTaskHolder PeriodicPaymentTask::specificClone() const
 {
@@ -24,22 +22,41 @@ void PeriodicPaymentTask::specificStartTaskLoop()
 {
     while(isActive())
     {
-        //TODO implement and remove redundant code
         QList<Transfer> transfers = _transferTable.getPeriodicTransfersListToDo();
         if(transfers.length() > 0)
         {
+            AccountTable accountTable;
             for(int i = 0; i < transfers.length();++i)
             {
-                Transfer& t = transfers[i];
-                cout << t.id() << ' ' << t.amount() << endl;
+                try
+                {
+                    quint64 time = QDateTime::currentDateTime().toTime_t();
+                    Transfer& t = transfers[i];
+                    Account payer = accountTable.getById(t.payerId());
+                    Account recipient = accountTable.getById(t.receiverId());
+                    payer.moneyDivide(t.amount());
+                    recipient.moneyAdd(t.amount());
+                    Transfer newTransfer = Transfer(payer.id(),
+                                                    recipient.id(),
+                                                    t.amount(),
+                                                    time,
+                                                    t.techComment(),
+                                                    t.comment(),
+                                                    t.period());
+                    _transferTable.setPaymentNonPeriodic(t.id());
+                    _transferTable.createNew(newTransfer);
+                    accountTable.update(payer);
+                    accountTable.update(recipient);
+                }
+                catch(...)
+                {
+                    //TODO LOG (new feature)
+                }
             }
-            cout << endl;
-            cout.flush();
-            QThread::sleep(1);
         }
         else
         {
-            QThread::sleep(1); //TODO set to 10
+            QThread::sleep(10);
         }
     }
 }

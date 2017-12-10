@@ -8,6 +8,7 @@ class GetAccountMoneyPacket : public Packet
 private:
     // Fields.
     quint64 _token;
+    quint32 _machineId;
     quint64 _accountId;
     // MC.
     virtual char specificGetID() const;
@@ -17,13 +18,18 @@ private:
     virtual PacketHolder specificHandle() const;
 public:
     GetAccountMoneyPacket();
-    GetAccountMoneyPacket(const quint64 token, const quint64 accountId);
+    GetAccountMoneyPacket(quint64 token, quint32 machineId, quint64 accountId);
     ~GetAccountMoneyPacket();
 
     // Selector-modifiers.
     quint64& token()
     {
         return _token;
+    }
+
+    quint32& machineId()
+    {
+        return _machineId;
     }
 
     quint64& accountId()
@@ -35,6 +41,11 @@ public:
     quint64 token() const
     {
         return _token;
+    }
+
+    quint32 machineId() const
+    {
+        return _machineId;
     }
 
     quint64 accountId() const
