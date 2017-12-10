@@ -61,8 +61,6 @@ Account AccountTable::getById(const quint64 id)
                    q.value(2).toInt(),
                    q.value(3).toString(),
                    q.value(4).toULongLong());
-
-//    return a;
 }
 
 QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
@@ -71,10 +69,10 @@ QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
                 QString("SELECT ID,type\
                          FROM account \
                          WHERE owner='%1'").arg(QString::number(user_upid))).second;
-    QMap<quint64, quint8> result;
+    QMap<quint64, qint8> result;
     while(q.next())
     {
-        result.insert(q.value(0).toULongLong(),q.value(1).toUInt());
+        result.insert(q.value(0).toULongLong(),q.value(1).toInt());
     }
     return result;
 }

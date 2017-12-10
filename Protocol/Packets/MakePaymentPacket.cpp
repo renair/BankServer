@@ -59,9 +59,13 @@ PacketHolder MakePaymentPacket::specificHandle() const
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
     }
+    if(amount() < 0)
+    {
+        return PacketHolder(new ErrorPacket("Money amount too large or negative."));
+    }
     AccountTable accountTable;
     quint64 time = QDateTime::currentDateTime().toTime_t();
-    if(to()<0)
+    if(to() < 0) //make widthraw
     {
         Account payer;
         ATM atm;
@@ -97,7 +101,7 @@ PacketHolder MakePaymentPacket::specificHandle() const
             return PacketHolder(new ErrorPacket(error.reason()));
         }
     }
-    else
+    else //make transfer
     {
         Account payer;
         Account recipient;

@@ -8,7 +8,7 @@ class GetCardsResponsePacket : public Packet
 {
 private:
     // Fields.
-    QMap<quint64, quint8> _cards;
+    QMap<quint64, qint8> _cards;
     // MC.
     virtual char specificGetID() const;
     virtual PacketHolder specificClone() const;

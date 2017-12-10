@@ -22,7 +22,7 @@ QByteArray GetCardsResponsePacket::specificDump() const
     quint8 _amount = amount();
     data.append((char*)&_amount, sizeof(_amount));
 
-    QMapIterator<quint64, quint8> iter(_cards);
+    QMapIterator<quint64, qint8> iter(_cards);
     while (iter.hasNext())
     {
         iter.next();
@@ -41,7 +41,7 @@ void GetCardsResponsePacket::specificLoad(QBuffer& data)
     {
         quint64 card = 0;
         data.read((char*)&card, sizeof(card));
-        quint8 type = 0;
+        qint8 type = 0;
         data.read((char*)&type, sizeof(type));
         _cards[card] = type;
     }

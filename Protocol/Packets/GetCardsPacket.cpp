@@ -59,7 +59,7 @@ PacketHolder GetCardsPacket::specificHandle() const
     try
     {
         quint64 s = SessionTable().getUserBySignature(token());
-        QMap<quint64, quint8> temp(AccountTable().getUserAccountsList(s));
+        QMap<quint64, qint8> temp(AccountTable().getUserAccountsList(s));
         response->cards().swap(temp);
     }
     catch(const AccountTable::AccountTableError& error)
