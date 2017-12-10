@@ -97,20 +97,6 @@ bool TransferTable::setPaymentNonPeriodic(Transfer &t)
     return setPaymentNonPeriodic(t.id());
 }
 
-//bool TransferTable::doPeriodicTransfer(Transfer &t)
-//{
-//    quint64 time = QDateTime::currentDateTime().toTime_t();
-//    quint64 period = t.period();
-//    setPaymentNonPeriodic(t);
-//    createNew(Transfer(t.payerId(),
-//                       t.receiverId(),
-//                       t.amount(),
-//                       time,
-//                       "periodic transfer",
-//                       "",
-//                       period));
-//}
-
 QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
 {
     QList<Transfer> list;

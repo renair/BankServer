@@ -2,12 +2,6 @@
 #include <iostream>
 #include "Server/Server.h"
 
-//#include "DataBase/testingdb.h"
-//#include "DataBase/Access/account_table.h"
-//#include "DataBase/Access/user_table.h"
-//#include "Protocol/PacketsList.h"
-//#include "DataBase/Access/session_table.h"
-//#include <QDateTime>
 using namespace std;
 
 int main(int argc, char** argv)

@@ -59,10 +59,8 @@ PacketHolder GetCardsPacket::specificHandle() const
     try
     {
         quint64 s = SessionTable().getUserBySignature(token());
-//        cout<< "user upid: " << s <<endl;
         QMap<quint64, quint8> temp(AccountTable().getUserAccountsList(s));
         response->cards().swap(temp);
-//        SessionTable().getUserBySignature(token()));
     }
     catch(const AccountTable::AccountTableError& error)
     {

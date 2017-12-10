@@ -1,6 +1,5 @@
 #include <QVariant>
 #include <QDebug>
-#include <QDateTime>
 #include "session_table.h"
 
 #include <iostream>
@@ -24,13 +23,17 @@ bool SessionTable::createNew(Session& s)
             _connection.execute(QString("INSERT INTO session(\
                                                    signature,\
                                                    auth_time,\
+                                                   card_id,\
+                                                   atm_id,\
                                                    user_upid,\
                                                    valid) \
-                                        VALUES (null,'%1','%2','%3')"). //null bacause of auto increment!!!
+                                        VALUES (null,'%1','%2','%3','%4','%5')"). //null bacause of auto increment!!!
                                         arg(QString::number(s.authTime()),
                                             QString::number(s.userUpid()),
+                                            QString::number(s.cardId()),
+                                            QString::number(s.atmId()),
                                             QString::number(s.validTime())));
-    s.signature() = result.second.lastInsertId().toInt();
+    s._signature = result.second.lastInsertId().toLongLong();
     return result.first;
 }
 
@@ -41,9 +44,9 @@ bool SessionTable::update(const Session& s)
                          WHERE signature='%1'").arg(s.signature())).second;
             if(!is_exist.next())
             throw SessionTableError("Unable to update non-existent object");
-    return _connection.execute(QString("UPDATE session "
-                                       "SET valid='%2'\
-                                        WHERE user_upid='%1'").
+    return _connection.execute(QString("UPDATE session \
+                                        SET valid='%2' \
+                                        WHERE signature='%1'").
                                        arg(QString::number(s.signature()),
                                            QString::number(s.validTime()))).first;
 }
@@ -51,17 +54,16 @@ bool SessionTable::update(const Session& s)
 Session SessionTable::getBySignature(const quint64 signature)
 {
     QSqlQuery q = _connection.execute(
-                QString("SELECT signature,auth_time,user_upid,valid \
+                QString("SELECT signature,auth_time,user_upid,card_id,valid \
                          FROM session \
                          WHERE signature='%1'").arg(QString::number(signature))).second;
     if(!q.next())
             throw SessionTableError("It seems you want to hack me)");
     return Session(q.value(0).toULongLong(),
-              q.value(1).toULongLong(),
-              q.value(2).toULongLong(),
-              q.value(3).toULongLong());
-
-//    return s;
+                   q.value(1).toULongLong(),
+                   q.value(2).toULongLong(),
+                   q.value(3).toULongLong(),
+                   q.value(4).toULongLong());
 }
 
 bool SessionTable::renewSession(const quint64 signature)
@@ -75,23 +77,45 @@ bool SessionTable::renewSession(const quint64 signature)
         session.renewValidTime(time+600);
         return update(session);
     }
-    catch(const SessionTable::SessionTableError&)
+    catch(...)//const SessionTable::SessionTableError&)
     {
         return false;
     }
-    catch(const Session::SessionError&)
+//    catch(const Session::SessionError&)
+//    {
+//        return false;
+//    }
+}
+
+bool SessionTable::clearATM(const quint64 atm_id)
+{
+    try
+    {
+        quint64 time = QDateTime::currentDateTime().toTime_t();
+        return _connection.execute(QString("UPDATE session \
+                                            SET valid='%2' \
+                                            WHERE atm_id='%1' AND valid>'%2'").
+                                        arg(QString::number(atm_id),
+                                            QString::number(time))).first;
+    }
+    catch(...)
     {
         return false;
     }
 }
 
-pair<bool,quint64> SessionTable::isAuthorized(const quint64 user_upid)
+pair<bool,quint64> SessionTable::isAuthorized(const quint64 user_upid,
+                                              const quint64 card_id)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT signature,auth_time,user_upid,valid \
                          FROM session \
-                         WHERE user_upid='%1' AND valid>'%2'").
-            arg(QString::number(user_upid),QString::number(QDateTime::currentDateTime().toTime_t()))).second;
+                         WHERE user_upid='%1' \
+                           AND card_id='%2' \
+                           AND valid>'%4'").
+            arg(QString::number(user_upid),
+                QString::number(card_id),
+                QString::number(QDateTime::currentDateTime().toTime_t()))).second;
     if(q.next())
     {
         return make_pair(true,q.value(0).toULongLong());

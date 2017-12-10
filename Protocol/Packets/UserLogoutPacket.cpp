@@ -1,5 +1,6 @@
 #include "UserLogoutPacket.h"
 #include "ErrorPacket.h"
+#include "DataBase/Access/session_table.h"
 
 UserLogoutPacket::UserLogoutPacket(quint64 token, quint32 machineId):
     _token(token),
@@ -35,6 +36,11 @@ void UserLogoutPacket::specificLoad(QBuffer& buff)
 
 PacketHolder UserLogoutPacket::specificHandle() const
 {
-    //TODO implement method
-    return PacketHolder(new ErrorPacket("Method not supported now."));
+    SessionTable sessionTable;
+    Session session = sessionTable.getBySignature(token());
+    if(session.atmId()!=machineId()) return PacketHolder(new ErrorPacket("Unexpected error in relation to session ID and machine ID."));
+    quint64 time = QDateTime::currentDateTime().toTime_t();
+    session.renewValidTime(time);
+    sessionTable.update(session);
+    return PacketHolder(0);
 }

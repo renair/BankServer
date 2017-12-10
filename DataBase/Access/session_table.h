@@ -1,6 +1,7 @@
 #ifndef SESSION_TABLE_H
 #define SESSION_TABLE_H
 
+#include <QDateTime>
 #include "DataBase/connection.h"
 #include "DataBase/Objects/session.h"
 
@@ -14,7 +15,8 @@ public:
     Session getBySignature(const quint64);
     quint64 getUserBySignature(const quint64);
     bool renewSession(const quint64);
-    pair<bool,quint64> isAuthorized(const quint64 user_upid);
+    bool clearATM(const quint64);
+    pair<bool,quint64> isAuthorized(const quint64 user_upid, const quint64 card_id);
 private:
     Connection& _connection;
 
