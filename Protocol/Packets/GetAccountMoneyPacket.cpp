@@ -52,7 +52,7 @@ void GetAccountMoneyPacket::specificLoad(QBuffer& data)
 PacketHolder GetAccountMoneyPacket::specificHandle() const
 {
     SessionTable session;
-    if(!session.renewSession(token()))
+    if(!session.renewSession(token(), machineId()))
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
     }

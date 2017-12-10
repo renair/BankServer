@@ -55,7 +55,7 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
 
 PacketHolder MakePaymentPacket::specificHandle() const
 {
-    if(!SessionTable().renewSession(token()))
+    if(!SessionTable().renewSession(token(), machineId()))
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
     }

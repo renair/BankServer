@@ -1,6 +1,8 @@
 #include "CancelPeriodicPaymentPacket.h"
 #include "ErrorPacket.h"
 #include "SuccessPacket.h"
+#include "DataBase/Access/session_table.h"
+#include "DataBase/Access/transfer_table.h"
 
 CancelPeriodicPaymentPacket::CancelPeriodicPaymentPacket(quint64 t, quint64 mi, quint64 pi):
     _token(t),
@@ -39,6 +41,11 @@ QByteArray CancelPeriodicPaymentPacket::specificDump() const
 
 PacketHolder CancelPeriodicPaymentPacket::specificHandle() const
 {
-    //TODO implement packet
-    return PacketHolder(new ErrorPacket("This method is not available now."));
+    if(!SessionTable().renewSession(token(), machineId()))
+    {
+        return PacketHolder(new ErrorPacket("You are not authorized"));
+    }
+    if(TransferTable().setPaymentNonPeriodic(paymentId()))
+        return PacketHolder(new SuccessPacket(QString("Succes, now the payment #%1 is not periodic").arg(paymentId()).toStdString()));
+    return PacketHolder(new ErrorPacket(QString("Unable to set payment #%1 not periodically").arg(paymentId())));
 }
