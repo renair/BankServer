@@ -20,7 +20,7 @@ public:
     {
     public:
         WithdrawTableError(const QString&);
-        const QString& reason() {return _reason;}
+        const QString& reason() const {return _reason;}
     private:
         QString _reason;
 

@@ -51,7 +51,7 @@ void GetCardsPacket::specificLoad(QBuffer& data)
 
 PacketHolder GetCardsPacket::specificHandle() const
 {
-    if(!SessionTable().renewSession(token()))
+    if(!SessionTable().renewSession(token(), machineId()))
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
     }

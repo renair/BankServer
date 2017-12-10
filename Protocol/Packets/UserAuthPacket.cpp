@@ -93,8 +93,7 @@ PacketHolder UserAuthPacket::specificHandle() const
             bool_signature = sessionTable.isAuthorized(owner,card());
             if(bool_signature.first)
             {
-                if(sessionTable.getBySignature(bool_signature.second).atmId()==machineId()
-                        && sessionTable.renewSession(bool_signature.second))
+                if(sessionTable.renewSession(bool_signature.second, machineId()))
                 {
                     return PacketHolder(new UserAuthResponsePacket(bool_signature.second));
                 }

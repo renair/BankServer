@@ -12,6 +12,7 @@
 #include "DataBase/Objects/atm.h"
 #include "DataBase/Objects/transfer.h"
 #include "DataBase/Objects/withdraw.h"
+#include "DataBase/Objects/atm.h"
 
 MakePaymentPacket::MakePaymentPacket()
 {}
@@ -54,46 +55,86 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
 
 PacketHolder MakePaymentPacket::specificHandle() const
 {
-    if(!SessionTable().renewSession(token()))
+    if(!SessionTable().renewSession(token(), machineId()))
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
     }
-    Account payer;
-    Account recipient;
-    Transfer transfer;
+    AccountTable accountTable;
     quint64 time = QDateTime::currentDateTime().toTime_t();
-    try
+    if(to()<0)
     {
-        payer = AccountTable().getById(from());
-        recipient = AccountTable().getById(to());
-        payer.moneyDivide(amount());
-        recipient.moneyAdd(amount());
-        transfer = Transfer(from(),
-                            to(),
-                            amount(),
-                            time,
-                            "transfer",
-                            comment(),
-                            0);
-        TransferTable().createNew(transfer);
-        AccountTable().update(payer);
-        AccountTable().update(recipient);
+        Account payer;
+        ATM atm;
+        Withdraw withdraw;
+        try
+        {
+            payer = accountTable.getById(from());
+            atm = ATMTable().getById(to()*(-1));
+            payer.moneyDivide(amount());
+            withdraw = Withdraw(from(),
+                                to()*(-1),
+                                amount(),
+                                time,
+                                "withdraw",
+                                comment());
+            WithdrawTable().createNew(withdraw);
+            accountTable.update(payer);
+        }
+        catch(const Account::AccountError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const Withdraw::WithdrawError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const AccountTable::AccountTableError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const WithdrawTable::WithdrawTableError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
     }
-    catch(const Account::AccountError& error)
+    else
     {
-        return PacketHolder(new ErrorPacket(error.reason()));
-    }
-    catch(const Transfer::TransferError& error)
-    {
-        return PacketHolder(new ErrorPacket(error.reason()));
-    }
-    catch(const AccountTable::AccountTableError& error)
-    {
-        return PacketHolder(new ErrorPacket(error.reason()));
-    }
-    catch(const TransferTable::TransferTableError& error)
-    {
-        return PacketHolder(new ErrorPacket(error.reason()));
+        Account payer;
+        Account recipient;
+        Transfer transfer;
+        try
+        {
+            payer = accountTable.getById(from());
+            recipient = accountTable.getById(to());
+            payer.moneyDivide(amount());
+            recipient.moneyAdd(amount());
+            transfer = Transfer(from(),
+                                to(),
+                                amount(),
+                                time,
+                                "transfer",
+                                comment(),
+                                0);
+            TransferTable().createNew(transfer);
+            accountTable.update(payer);
+            accountTable.update(recipient);
+        }
+        catch(const Account::AccountError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const Transfer::TransferError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const AccountTable::AccountTableError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
+        catch(const TransferTable::TransferTableError& error)
+        {
+            return PacketHolder(new ErrorPacket(error.reason()));
+        }
     }
     MakePaymentResponsePacket* result = new MakePaymentResponsePacket();
     result->setPaymentStatus(MakePaymentResponsePacket::PaymentStatus::PAYMENT_SUCCESSFULL);

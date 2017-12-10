@@ -66,25 +66,21 @@ Session SessionTable::getBySignature(const quint64 signature)
                    q.value(4).toULongLong());
 }
 
-bool SessionTable::renewSession(const quint64 signature)
+bool SessionTable::renewSession(const quint64 signature, const quint64 atm_id)
 {
     try
     {
         quint64 time = QDateTime::currentDateTime().toTime_t();
         Session session = getBySignature(signature);
-        if(time>session.validTime())
+        if(time>session.validTime() || session.atmId()!=atm_id)
             return false;
         session.renewValidTime(time+600);
         return update(session);
     }
-    catch(...)//const SessionTable::SessionTableError&)
+    catch(...)
     {
         return false;
     }
-//    catch(const Session::SessionError&)
-//    {
-//        return false;
-//    }
 }
 
 bool SessionTable::clearATM(const quint64 atm_id)
