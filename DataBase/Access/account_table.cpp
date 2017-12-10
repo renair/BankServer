@@ -63,7 +63,7 @@ Account AccountTable::getById(const quint64 id)
                    q.value(4).toULongLong());
 }
 
-QMap<quint64, quint8> AccountTable::getUserAccountsList(const quint64 user_upid)
+QMap<quint64, qint8> AccountTable::getUserAccountsList(const quint64 user_upid)
 {
     QSqlQuery q = _connection.execute(
                 QString("SELECT ID,type\

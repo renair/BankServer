@@ -19,7 +19,7 @@ public:
     ~GetCardsResponsePacket();
 
     // Selectors-modifiers.
-    QMap<quint64, quint8>& cards()
+    QMap<quint64, qint8>& cards()
     {
         return _cards;
     }
@@ -30,7 +30,7 @@ public:
         return _cards.size();
     }
 
-    const QMap<quint64, quint8>& cards() const
+    const QMap<quint64, qint8>& cards() const
     {
         return _cards;
     }

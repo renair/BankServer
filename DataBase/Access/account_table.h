@@ -12,7 +12,7 @@ public:
     bool createNew(const Account&);
     bool update(const Account&);
     Account getById(const quint64 account_id);
-    QMap<quint64, quint8> getUserAccountsList(const quint64 user_upid);
+    QMap<quint64, qint8> getUserAccountsList(const quint64 user_upid);
     quint64 getOwnerById(const quint64);
 private:
     Connection& _connection;

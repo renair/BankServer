@@ -12,7 +12,9 @@ private:
     quint64 _from;
     qint64 _to;
     qint64 _amount;
+    quint64 _periodicity;
     QString _comment;
+    QString _technicalComment;
     //method configuration
     virtual char specificGetID() const;
     virtual PacketHolder specificClone() const;
@@ -44,14 +46,24 @@ public:
          return _to;
      }
 
-     quint64& amount()
+     qint64& amount()
      {
          return _amount;
+     }
+
+     quint64& periodicity()
+     {
+         return _periodicity;
      }
 
      QString& comment()
      {
          return _comment;
+     }
+
+     QString& technicalComment()
+     {
+         return _technicalComment;
      }
 
      //selectors
@@ -75,14 +87,24 @@ public:
          return _to;
      }
 
-     quint64 amount() const
+     qint64 amount() const
      {
          return _amount;
+     }
+
+     quint64 periodicity() const
+     {
+         return _periodicity;
      }
 
      const QString& comment() const
      {
          return _comment;
+     }
+
+     const QString& technicalComment() const
+     {
+         return _technicalComment;
      }
 };
 

@@ -38,7 +38,10 @@ QByteArray MakePaymentPacket::specificDump() const
     data.append((char*)&_from, sizeof(_from));
     data.append((char*)&_to, sizeof(_to));
     data.append((char*)&_amount, sizeof(_amount));
+    data.append((char*)&_periodicity, sizeof(_periodicity));
     std::string str = _comment.toStdString();
+    data.append(str.c_str(), str.length()+1);
+    str = _technicalComment.toStdString();
     data.append(str.c_str(), str.length()+1);
     return data;
 }
@@ -50,7 +53,11 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
     data.read((char*)&_from, sizeof(_from));
     data.read((char*)&_to, sizeof(_to));
     data.read((char*)&_amount, sizeof(_amount));
-    _comment = QString(data.readAll());
+    data.read((char*)&_periodicity, sizeof(_periodicity));
+    QByteArray strings = data.readAll();
+    _comment = QString(strings.data());
+    strings.remove(0, _comment.size()+1);
+    _technicalComment = QString(strings.data());
 }
 
 PacketHolder MakePaymentPacket::specificHandle() const
