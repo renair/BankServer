@@ -5,11 +5,21 @@
 
 class GetPaymentsPacket : public Packet
 {
+public:
+    enum PaymentsType
+    {
+        COMMITED_PAYMENTS = 1,
+        PERIODIC_PAYMENTS = 2,
+        UNKNOWN_PAYMENTS = 10
+    };
 private:
     //fields
     quint64 _token;
     quint32 _machineId;
     quint64 _cardNumber;
+    char _paymentsType;
+    //methods
+    PaymentsType getTypeById(char) const;
     //method setup
     virtual char specificGetID() const;
     virtual PacketHolder specificClone() const;
@@ -20,6 +30,7 @@ public:
     GetPaymentsPacket();
     GetPaymentsPacket(quint64 token, quint32 machineId, quint64 carnNum);
     ~GetPaymentsPacket();
+
     //selector-modifiers
     quint64& token()
     {
@@ -36,6 +47,11 @@ public:
         return _cardNumber;
     }
 
+    void setPaymentsType(PaymentsType t)
+    {
+        _paymentsType = t;
+    }
+
     //selectors
     quint64 token() const
     {
@@ -50,6 +66,11 @@ public:
     quint64 cardNumber() const
     {
         return _cardNumber;
+    }
+
+    PaymentsType getPaymentsType() const
+    {
+        return getTypeById(_paymentsType);
     }
 };
 

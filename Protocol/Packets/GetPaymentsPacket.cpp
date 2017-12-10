@@ -17,6 +17,16 @@ GetPaymentsPacket::GetPaymentsPacket(quint64 token, quint32 machineId, quint64 c
     _cardNumber(carnNum)
 {}
 
+GetPaymentsPacket::PaymentsType GetPaymentsPacket::getTypeById(char id) const
+{
+    switch(id)
+    {
+        case 1: return COMMITED_PAYMENTS;
+        case 2: return PERIODIC_PAYMENTS;
+        default: return UNKNOWN_PAYMENTS;
+    }
+}
+
 GetPaymentsPacket::~GetPaymentsPacket()
 {}
 
@@ -55,10 +65,11 @@ PacketHolder GetPaymentsPacket::specificHandle() const
     GetPaymentsResponsePacket* response = new GetPaymentsResponsePacket();
     try
     {
+        //TODO implement logic if periodic or if not periodic
         QList<Transfer> list = TransferTable().getTransfersFromAccount(cardNumber());
         for(int i = 0;i < list.size();++i)
         {
-            response->addPayment(list[i].receiverId(), list[i].amount());
+            response->addPayment(list[i].id(), list[i].receiverId(), list[i].amount());
         }
     }
     catch(const TransferTable::TransferTableError& err)

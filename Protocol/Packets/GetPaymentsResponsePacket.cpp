@@ -6,8 +6,9 @@ GetPaymentsResponsePacket::GetPaymentsResponsePacket()
 GetPaymentsResponsePacket::~GetPaymentsResponsePacket()
 {}
 
-void GetPaymentsResponsePacket::addPayment(quint64 to, quint64 amount)
+void GetPaymentsResponsePacket::addPayment(quint64 paymentId, quint64 to, quint64 amount)
 {
+    _paymentsFields.append((char*)&paymentId, sizeof(paymentId));
     _paymentsFields.append((char*)&to, sizeof(to));
     _paymentsFields.append((char*)&amount, sizeof(amount));
     _paymentsAmount++;
@@ -37,6 +38,8 @@ void GetPaymentsResponsePacket::specificLoad(QBuffer& data)
     data.read((char*)&_paymentsAmount, sizeof(_paymentsAmount));
     for(quint16 i = 0; i < paymentsAmount();++i)
     {
+        //read payment id
+        _paymentsFields.append(data.read(sizeof(quint64)));
         //read card number
         _paymentsFields.append(data.read(sizeof(quint64)));
         //read money amount
