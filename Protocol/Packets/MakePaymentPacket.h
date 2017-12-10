@@ -10,7 +10,7 @@ private:
     quint64 _token;
     quint32 _machineId;
     quint64 _from;
-    quint64 _to;
+    qint64 _to;
     quint64 _amount;
     QString _comment;
     //method configuration
@@ -39,7 +39,7 @@ public:
         return _from;
      }
 
-     quint64& to()
+     qint64& to()
      {
          return _to;
      }
@@ -70,7 +70,7 @@ public:
         return _from;
      }
 
-     quint64 to() const
+     qint64 to() const
      {
          return _to;
      }

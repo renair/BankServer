@@ -23,4 +23,8 @@
 #include "Packets/GetPaymentsResponsePacket.h"
 //#6
 #include "Packets/UserLogoutPacket.h"
+//#7
+#include "Packets/SuccessPacket.h"
+//#8
+#include "Packets/CancelPeriodicPaymentPacket.h"
 #endif // PACKETSLIST_H
