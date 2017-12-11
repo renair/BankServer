@@ -12,7 +12,6 @@ Server::Server():
 {
     makeConnections();
     configureServer(_configuation);
-    _tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::Server(const ServerConfiguration& config):
@@ -22,7 +21,6 @@ Server::Server(const ServerConfiguration& config):
 {
     makeConnections();
     configureServer(_configuation);
-    _tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::~Server()
@@ -65,6 +63,11 @@ void Server::start(quint16 port)
 void Server::configureServer(const ServerConfiguration& config)
 {
     _packetProcessor.receivedPacket().setSaveFileName(config.packetStorage());
+}
+
+void Server::addNewTask(const AbstractTask& newTask)
+{
+    _tasksPool.addNewTask(newTask);
 }
 
 void Server::stop()

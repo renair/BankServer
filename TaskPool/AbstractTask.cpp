@@ -41,20 +41,24 @@ AbstractTaskHolder AbstractTask::clone() const
     return res;
 }
 
-void AbstractTask::run()
+void AbstractTask::run(quint32 milis)
 {
     _isActive = true;
     _isFinished = false;
-    specificStartTaskLoop();
-    _isActive = false; //in case of loop will be finished by itself
+    while(_isActive)
+    {
+        specificTask();
+        std::this_thread::sleep_for(std::chrono::milliseconds(milis));
+    }
+    _isActive = false; //in case of loop was finished by itself
     _isFinished = true;
 }
 
-void AbstractTask::startTaskLoop()
+void AbstractTask::startTaskLoop(quint32 miliseconds)
 {
     if(_loopThread == NULL)
     {
-        _loopThread = new thread(&AbstractTask::run, this);
+        _loopThread = new thread(&AbstractTask::run, this, miliseconds);
         _loopThread->detach();
     }
 }

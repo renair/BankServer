@@ -55,12 +55,22 @@ unsigned int TasksPool::restartTask(unsigned int id)
 
 void TasksPool::stopAll()
 {
+    //firstrly send signal to stop task
     for(int i = 0;i < _tasksContainer.length();++i)
     {
         AbstractTaskHolder& task = _tasksContainer[i];
         if(task && task->isActive())
         {
-            stopTask(i);
+            task->stopTaskLoop();
+        }
+    }
+    //and wait active tasks
+    for(int i = 0;i < _tasksContainer.length();++i)
+    {
+        AbstractTaskHolder& task = _tasksContainer[i];
+        if(task && !task->isFinished())
+        {
+            task->wait();
         }
     }
 }

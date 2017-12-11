@@ -1,9 +1,8 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "Server/Server.h"
+#include "TaskPool/TasksList.h"
 #include "AppClose.h"
-
-#include "TaskPool/Tasks/PeriodicPaymentTask.h"
 
 using namespace std;
 
@@ -12,7 +11,11 @@ int main(int argc, char** argv)
     QCoreApplication app(argc, argv);
     signal(SIGINT, &quitApp); //for aboutToQuit() work properly
 
+    //init new server object based on configuration file
     Server serv(ServerConfiguration("config.ini"));
+    //add tasks
+    serv.addNewTask(PeriodicPaymentTask());
+    //start server
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
     try
     {

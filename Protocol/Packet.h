@@ -3,7 +3,7 @@
 
 #include<QBuffer>
 #include<QSharedPointer>
-#include<unordered_map>
+#include<QMap>
 
 class Packet;
 
@@ -13,7 +13,7 @@ Q_DECLARE_METATYPE(PacketHolder)
 class Packet
 {
 private:
-    static std::unordered_map<char, PacketHolder> _packetsMap;
+    static QMap<char, PacketHolder> _packetsMap;
     static bool _isInited;
     // specific methods for each packets
     virtual char specificGetID() const = 0;

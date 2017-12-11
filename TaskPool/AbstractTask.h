@@ -15,10 +15,10 @@ private:
     bool _isActive; //is process executing now
     bool _isFinished; //is process fully stoped
     std::thread* _loopThread;
-    virtual void specificStartTaskLoop() = 0;
+    virtual void specificTask() = 0;
     virtual AbstractTaskHolder specificClone() const = 0;
     AbstractTask& operator=(const AbstractTask&) = delete;
-    void run();
+    void run(quint32);
 public:
     AbstractTask();
     AbstractTask(const AbstractTask&);
@@ -26,7 +26,7 @@ public:
     bool isActive() const;
     bool isFinished() const;
     AbstractTaskHolder clone() const;
-    void startTaskLoop();
+    void startTaskLoop(quint32 miliseconds = 10*1000);
     void stopTaskLoop();
     void wait();
 };

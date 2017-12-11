@@ -5,7 +5,7 @@
 using namespace std;
 
 bool Packet::_isInited = false;
-std::unordered_map<char, PacketHolder> Packet::_packetsMap;
+QMap<char, PacketHolder> Packet::_packetsMap;
 
 void Packet::init()
 {
@@ -27,6 +27,8 @@ void Packet::init()
     _packetsMap[5] = PacketHolder(new GetPaymentsPacket());
 //    _packetsMap[-5] = PacketHolder(new GetPaymentsResponsePacket());
     _packetsMap[6] = PacketHolder(new UserLogoutPacket());
+//    _packetsMap[7] = PacketHolder(new SuccessPacket());
+    _packetsMap[8] = PacketHolder(new CancelPeriodicPaymentPacket());
     _isInited = true;
     cout << "\tdone" << endl; //LOG
 }
@@ -36,18 +38,12 @@ PacketHolder Packet::getPacket(char id, int descriptor)
     if(!_isInited)
     {
         init();
-        _isInited = true;
     }
-    for(std::unordered_map<char, PacketHolder>::iterator iterator = _packetsMap.begin();
-        iterator != _packetsMap.end();
-        ++iterator)
+    if(_packetsMap.contains(id))
     {
-        if(iterator->first == id)
-        {
-            PacketHolder pack = iterator->second->clone();
-            pack->setSourceDescriptor(descriptor);
-            return pack;
-        }
+        PacketHolder pack = _packetsMap[id]->clone();
+        pack->setSourceDescriptor(descriptor);
+        return pack;
     }
     return PacketHolder(NULL);
 }

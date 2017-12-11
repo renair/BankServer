@@ -4,7 +4,6 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QThread>
-#include <QPair>
 #include "PacketBuilder.h"
 #include "PacketStorage.h"
 #include "PacketProcessor.h"
@@ -35,6 +34,7 @@ public:
     void start();
     void start(quint16);
     void configureServer(const ServerConfiguration&);
+    void addNewTask(const AbstractTask&);
 public slots:
     void stop();
 private slots:

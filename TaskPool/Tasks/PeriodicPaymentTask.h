@@ -10,7 +10,7 @@ private:
     //variables
     TransferTable _transferTable;
     //methods
-    virtual void specificStartTaskLoop();
+    virtual void specificTask();
     virtual AbstractTaskHolder specificClone() const;
     PeriodicPaymentTask& operator=(const PeriodicPaymentTask&) = delete;
 public:
