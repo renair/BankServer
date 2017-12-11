@@ -41,8 +41,8 @@ bool AccountTable::update(const Account & account)
             if(!is_exist.next())
             throw AccountTableError("Unable to update non-existent object");
     return _connection.execute(
-        QString("UPDATE account "
-                "SET pin='%2',\
+        QString("UPDATE account \
+                 SET pin='%2',\
                      money_amount='%3', \
                      login_failed='%4', \
                      type='%5' \
@@ -99,6 +99,15 @@ bool AccountTable::blockAccount(Account & acc)
     if(acc.loginFailed()<3) return false;
     if(acc.type()>0) acc.type()*=(-1);
     return update(acc);
+}
+
+bool AccountTable::resetFailedLogins(const quint64 id)
+{
+    return _connection.execute(
+                QString("UPDATE account \
+                        SET login_failed=0 \
+                        WHERE ID='%1'").
+                       arg(QString::number(id))).first;
 }
 
 AccountTable::AccountTableError::AccountTableError(const QString & reason): _reason(reason)

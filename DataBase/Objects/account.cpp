@@ -6,7 +6,7 @@ Account::Account(quint64 id,
                  int type,
                  const QString& pin,
                  quint32 money,
-                 size_t login_failed):
+                 uint login_failed):
     _id(id),
     _owner(owner),
     _type(type),

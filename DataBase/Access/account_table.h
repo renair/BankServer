@@ -12,6 +12,7 @@ public:
     bool createNew(const Account&);
     bool update(const Account&);
     bool blockAccount(Account&);
+    bool resetFailedLogins(const quint64);
     Account getById(const quint64 account_id);
     QMap<quint64, qint8> getUserAccountsList(const quint64 user_upid);
     quint64 getOwnerById(const quint64);

@@ -95,6 +95,7 @@ PacketHolder UserAuthPacket::specificHandle() const
             {
                 if(sessionTable.renewSession(bool_signature.second, machineId()))
                 {
+                    accountTable.resetFailedLogins(card());
                     return PacketHolder(new UserAuthResponsePacket(bool_signature.second));
                 }
                 else

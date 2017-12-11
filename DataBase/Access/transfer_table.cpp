@@ -76,6 +76,27 @@ QList<Transfer> TransferTable::getTransfersFromAccount(const quint64 id)
     return list;
 }
 
+QList<Transfer> TransferTable::getPeriodicTransfersFromAccount(const quint64 id)
+{
+    QList<Transfer> list;
+    QSqlQuery q = _connection.execute(
+                QString("SELECT ID,payer,destination,amount,time,technical_comment,comment,periodicity \
+                         FROM payment \
+                         WHERE payer='%1' AND is_withdraw='0' AND periodicity>0").arg(QString::number(id))).second;
+    while(q.next())
+    {
+        list.append(
+           Transfer(q.value(0).toULongLong(),
+                    q.value(1).toULongLong(),
+                    q.value(2).toULongLong(),
+                    q.value(3).toULongLong(),
+                    q.value(4).toUInt(),
+                    q.value(5).toString(),
+                    q.value(6).toString()));
+    }
+    return list;
+}
+
 bool TransferTable::setPaymentNonPeriodic(const quint64 id)
 {
     QSqlQuery is_exist = _connection.execute(
