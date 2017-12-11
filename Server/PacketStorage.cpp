@@ -56,9 +56,10 @@ bool PacketStorage::isSaved() const
     return _isSaved;
 }
 
-QString& PacketStorage::saveFileName()
+void PacketStorage::setSaveFileName(const QString& name)
 {
-    return _saveFileName;
+    _saveFileName = name;
+    loadFromFile();
 }
 
 const QString& PacketStorage::saveFileName() const
@@ -71,7 +72,6 @@ void PacketStorage::loadFromFile()
     loadFromFile(_saveFileName);
 }
 
-//TODO improve loading algorithm!!!
 void PacketStorage::loadFromFile(const QString& filename)
 {
     QFile file(filename);

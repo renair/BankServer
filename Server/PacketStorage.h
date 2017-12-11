@@ -22,7 +22,7 @@ public:
     PacketHolder nextPacket() const;
     unsigned int amount() const;
     bool isSaved() const;
-    QString& saveFileName();
+    void setSaveFileName(const QString&);
     const QString& saveFileName() const;
     void loadFromFile();
     void loadFromFile(const QString&);

@@ -64,7 +64,7 @@ void Server::start(quint16 port)
 
 void Server::configureServer(const ServerConfiguration& config)
 {
-    _packetProcessor.receivedPacket().saveFileName() = config.packetStorage();
+    _packetProcessor.receivedPacket().setSaveFileName(config.packetStorage());
 }
 
 void Server::stop()
