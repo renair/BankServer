@@ -12,6 +12,7 @@ public:
     bool createNew(const Transfer&);
     Transfer getById(const quint64);
     QList<Transfer> getTransfersFromAccount(const quint64);
+    QList<Transfer> getPeriodicTransfersFromAccount(const quint64);
     bool setPaymentNonPeriodic(const quint64 id);
     bool setPaymentNonPeriodic(Transfer&);
     QList<Transfer> getPeriodicTransfersListToDo();

@@ -7,7 +7,6 @@
 class Connection
 {
 public:
-//    Connection(const Connection&);
     inline static Connection& getConnection(){return _connection;}
     std::pair<bool, QSqlQuery> execute(const QString&);
     const QString& DBtype() const{return _db_type;}
@@ -38,7 +37,6 @@ private:
     QString& DBname(){return _db_name;}
     QString& DBaddress(){return _db_address;}
     QSqlDatabase& dataBase(){return _data_base;}
-//    bool& connected(){return _connected;}
 
 public:
     class ConnectionError

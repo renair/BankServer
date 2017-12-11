@@ -13,16 +13,19 @@ public:
             quint64 owner=0,
             int type=0,
             const QString& pin="",
-            quint32 money=0);
+            quint32 money=0,
+            uint login_failed=0);
 
-    const quint64& id() const {return _id;}
-    const quint64& owner() const {return _owner;}
-    const int& type() const {return _type;}
-    const quint32& moneyAmount() const {return _money_amount;}
+    quint64 id() const {return _id;}
+    quint64 owner() const {return _owner;}
+    int type() const {return _type;}
+    quint32 moneyAmount() const {return _money_amount;}
+    size_t loginFailed() const {return _login_failed;}
 
     quint32 moneyAdd(qint32);
     quint32 moneyDivide(qint32);
     bool checkPin(const QString&);
+    bool blocked() const {return _type<0;}
     bool setNewPin(const QString& new_pin, const QString& old_pin="");
 private:
     quint64 _id;
@@ -30,8 +33,10 @@ private:
     int _type;
     QString _pin;
     quint32 _money_amount;
+    uint _login_failed;
 
     const QString& pin() const {return _pin;}
+    int& type() {return _type;}
 
 public:
     class AccountError

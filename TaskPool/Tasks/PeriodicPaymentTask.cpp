@@ -20,7 +20,15 @@ AbstractTaskHolder PeriodicPaymentTask::specificClone() const
 
 void PeriodicPaymentTask::specificTask()
 {
-    QList<Transfer> transfers = _transferTable.getPeriodicTransfersListToDo();
+    QList<Transfer> transfers;
+    try
+    {
+         transfers = _transferTable.getPeriodicTransfersListToDo();
+    }
+    catch(const Connection::ConnectionError& error)
+    {
+        cout<< "Problem: " << error.reason().toStdString() <<endl;
+    }
     if(transfers.length() > 0)
     {
         AccountTable accountTable;

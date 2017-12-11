@@ -86,7 +86,7 @@ PacketHolder UserAuthPacket::specificHandle() const
         SessionTable sessionTable;
         sessionTable.clearATM(machineId());
         Account account = accountTable.getById(card());
-        quint64 owner = accountTable.getOwnerById(card());
+        quint64 owner = account.owner();
         if(account.checkPin(password()))
         {
             pair<bool, quint64> bool_signature;

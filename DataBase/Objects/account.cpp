@@ -1,18 +1,19 @@
 #include "account.h"
+#include "DataBase/Access/account_table.h"
 
 Account::Account(quint64 id,
                  quint64 owner,
                  int type,
                  const QString& pin,
-                 quint32 money):
+                 quint32 money,
+                 size_t login_failed):
     _id(id),
     _owner(owner),
     _type(type),
     _pin(pin),
-    _money_amount(money)
-{
-
-}
+    _money_amount(money),
+    _login_failed(login_failed)
+{}
 
 quint32 Account::moneyAdd(qint32 value)
 {
@@ -32,9 +33,20 @@ quint32 Account::moneyDivide(qint32 value)
     return _money_amount-=(quint32)value;
 }
 
-bool Account::checkPin(const QString& pin)
+bool Account::checkPin(const QString & s)
 {
-    return _pin==pin;
+    if(s!=_pin && ++_login_failed>=3)
+    {
+        type()*=(type()>0?(-1):1);
+        try
+        {
+            AccountTable().update(*this);
+        }
+        catch(...)
+        {}
+        return false;
+    }
+    return true;
 }
 
 bool Account::setNewPin(const QString& new_pin, const QString& old_pin)

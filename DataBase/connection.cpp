@@ -2,6 +2,9 @@
 #include <QFileInfo>
 #include "DataBase/connection.h"
 
+#include <iostream>
+using namespace std;
+
 Connection Connection::_connection;
 
 Connection::Connection(const QString& type, const QString& name, const QString& address):
@@ -35,7 +38,8 @@ bool Connection::connect()
     if(connected())
         return connected();
     if(!_db_address.contains("http") && !QFile::exists(_db_address+_db_name))
-        throw ConnectionError("The database does not exist!");
+//        throw ConnectionError("The database does not exist!");
+        cout<< "Database does not exist, created new." <<endl;
     return _connected=dataBase().open();
 }
 
@@ -54,7 +58,6 @@ std::pair<bool, QSqlQuery> Connection::execute(const QString& sql)
 {
     if(connected() || connect())
     {
-//        qDebug()<< "Trying execute SQL: " <<sql<<endl;
         QSqlQuery q;
         return std::make_pair(q.exec(sql), q);
     }
