@@ -18,6 +18,7 @@ public:
                    const QString& address);
     bool connected(){return _connected;}
     bool rollback();
+    ~Connection();
 private:
     QString _db_type;
     QString _db_name;
@@ -31,7 +32,6 @@ private:
                const QString& address= "./");
     Connection(const Connection&) = delete;
     Connection& operator=(const Connection&) = delete;
-    ~Connection();
     bool connect();
     void close();
     QString& DBtype(){return _db_type;}
