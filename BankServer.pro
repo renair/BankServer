@@ -99,7 +99,8 @@ HEADERS += \
     TaskPool/Tasks/PeriodicPaymentTask.h \
     Protocol/Packets/UserLogoutPacket.h \
     Protocol/Packets/SuccessPacket.h \
-    Protocol/Packets/CancelPeriodicPaymentPacket.h
+    Protocol/Packets/CancelPeriodicPaymentPacket.h \
+    AppClose.h
 
 DISTFILES += \
     .gitignore \

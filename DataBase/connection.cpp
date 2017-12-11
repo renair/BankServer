@@ -13,7 +13,6 @@ Connection::Connection(const QString& type, const QString& name, const QString& 
 {
     _data_base = QSqlDatabase::addDatabase(_db_type);
     _data_base.setDatabaseName(_db_address+_db_name);
-//    qDebug()<<"Connection constructor, _connected: " << _data_base.isOpen() <<endl;
 }
 
 Connection::~Connection()
@@ -30,14 +29,6 @@ bool Connection::reconnect(const QString &type, const QString &name, const QStri
     dataBase() = QSqlDatabase::addDatabase(DBtype(),DBaddress()+DBname());
     return connect();
 }
-
-//Connection::Connection(const Connection& c):
-//    _db_type(c.DBtype()),
-//    _db_name(c.DBname()),
-//    _db_address(c.DBaddress()),
-//    _data_base(c.dataBase()),
-//    _connected(c.connected())
-//{}
 
 bool Connection::connect()
 {

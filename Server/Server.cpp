@@ -7,25 +7,30 @@
 using namespace std;
 
 Server::Server():
+    _isStarted(false),
     _packetBuilder(_packetProcessor.receivedPacket())
 {
     makeConnections();
-    _packetProcessor.moveToThread(&_processorThread);
+    configureServer(_configuation);
     _tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::Server(const ServerConfiguration& config):
+    _isStarted(false),
     _configuation(config),
     _packetBuilder(_packetProcessor.receivedPacket())
 {
     makeConnections();
-    _packetProcessor.moveToThread(&_processorThread);
+    configureServer(_configuation);
     _tasksPool.addNewTask(PeriodicPaymentTask());
 }
 
 Server::~Server()
 {
-    stop();
+    if(_isStarted)
+    {
+        stop();
+    }
 }
 
 void Server::makeConnections() const
@@ -33,40 +38,58 @@ void Server::makeConnections() const
     //contains metatype registration(PacketHolder)
     Packet::init();
     connect(&_tcpServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
-    connect(&_processorThread, SIGNAL(started()), &_packetProcessor, SLOT(startProcessing()));
     connect(&_packetProcessor, SIGNAL(packetProcessed(PacketHolder)), this, SLOT(sendPacket(PacketHolder)), Qt::QueuedConnection); //will call async
 }
 
-void Server::start(unsigned short port)
+void Server::start()
 {
-    cout << "Starting server... " << endl; //LOG
-    _processorThread.start();
-    if(_tcpServer.isListening() || !_tcpServer.listen(QHostAddress::Any, port))
+    start(_configuation.serverPort());
+}
+
+void Server::start(quint16 port)
+{
+    if(!_isStarted)
     {
-        throw _tcpServer.serverError();
+        cout << "Starting server at " << port << " port ... " << endl; //LOG
+        _packetProcessor.startProcessing();
+        _configuation.serverPort() = port;
+        if(_tcpServer.isListening() || !_tcpServer.listen(QHostAddress::Any, port))
+        {
+            throw _tcpServer.serverError();
+        }
+        _isStarted = true;
+        cout << "Server started." << endl; //LOG
     }
-    cout << "Server started." << endl; //LOG
+}
+
+void Server::configureServer(const ServerConfiguration& config)
+{
+    _packetProcessor.receivedPacket().saveFileName() = config.packetStorage();
 }
 
 void Server::stop()
 {
-    cout << "Stoping server..." << endl; //LOG
-    //PacketProcessor will save all unprocessed packets
-    _packetProcessor.stopProcessing();
-    //close all opened connection
-    for(QMap<int, QByteArray*>::const_iterator iterator = _connectionData.begin();
-        iterator != _connectionData.end();
-        iterator++)
+    if(_isStarted)
     {
-        delete iterator.value();
-        _connectionSocket.take(iterator.key())->deleteLater();
+        cout << "Stoping server..." << endl; //LOG
+        //PacketProcessor will save all unprocessed packets and stop thread
+        _packetProcessor.stopProcessing();
+        //close all opened connection
+        for(QMap<int, QByteArray*>::const_iterator iterator = _connectionData.begin();
+            iterator != _connectionData.end();
+            iterator++)
+        {
+            delete iterator.value();
+            _connectionSocket.take(iterator.key())->deleteLater();
+        }
+        assert(_connectionSocket.size() == 0);
+        //stop all services
+        _tasksPool.stopAll();
+        //close main server
+        _tcpServer.close();
+        _isStarted = false;
+        cout << "Server stoped." << endl;
     }
-    assert(_connectionSocket.size() == 0);
-    //stop all services
-    _tasksPool.stopAll();
-    //close main server
-    _tcpServer.close();
-    cout << "\tdone";
 }
 
 void Server::clientConnected()

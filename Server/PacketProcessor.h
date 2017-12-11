@@ -2,6 +2,7 @@
 #define PACKETPROCESSOR_H
 
 #include <QMap>
+#include <thread>
 #include "PacketStorage.h"
 
 class PacketProcessor : public QObject
@@ -10,8 +11,11 @@ class PacketProcessor : public QObject
 private:
     PacketStorage _receivedPackets;
     bool _isRunning;
+    bool _finished;
+    std::thread* _thread;
     PacketProcessor& operator=(const PacketProcessor&) = delete;
     PacketProcessor(const PacketProcessor&) = delete;
+    void startProcessingLoop();
 public:
     PacketProcessor();
     ~PacketProcessor();

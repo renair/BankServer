@@ -1,18 +1,22 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "Server/Server.h"
+#include "AppClose.h"
+
+#include "TaskPool/Tasks/PeriodicPaymentTask.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
+    signal(SIGINT, &quitApp); //for aboutToQuit() work properly
 
-    Server serv;
+    Server serv(ServerConfiguration("config.ini"));
     QObject::connect(&app, SIGNAL(aboutToQuit()), &serv, SLOT(stop()));
     try
     {
-        serv.start(21025);
+        serv.start();
     }
     catch(const QTcpSocket::SocketError& err)
     {

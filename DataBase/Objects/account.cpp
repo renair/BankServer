@@ -27,7 +27,7 @@ quint32 Account::moneyDivide(qint32 value)
     if(value<0)
         throw AccountError(QString("Trying to divide negative value -(%1), please, use money_add(%2);")
                            .arg(QString::number(value),QString::number(value*(-1))));
-    if(_money_amount < (quint32)value) //TODO fix it!
+    if(_money_amount < (quint32)value)
         throw AccountError("Not enough money.");
     return _money_amount-=(quint32)value;
 }

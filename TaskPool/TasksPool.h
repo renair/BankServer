@@ -13,7 +13,7 @@ private:
 public:
     class TaskNotExistException;
     TasksPool();
-    virtual ~TasksPool();
+    ~TasksPool();
     unsigned int addNewTask(const AbstractTask&);
     const AbstractTask& getTask(unsigned int) const;
     void stopTask(unsigned int);

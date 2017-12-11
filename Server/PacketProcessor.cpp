@@ -1,4 +1,4 @@
-#include <QThread>
+#include <chrono>
 #include <iostream>
 #include "PacketProcessor.h"
 #include "../Protocol/Packets/ErrorPacket.h"
@@ -6,11 +6,15 @@
 using namespace std;
 
 PacketProcessor::PacketProcessor():
-    _receivedPackets("received_packets.pack")
+    _receivedPackets("received_packets.pack"),
+    _isRunning(false),
+    _finished(true),
+    _thread(NULL)
 {}
 
 PacketProcessor::~PacketProcessor()
 {
+    stopProcessing();
     _receivedPackets.saveToFile();
     cout << "Unprocessed packets saved to " << _receivedPackets.saveFileName().toStdString().c_str() << endl;
 }
@@ -39,12 +43,17 @@ bool PacketProcessor::isRunning() const
 void PacketProcessor::stopProcessing()
 {
     _isRunning = false;
+    while(!_finished)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    delete _thread;
+    _thread = NULL;
 }
 
-void PacketProcessor::startProcessing()
+void PacketProcessor::startProcessingLoop()
 {
     cout << "Packet processor have been started" << endl; //LOG
-    _isRunning = true;
     while(_isRunning)
     {
         if(_receivedPackets.amount() > 0)
@@ -62,15 +71,24 @@ void PacketProcessor::startProcessing()
                 cout << "Unexpected exception during handling packet with ID#" << (int)packet->getID() << endl; //LOG
                 processed = PacketHolder(new ErrorPacket("Unexpected server error"));
             }
-            if(processed)
-            {
-                    emit packetProcessed(processed);
-            }
+            emit packetProcessed(processed);
         }
         else
         {
-            QThread::msleep(500); //wait half a second
+            std::this_thread::sleep_for(std::chrono::milliseconds(500)); //wait half a second
         }
     }
     cout << "Packet processor have been stopped" << endl; //LOG
+    _finished = true;
+}
+
+void PacketProcessor::startProcessing()
+{
+    if(_thread == NULL)
+    {
+        _isRunning = true;
+        _finished = false;
+        _thread = new std::thread(&PacketProcessor::startProcessingLoop, this);
+        _thread->detach();
+    }
 }

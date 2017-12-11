@@ -15,11 +15,11 @@ class Server : public QObject
 {
     Q_OBJECT
 private:
+    bool _isStarted;
     QTcpServer _tcpServer;
     QMap<int, QByteArray*> _connectionData;
     QMap<int, QTcpSocket*> _connectionSocket;
     ServerConfiguration _configuation;
-    QThread _processorThread;
     PacketProcessor _packetProcessor;
     PacketBuilder _packetBuilder;
     TasksPool _tasksPool;
@@ -32,7 +32,9 @@ public:
     Server();
     Server(const ServerConfiguration&);
     ~Server();
-    void start(unsigned short port = 45654);
+    void start();
+    void start(quint16);
+    void configureServer(const ServerConfiguration&);
 public slots:
     void stop();
 private slots:

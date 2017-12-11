@@ -28,8 +28,8 @@ private:
 
     Connection(const QString& type="QSQLITE",
                const QString& name="database.db",
-               const QString& address= "../BankServer/");
-    //Connection(const Connection&) = delete;
+               const QString& address= "./");
+    Connection(const Connection&) = delete;
     Connection& operator=(const Connection&) = delete;
     ~Connection();
     bool connect();

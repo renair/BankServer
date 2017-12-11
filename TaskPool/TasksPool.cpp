@@ -58,7 +58,7 @@ void TasksPool::stopAll()
     for(int i = 0;i < _tasksContainer.length();++i)
     {
         AbstractTaskHolder& task = _tasksContainer[i];
-        if(task->isActive())
+        if(task && task->isActive())
         {
             stopTask(i);
         }

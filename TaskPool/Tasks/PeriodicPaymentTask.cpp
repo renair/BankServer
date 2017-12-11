@@ -49,9 +49,7 @@ void PeriodicPaymentTask::specificStartTaskLoop()
                     accountTable.update(recipient);
                 }
                 catch(...)
-                {
-                    //TODO LOG (new feature)
-                }
+                {}
             }
         }
         else
