@@ -5,6 +5,9 @@
 #include "DataBase/Access/session_table.h"
 #include "DataBase/Access/transfer_table.h"
 
+#include <iostream>
+using namespace std;
+
 GetPaymentsPacket::GetPaymentsPacket():
     _token(0),
     _machineId(0),
@@ -66,13 +69,16 @@ PacketHolder GetPaymentsPacket::specificHandle() const
     try
     {
         QList<Transfer> list;
-        if(getPaymentsType()==GetPaymentsPacket::PaymentsType::COMMITED_PAYMENTS)
-        {
+        switch (getPaymentsType()) {
+        case GetPaymentsPacket::PaymentsType::COMMITED_PAYMENTS:
             list = TransferTable().getTransfersFromAccount(cardNumber());
-        }
-        else
-        {
+            break;
+        case GetPaymentsPacket::PaymentsType::PERIODIC_PAYMENTS:
             list = TransferTable().getPeriodicTransfersFromAccount(cardNumber());
+            break;
+        default:
+            list = TransferTable().getTransfersFromAccount(cardNumber());
+            break;
         }
         for(int i = 0;i < list.size();++i)
         {

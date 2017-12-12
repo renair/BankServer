@@ -2,6 +2,9 @@
 #include "ErrorPacket.h"
 #include "DataBase/Access/session_table.h"
 
+#include <iostream>
+using namespace std;
+
 UserLogoutPacket::UserLogoutPacket(quint64 token, quint32 machineId):
     _token(token),
     _machineId(machineId)
@@ -36,6 +39,7 @@ void UserLogoutPacket::specificLoad(QBuffer& buff)
 
 PacketHolder UserLogoutPacket::specificHandle() const
 {
+    cout<< "logout" <<endl;
     SessionTable sessionTable;
     Session session = sessionTable.getBySignature(token());
     if(session.atmId()!=machineId()) return PacketHolder(new ErrorPacket("Unexpected error in relation to session ID and machine ID."));

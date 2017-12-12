@@ -89,13 +89,14 @@ PacketHolder UserAuthPacket::specificHandle() const
         quint64 owner = account.owner();
         if(account.checkPin(password()))
         {
+            if(account.blocked())
+                return PacketHolder(new ErrorPacket("This card blocked."));
             pair<bool, quint64> bool_signature;
             bool_signature = sessionTable.isAuthorized(owner,card());
             if(bool_signature.first)
             {
                 if(sessionTable.renewSession(bool_signature.second, machineId()))
                 {
-                    accountTable.resetFailedLogins(card());
                     return PacketHolder(new UserAuthResponsePacket(bool_signature.second));
                 }
                 else

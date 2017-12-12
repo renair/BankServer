@@ -2,6 +2,9 @@
 #include <QDateTime>
 #include "transfer_table.h"
 
+#include <iostream>
+using namespace std;
+
 TransferTable::TransferTable(): _connection(Connection::getConnection())
 {}
 
@@ -51,8 +54,6 @@ Transfer TransferTable::getById(const quint64 id)
                     q.value(4).toUInt(),
                     q.value(5).toString(),
                     q.value(6).toString());
-
-//    return t;
 }
 
 QList<Transfer> TransferTable::getTransfersFromAccount(const quint64 id)
@@ -107,8 +108,8 @@ bool TransferTable::setPaymentNonPeriodic(const quint64 id)
             throw TransferTableError("Unable to update non-existent object");
     return _connection.execute(
         QString("UPDATE payment \
-                 SET periodicity=0,\
-                 WHERE UPID='%1'").
+                 SET periodicity=0 \
+                 WHERE ID='%1'").
                 arg(QString::number(id))).first;
 }
 
@@ -133,9 +134,10 @@ QList<Transfer> TransferTable::getPeriodicTransfersListToDo()
                     q.value(1).toULongLong(),
                     q.value(2).toULongLong(),
                     q.value(3).toULongLong(),
-                    q.value(4).toUInt(),
+                    q.value(4).toULongLong(),
                     q.value(5).toString(),
-                    q.value(6).toString()));
+                    q.value(6).toString(),
+                    q.value(7).toULongLong()));
     }
     return list;
 }

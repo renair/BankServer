@@ -23,9 +23,9 @@ bool SessionTable::createNew(Session& s)
             _connection.execute(QString("INSERT INTO session(\
                                                    signature,\
                                                    auth_time,\
+                                                   user_upid,\
                                                    card_id,\
                                                    atm_id,\
-                                                   user_upid,\
                                                    valid) \
                                         VALUES (null,'%1','%2','%3','%4','%5')"). //null bacause of auto increment!!!
                                         arg(QString::number(s.authTime()),
@@ -54,7 +54,7 @@ bool SessionTable::update(const Session& s)
 Session SessionTable::getBySignature(const quint64 signature)
 {
     QSqlQuery q = _connection.execute(
-                QString("SELECT signature,auth_time,user_upid,card_id,valid \
+                QString("SELECT signature,auth_time,user_upid,card_id,atm_id,valid \
                          FROM session \
                          WHERE signature='%1'").arg(QString::number(signature))).second;
     if(!q.next())
@@ -63,7 +63,8 @@ Session SessionTable::getBySignature(const quint64 signature)
                    q.value(1).toULongLong(),
                    q.value(2).toULongLong(),
                    q.value(3).toULongLong(),
-                   q.value(4).toULongLong());
+                   q.value(4).toULongLong(),
+                   q.value(5).toULongLong());
 }
 
 bool SessionTable::renewSession(const quint64 signature, const quint64 atm_id)

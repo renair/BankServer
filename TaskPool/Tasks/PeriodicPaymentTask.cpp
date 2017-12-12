@@ -40,6 +40,8 @@ void PeriodicPaymentTask::specificTask()
                 Transfer& t = transfers[i];
                 Account payer = accountTable.getById(t.payerId());
                 Account recipient = accountTable.getById(t.receiverId());
+                quint32 period = t.period();
+                _transferTable.setPaymentNonPeriodic(t);
                 payer.moneyDivide(t.amount());
                 recipient.moneyAdd(t.amount());
                 Transfer newTransfer = Transfer(payer.id(),
@@ -48,8 +50,7 @@ void PeriodicPaymentTask::specificTask()
                                                 time,
                                                 t.techComment(),
                                                 t.comment(),
-                                                t.period());
-                _transferTable.setPaymentNonPeriodic(t.id());
+                                                period);
                 _transferTable.createNew(newTransfer);
                 accountTable.update(payer);
                 accountTable.update(recipient);

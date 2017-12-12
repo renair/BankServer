@@ -14,6 +14,9 @@
 #include "DataBase/Objects/withdraw.h"
 #include "DataBase/Objects/atm.h"
 
+#include <iostream>
+using namespace std;
+
 MakePaymentPacket::MakePaymentPacket()
 {}
 
@@ -62,6 +65,11 @@ void MakePaymentPacket::specificLoad(QBuffer& data)
 
 PacketHolder MakePaymentPacket::specificHandle() const
 {
+//    cout<< "token: " << token() <<endl
+//        << "machine: " << machineId() <<endl
+//        << "from: " << from() <<endl
+//        << "to: " << to() <<endl
+//        << "amount: " << amount() <<endl;
     if(!SessionTable().renewSession(token(), machineId()))
     {
         return PacketHolder(new ErrorPacket("You are not authorized"));
@@ -69,6 +77,10 @@ PacketHolder MakePaymentPacket::specificHandle() const
     if(amount() < 0)
     {
         return PacketHolder(new ErrorPacket("Money amount too large or negative."));
+    }
+    if(from()==(quint64)to())
+    {
+        return PacketHolder(new ErrorPacket("The payee card can not be a payer card."));
     }
     AccountTable accountTable;
     quint64 time = QDateTime::currentDateTime().toTime_t();

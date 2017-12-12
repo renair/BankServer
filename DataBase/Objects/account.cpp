@@ -17,6 +17,8 @@ Account::Account(quint64 id,
 
 quint32 Account::moneyAdd(qint32 value)
 {
+    if(blocked())
+        throw AccountError("Card is blocked.");
     if(value<0)
         throw AccountError(QString("Trying to add negative value ( %1 ), please, use money_divide(%2);")
                            .arg(QString::number(value),QString::number(value*(-1))));
@@ -25,6 +27,8 @@ quint32 Account::moneyAdd(qint32 value)
 
 quint32 Account::moneyDivide(qint32 value)
 {
+    if(blocked())
+        throw AccountError("Card is blocked.");
     if(value<0)
         throw AccountError(QString("Trying to divide negative value -(%1), please, use money_add(%2);")
                            .arg(QString::number(value),QString::number(value*(-1))));
@@ -35,9 +39,13 @@ quint32 Account::moneyDivide(qint32 value)
 
 bool Account::checkPin(const QString & s)
 {
-    if(s!=_pin && ++_login_failed>=3)
+    if(s!=_pin || blocked())
     {
-        type()*=(type()>0?(-1):1);
+        if(blocked() || ++_login_failed>=3)
+        {
+            type()*=(type()>0?(-1):1);
+            _login_failed=0;
+        }
         try
         {
             AccountTable().update(*this);
@@ -46,12 +54,16 @@ bool Account::checkPin(const QString & s)
         {}
         return false;
     }
-    return true;
+    else
+    {
+        AccountTable().resetFailedLogins(id());
+        return true;
+    }
 }
 
 bool Account::setNewPin(const QString& new_pin, const QString& old_pin)
 {
-    if(checkPin(old_pin))
+    if(checkPin(old_pin) && !blocked())
     {
         _pin=new_pin;
         return true;
