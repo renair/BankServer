@@ -1,5 +1,6 @@
 #include "UserLogoutPacket.h"
 #include "ErrorPacket.h"
+#include "SuccessPacket.h"
 #include "DataBase/Access/session_table.h"
 
 #include <iostream>
@@ -42,9 +43,12 @@ PacketHolder UserLogoutPacket::specificHandle() const
     cout<< "logout" <<endl;
     SessionTable sessionTable;
     Session session = sessionTable.getBySignature(token());
-    if(session.atmId()!=machineId()) return PacketHolder(new ErrorPacket("Unexpected error in relation to session ID and machine ID."));
+    if(session.atmId()!=machineId())
+    {
+        return PacketHolder(new ErrorPacket("Unexpected error in relation to session ID and machine ID."));
+    }
     quint64 time = QDateTime::currentDateTime().toTime_t();
     session.renewValidTime(time);
     sessionTable.update(session);
-    return PacketHolder(0);
+    return PacketHolder(new SuccessPacket("Loged out."));
 }

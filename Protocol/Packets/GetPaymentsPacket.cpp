@@ -49,6 +49,7 @@ QByteArray GetPaymentsPacket::specificDump() const
     data.append((char*)&_token, sizeof(_token));
     data.append((char*)&_machineId, sizeof(_machineId));
     data.append((char*)&_cardNumber, sizeof(_cardNumber));
+    data.append((char*)&_paymentsType, sizeof(_paymentsType));
     return data;
 }
 
@@ -57,6 +58,7 @@ void GetPaymentsPacket::specificLoad(QBuffer& data)
     data.read((char*)&_token, sizeof(_token));
     data.read((char*)&_machineId, sizeof(_machineId));
     data.read((char*)&_cardNumber, sizeof(_cardNumber));
+    data.read((char*)&_paymentsType, sizeof(_paymentsType));
 }
 
 PacketHolder GetPaymentsPacket::specificHandle() const
@@ -70,10 +72,10 @@ PacketHolder GetPaymentsPacket::specificHandle() const
     {
         QList<Transfer> list;
         switch (getPaymentsType()) {
-        case GetPaymentsPacket::PaymentsType::COMMITED_PAYMENTS:
+        case COMMITED_PAYMENTS:
             list = TransferTable().getTransfersFromAccount(cardNumber());
             break;
-        case GetPaymentsPacket::PaymentsType::PERIODIC_PAYMENTS:
+        case PERIODIC_PAYMENTS:
             list = TransferTable().getPeriodicTransfersFromAccount(cardNumber());
             break;
         default:

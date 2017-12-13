@@ -1,6 +1,7 @@
 #include "GetPaymentsResponsePacket.h"
 
-GetPaymentsResponsePacket::GetPaymentsResponsePacket()
+GetPaymentsResponsePacket::GetPaymentsResponsePacket():
+    _paymentsAmount(0)
 {}
 
 GetPaymentsResponsePacket::~GetPaymentsResponsePacket()
