@@ -27,7 +27,7 @@ void PeriodicPaymentTask::specificTask()
     }
     catch(const Connection::ConnectionError& error)
     {
-        cout<< "Problem: " << error.reason().toStdString() <<endl;
+        cout<< "Data base problem: " << error.reason().toStdString() <<endl;
     }
     if(transfers.length() > 0)
     {
@@ -44,19 +44,21 @@ void PeriodicPaymentTask::specificTask()
                 _transferTable.setPaymentNonPeriodic(t);
                 payer.moneyDivide(t.amount());
                 recipient.moneyAdd(t.amount());
-                Transfer newTransfer = Transfer(payer.id(),
-                                                recipient.id(),
-                                                t.amount(),
-                                                time,
-                                                t.techComment(),
-                                                t.comment(),
-                                                period);
+                Transfer newTransfer (payer.id(),
+                                      recipient.id(),
+                                      t.amount(),
+                                      time,
+                                      t.techComment(),
+                                      t.comment(),
+                                      period);
                 _transferTable.createNew(newTransfer);
                 accountTable.update(payer);
                 accountTable.update(recipient);
             }
             catch(...)
-            {}
+            {
+                cout << "Exception in periodic payment!" << endl;
+            }
         }
     }
 }

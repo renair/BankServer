@@ -137,7 +137,7 @@ PacketHolder MakePaymentPacket::specificHandle() const
                                 time,
                                 "transfer",
                                 comment(),
-                                0);
+                                periodicity());
             TransferTable().createNew(transfer);
             accountTable.update(payer);
             accountTable.update(recipient);
