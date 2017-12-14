@@ -1,8 +1,8 @@
 #include <cassert>
+#include <iostream>
 #include "TasksPool.h"
 #include "AbstractTask.h"
 
-#include <iostream>
 using namespace std;
 
 TasksPool::TasksPool()

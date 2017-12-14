@@ -132,7 +132,13 @@ void Server::sendPacket(PacketHolder packet)
     int descriptor = packet->sourceDescriptor();
     if(_connectionSocket.contains(descriptor))
     {
-        _connectionSocket[descriptor]->write(packet->dump());
+        QByteArray arr = packet->dump();
+        const char* data = arr.data();
+        int sent = 0;
+        while(sent < arr.length())
+        {
+            sent += _connectionSocket[descriptor]->write(data+sent, arr.length()-sent);
+        }
     }
     else
     {
