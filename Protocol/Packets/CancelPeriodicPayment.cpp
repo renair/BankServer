@@ -25,17 +25,17 @@ PacketHolder CancelPeriodicPaymentPacket::specificClone() const
 
 void CancelPeriodicPaymentPacket::specificLoad(QBuffer& buff)
 {
-    buff.read((char*)_token, sizeof(_token));
-    buff.read((char*)_machineId, sizeof(_machineId));
-    buff.read((char*)_paymentId, sizeof(_paymentId));
+    buff.read((char*)&_token, sizeof(_token));
+    buff.read((char*)&_machineId, sizeof(_machineId));
+    buff.read((char*)&_paymentId, sizeof(_paymentId));
 }
 
 QByteArray CancelPeriodicPaymentPacket::specificDump() const
 {
     QByteArray res;
-    res.append((char*)_token, sizeof(_token));
-    res.append((char*)_machineId, sizeof(_machineId));
-    res.append((char*)_paymentId, sizeof(_paymentId));
+    res.append((char*)&_token, sizeof(_token));
+    res.append((char*)&_machineId, sizeof(_machineId));
+    res.append((char*)&_paymentId, sizeof(_paymentId));
     return res;
 }
 
